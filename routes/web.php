@@ -4,7 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
 
 Route::get('/dashboard', function () {
@@ -17,11 +17,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
-
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::middleware(['auth'])->group(function () {
 
@@ -45,7 +40,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/guru', fn() => view('guru.dashboard'))->name('guru.dashboard');
         Route::get('/guru/data-perusahaan', fn() => view('guru.perusahaan'))->name('guru.perusahaan');
         Route::get('/guru/data-user', fn() => view('guru.user'))->name('guru.user');
-        Route::get('/guru/data-siswa', fn() => view('guru.siswa'))->name('guru.siswa');
+        Route::get('/guru/data-siswa', fn() => view('guru.data-siswa.index'))->name('guru.data-siswa.index');
         Route::get('/guru/data-kategori', fn() => view('guru.kategori'))->name('guru.kategori');
     });
 
