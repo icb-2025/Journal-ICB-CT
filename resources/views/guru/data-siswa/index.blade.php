@@ -22,10 +22,16 @@
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">No</th>
-                        <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">NIS</th>
                         <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Nama Lengkap</th>
+                        <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">NIS</th>
                         <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Tempat, Tanggal Lahir</th>
-                        <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Jenis Kelamin</th>
+                        <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Golongan Darah</th>
+                        <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Sekolah</th>
+                        <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Alamat Sekolah</th>
+                        <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Nomor Telepon / Faximile</th>
+                        <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Nama Orang Tua / Wali</th>
+                        <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Alamat Orang Tua / Wali</th>
+                        <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">No Telepon Orang Tua / Wali</th>
                         <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Aksi</th>
                     </tr>
                 </thead>
@@ -33,10 +39,16 @@
                     @forelse($siswas as $siswa)
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap">{{ $loop->iteration }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $siswa->nis }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ $siswa->nama_lengkap }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $siswa->nis }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ $siswa->tempat_lahir }}, {{ \Carbon\Carbon::parse($siswa->tanggal_lahir)->format('d M Y') }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{ $siswa->jenis_kelamin }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $siswa->gol_darah }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $siswa->sekolah }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $siswa->alamat_sekolah }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $siswa->telepon_sekolah }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $siswa->nama_wali }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $siswa->alamat_wali }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $siswa->telepon_sekolah }}</td>
                         <td class="flex px-6 py-4 space-x-2 whitespace-nowrap">
                             <a href="{{ route('guru.data-siswa.show', $siswa->id) }}" class="text-blue-600 hover:text-blue-900" title="Lihat">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
