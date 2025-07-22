@@ -1,86 +1,172 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ config('app.name', 'Laravel') }} - @yield('title', 'Dashboard')</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>{{ config('app.name', 'Laravel') }} - @yield('title')</title>
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+
+    <!-- Scripts -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     
-    <!-- Optional: Tailwind Config -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#1e3a8a', // blue-800
-                    }
-                }
-            }
+    <style>
+        .sidebar {
+            transition: all 0.3s ease;
         }
-    </script>
+        .sidebar-collapsed {
+            width: 80px;
+        }
+        .sidebar-expanded {
+            width: 260px;
+        }
+        .active-menu {
+            background-color: #e0e7ff;
+            border-left: 4px solid #6366f1;
+            color: #6366f1;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
-    <div class="flex min-h-screen">
+<body class="bg-gray-50 font-sans antialiased">
+    <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-        <aside class="w-64 bg-blue-800 text-white flex flex-col">
-            <div class="p-4 border-b border-blue-700">
-                <h1 class="text-2xl font-bold">User Panel</h1>
-            </div>
-            <nav class="flex-1 mt-4 space-y-1">
-                <a href="#" class="flex items-center px-4 py-2 hover:bg-blue-700 transition">
-                    <i class="fas fa-home mr-3 w-5 text-white"></i>
-                    <span>Dashboard</span>
-                </a>
-                <a href="#" class="flex items-center px-4 py-2 hover:bg-blue-700 transition">
-                    <i class="fas fa-tasks mr-3 w-5 text-white"></i>
-                    <span>Kegiatan</span>
-                </a>
-                <a href="#" class="flex items-center px-4 py-2 hover:bg-blue-700 transition">
-                    <i class="fas fa-cog mr-3 w-5 text-white"></i>
-                    <span>Settings</span>
-                </a>
-            </nav>
-            <div class="p-4 border-t border-blue-700">
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="w-full flex items-center px-4 py-2 hover:bg-blue-700 transition">
-                        <i class="fas fa-sign-out-alt mr-3 w-5 text-white"></i>
-                        <span>Logout</span>
+        <div id="sidebar" class="sidebar sidebar-expanded bg-white shadow-lg">
+            <div class="flex flex-col h-full">
+                <!-- Logo -->
+                <div class="flex items-center justify-between p-4 border-b">
+                    <a href="/" class="flex items-center">
+                        <x-application-logo class="h-10 w-auto fill-current text-indigo-600" />
+                        <span class="ml-3 text-xl font-semibold text-gray-800 whitespace-nowrap">MyApp</span>
+                    </a>
+                    <button id="toggle-sidebar" class="p-1 rounded-lg hover:bg-gray-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" />
+                        </svg>
                     </button>
-                </form>
+                </div>
+
+                <!-- User Profile -->
+                @auth
+                <div class="p-4 border-b flex items-center space-x-3">
+                    <div class="relative">
+                        <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=6366f1&color=fff" 
+                             alt="User" 
+                             class="h-10 w-10 rounded-full">
+                        <span class="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full bg-green-400 ring-2 ring-white"></span>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-gray-900 truncate">{{ Auth::user()->name }}</p>
+                        <p class="text-xs text-gray-500 truncate">{{ Auth::user()->email }}</p>
+                    </div>
+                </div>
+                @endauth
+
+                <!-- Navigation -->
+                <nav class="flex-1 overflow-y-auto">
+                    <ul class="space-y-1 p-2">
+                        <li>
+                            <a href="{{ route('dashboard') }}" 
+                               class="flex items-center p-3 rounded-lg hover:bg-gray-100 {{ request()->routeIs('dashboard') ? 'active-menu' : '' }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
+                                </svg>
+                                <span class="ml-3">Dashboard</span>
+                            </a>
+                        </li>
+                        @auth
+                        <li>
+                            <a href="{{ route('profile.edit') }}" 
+                               class="flex items-center p-3 rounded-lg hover:bg-gray-100 {{ request()->routeIs('profile.edit') ? 'active-menu' : '' }}">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                </svg>
+                                <span class="ml-3">Profile</span>
+                            </a>
+                        </li>
+                        @endauth
+                    </ul>
+                </nav>
+
+                <!-- Logout -->
+                @auth
+                <div class="p-4 border-t">
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="flex items-center w-full p-3 rounded-lg hover:bg-gray-100 text-red-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />
+                            </svg>
+                            <span class="ml-3">Logout</span>
+                        </button>
+                    </form>
+                </div>
+                @endauth
             </div>
-        </aside>
+        </div>
 
         <!-- Main Content -->
-        <div class="flex-1 flex flex-col">
-            <!-- Topbar -->
-            <header class="bg-white shadow flex items-center justify-between px-6 py-4">
-                <h2 class="text-xl font-semibold">@yield('title', 'Dashboard')</h2>
-                <div class="flex items-center space-x-4">
-                    <div class="relative">
-                        <i class="fas fa-bell text-gray-500 text-lg"></i>
-                        <span class="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-red-500"></span>
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Top Navigation -->
+            <header class="bg-white shadow-sm">
+                <div class="flex items-center justify-between px-6 py-3">
+                    <h1 class="text-xl font-semibold text-gray-900">@yield('title')</h1>
+                    @auth
+                    <div class="flex items-center space-x-4">
+                        <button class="p-2 rounded-full hover:bg-gray-100">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
+                            </svg>
+                        </button>
+                        <div class="relative">
+                            <button id="user-menu-button" class="flex items-center space-x-2 focus:outline-none">
+                                <span class="text-sm font-medium text-gray-700">{{ Auth::user()->name }}</span>
+                                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=6366f1&color=fff" 
+                                     alt="User" 
+                                     class="h-8 w-8 rounded-full">
+                            </button>
+                        </div>
                     </div>
-                    <div class="flex items-center">
-                        <img src="https://via.placeholder.com/40" class="h-8 w-8 rounded-full" alt="User">
-                        <span class="ml-2 font-medium text-sm">User</span>
-                    </div>
+                    @endauth
                 </div>
             </header>
 
             <!-- Page Content -->
-            <main class="flex-1 overflow-y-auto p-6">
+            <main class="flex-1 overflow-y-auto p-6 bg-gray-50">
                 @yield('content')
             </main>
         </div>
     </div>
 
-    <!-- Alpine.js (optional) -->
-    <script src="//unpkg.com/alpinejs" defer></script>
+    <script>
+        // Toggle sidebar
+        document.getElementById('toggle-sidebar')?.addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar) {
+                sidebar.classList.toggle('sidebar-collapsed');
+                sidebar.classList.toggle('sidebar-expanded');
+                
+                // Store preference in localStorage
+                const isCollapsed = sidebar.classList.contains('sidebar-collapsed');
+                localStorage.setItem('sidebarCollapsed', isCollapsed);
+            }
+        });
+
+        // Check for saved preference
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar) {
+                const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+                
+                if (isCollapsed) {
+                    sidebar.classList.add('sidebar-collapsed');
+                    sidebar.classList.remove('sidebar-expanded');
+                }
+            }
+        });
+    </script>
 </body>
 </html>
