@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Guru\DataSiswaController;
 
 Route::get('/', function () {
     return view('index');
@@ -43,6 +44,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/guru/data-siswa', fn() => view('guru.data-siswa.index'))->name('guru.data-siswa.index');
         Route::get('/guru/data-kategori', fn() => view('guru.kategori'))->name('guru.kategori');
     });
+    Route::middleware('role:superuser,guru')->prefix('guru')->name('guru.')->group(function () {
+        Route::resource('data-siswa', DataSiswaController::class);
+    });
+
 
 });
 
