@@ -39,10 +39,10 @@ Route::middleware(['auth'])->group(function () {
     // Guru
     Route::middleware('role:superuser,guru')->group(function () {
         Route::get('/guru', fn() => view('guru.dashboard'))->name('guru.dashboard');
-        Route::get('/guru/data-perusahaan', fn() => view('guru.perusahaan'))->name('guru.perusahaan');
-        Route::get('/guru/data-user', fn() => view('guru.user'))->name('guru.user');
+        Route::get('/guru/data-perusahaan', fn() => view('guru.data-perusahaan.index'))->name('guru.data-perusahaan.index');
+        Route::get('/guru/data-user', fn() => view('guru.data-user.index'))->name('guru.data-user.index');
         Route::get('/guru/data-siswa', fn() => view('guru.data-siswa.index'))->name('guru.data-siswa.index');
-        Route::get('/guru/data-kategori', fn() => view('guru.kategori'))->name('guru.kategori');
+        Route::get('/guru/data-kategori', fn() => view('guru.data-kategori.index'))->name('guru.data-kategori.index');
     });
     Route::middleware('role:superuser,guru')->prefix('guru')->name('guru.')->group(function () {
         Route::resource('data-siswa', DataSiswaController::class);

@@ -1,19 +1,19 @@
-@extends('layouts.user')
+@extends('layouts.guru')
 
 @section('content')
-<div class="bg-white p-6 rounded-lg shadow-md">
-    <h2 class="text-xl font-semibold mb-6">Input Kegiatan Harian</h2>
+<div class="p-6 bg-white rounded-lg shadow-md">
+    <h2 class="mb-6 text-xl font-semibold">Input Kegiatan Harian</h2>
 
     <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
-                    <th class="w-16 px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                    <th class="w-48 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tempat/Tanggal</th>
-                    <th class="w-28 px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Mulai</th>
-                    <th class="w-28 px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Selesai</th>
-                    <th class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kegiatan</th>
-                    <th class="w-32 px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                    <th class="w-16 px-3 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase">No</th>
+                    <th class="w-48 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Tempat/Tanggal</th>
+                    <th class="px-3 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase w-28">Mulai</th>
+                    <th class="px-3 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase w-28">Selesai</th>
+                    <th class="px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Kegiatan</th>
+                    <th class="w-32 px-3 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase">Aksi</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
@@ -34,9 +34,9 @@
                         <textarea rows="1" class="input-field w-full px-2 py-1.5 border rounded-md"></textarea>
                     </td>
                     <td class="px-3 py-3 text-center">
-                        <div id="action-buttons" class="hidden flex justify-center space-x-2">
-                            <button type="button" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">Input</button>
-                            <button type="button" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Hapus</button>
+                        <div id="action-buttons" class="flex justify-center hidden space-x-2">
+                            <button type="button" class="px-3 py-1 text-white bg-green-500 rounded hover:bg-green-600">Input</button>
+                            <button type="button" class="px-3 py-1 text-white bg-red-500 rounded hover:bg-red-600">Hapus</button>
                         </div>
                     </td>
                 </tr>
