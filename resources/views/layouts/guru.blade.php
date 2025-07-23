@@ -79,15 +79,19 @@
                         </button>
 
                         <div x-show="open" x-transition class="bg-indigo-900">
-                            <a href="{{ route('guru.data-perusahaan.index') }}" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
+                            <a href="#" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
                                 <i class="fas fa-building w-4 mr-2 text-center"></i>
                                 Data Perusahaan
                             </a>
-                            <a href="{{ route('guru.data-user.index') }}" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
+                            <a href="#" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
                                 <i class="fas fa-users w-4 mr-2 text-center"></i>
                                 Data User
                             </a>
-                            <a href="{{ route('guru.data-siswa.index') }}" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
+                            <a href="#" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
+                                <i class="fas fa-chalkboard-teacher w-4 mr-2 text-center"></i>
+                                Data Guru
+                            </a>
+                            <a href="#" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
                                 <i class="fas fa-user-graduate w-4 mr-2 text-center"></i>
                                 Data Siswa
                             </a>
