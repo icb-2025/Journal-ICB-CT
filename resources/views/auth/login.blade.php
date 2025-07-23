@@ -24,6 +24,8 @@
     </style>
 </head>
 <body class="font-sans antialiased">
+
+
     <div class="min-h-screen gradient-bg flex flex-col sm:justify-center items-center">
         <div class="w-full max-w-md p-8 space-y-8 bg-white rounded-2xl shadow-xl mx-4 sm:mx-0">
             <div class="text-center">
