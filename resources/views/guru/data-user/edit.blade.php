@@ -4,7 +4,10 @@
 <div class="container mx-auto px-4 py-6">
     <h2 class="text-2xl font-semibold text-gray-800 mb-4">Edit User</h2>
 
-    <form action="{{ route('guru.data-user.update', $user->id) }}" method="POST" class="bg-white p-6 rounded-lg shadow space-y-5">
+<form action="{{ route('guru.data-user.update', ['data_user' => $user->id]) }}" method="POST">
+
+
+
         @csrf
         @method('PUT')
 
@@ -44,5 +47,24 @@
             <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">Update</button>
         </div>
     </form>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const roleSelect = document.querySelector('select[name="role"]');
+        const kodeInput = document.querySelector('input[name="kode_perusahaan"]');
+
+        function toggleKodeInput() {
+            if (['superuser', 'guru'].includes(roleSelect.value)) {
+                kodeInput.value = '-';
+                kodeInput.readOnly = true;
+            } else {
+                kodeInput.readOnly = false;
+            }
+        }
+
+        roleSelect.addEventListener('change', toggleKodeInput);
+        toggleKodeInput(); // inisialisasi saat load
+    });
+</script>
+
 </div>
 @endsection

@@ -8,7 +8,7 @@ use App\Http\Controllers\Guru\UserController;
 
 Route::get('/', function () {
     return view('index');
-});
+})->middleware('auth'); 
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -29,7 +29,7 @@ Route::middleware(['auth'])->group(function () {
         return match ($role) {
             'superuser' => redirect()->route('superuser.dashboard'),
             'guru' => redirect()->route('guru.dashboard'),
-            default => view('dashboard'), // siswa tetap di dashboard
+            default => view('dashboard'),
         };
     })->name('dashboard');
 
@@ -49,6 +49,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('data-siswa', DataSiswaController::class);
         Route::resource('data-perusahaan', DataPerusahaanController::class);
         Route::resource('data-user', UserController::class)->names('data-user');
+
 
 
     });

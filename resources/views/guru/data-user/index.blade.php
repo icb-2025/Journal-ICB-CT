@@ -52,7 +52,7 @@
         <td class="px-6 py-4 text-sm text-gray-500">{{ $user->input_date ? \Carbon\Carbon::parse($user->input_date)->format('Y-m-d H:i') : '-' }}</td>
         <td class="px-6 py-4 text-sm font-medium flex gap-2">
     <a href="{{ route('guru.data-user.edit', $user->id) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-    <form action="{{ route('guru.data-user.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus user ini?');">
+    <form action="{{ route('guru.data-user.destroy', ['data_user' => $user->id]) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus user ini?');">
         @csrf
         @method('DELETE')
         <button type="submit" class="text-red-600 hover:text-red-800 ml-2">Delete</button>
