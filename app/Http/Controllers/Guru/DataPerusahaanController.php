@@ -75,12 +75,12 @@ $bulanTahun = \Carbon\Carbon::create(2025, 10, 1)->format('Ym'); // hasil: 20250
 }
 
 
-    public function edit(Perusahaan $perusahaan)
+    public function edit(Perusahaan $data_perusahaan)
     {
-        return view('guru.data-perusahaan.edit', compact('perusahaan'));
+        return view('guru.data-perusahaan.edit', ['perusahaan' => $data_perusahaan]);
     }
 
-    public function update(Request $request, Perusahaan $perusahaan)
+    public function update(Request $request, Perusahaan $data_perusahaan)
     {
         $validated = $request->validate([
             'nama_industri'   => 'required|string|max:255',
@@ -91,16 +91,17 @@ $bulanTahun = \Carbon\Carbon::create(2025, 10, 1)->format('Ym'); // hasil: 20250
             'nama_pembimbing' => 'required|string|max:255',
         ]);
 
-        $perusahaan->update($validated);
+        $data_perusahaan->update($validated);
 
         return redirect()->route('guru.data-perusahaan.index')->with('success', 'Data perusahaan berhasil diperbarui.');
     }
 
-    public function destroy(Perusahaan $perusahaan)
-    {
-        $perusahaan->delete();
-        return redirect()->route('guru.data-perusahaan.index')->with('success', 'Data perusahaan berhasil dihapus.');
-    }
+    public function destroy(Perusahaan $data_perusahaan)
+{
+    $data_perusahaan->delete();
+    return redirect()->route('guru.data-perusahaan.index')->with('success', 'Data perusahaan berhasil dihapus.');
+}
+
 
 
 }
