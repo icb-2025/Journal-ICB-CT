@@ -2,6 +2,8 @@
 
 @section('title', 'Data Kategori')
 
+
+
 @section('content')
 
 @endsection
