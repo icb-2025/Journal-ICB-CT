@@ -5,14 +5,17 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Guru\DataSiswaController;
 use App\Http\Controllers\Guru\DataPerusahaanController;
 use App\Http\Controllers\Guru\UserController;
+use App\Http\Controllers\KegiatanController;
+use App\Http\Controllers\Guru\KategoriTugasController;
+use App\Http\Controllers\AktivitasSiswaController;
 
 Route::prefix('guru')->middleware(['auth', 'role:guru'])->group(function() {
     Route::resource('data-siswa', \App\Http\Controllers\Guru\DataSiswaController::class);
     Route::get('data-siswa/export/excel', [\App\Http\Controllers\Guru\DataSiswaController::class, 'exportExcel'])->name('guru.data-siswa.export.excel');
     Route::get('data-siswa/export/pdf', [\App\Http\Controllers\Guru\DataSiswaController::class, 'exportPdf'])->name('guru.data-siswa.export.pdf');
 });
-Route::get('/', function () {
-    return view('index');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', [AktivitasSiswaController::class, 'create']);
 });
 
 Route::get('/dashboard', function () {
@@ -38,6 +41,11 @@ Route::middleware(['auth'])->group(function () {
         };
     })->name('dashboard');
 
+    Route::middleware('role:siswa')->prefix('siswa')->name('siswa.')->group(function () {
+   Route::get('input-kategori', [AktivitasSiswaController::class, 'create'])->name('input-kategori.create');
+    Route::post('input-kategori', [AktivitasSiswaController::class, 'store'])->name('input-kategori.store');
+});
+
     // Superuser
     Route::middleware('role:superuser')->group(function () {
         Route::get('/superuser', fn() => view('superuser.dashboard'))->name('superuser.dashboard');
@@ -55,8 +63,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('data-siswa', DataSiswaController::class);
         Route::resource('data-perusahaan', DataPerusahaanController::class);
         Route::resource('data-user', UserController::class)->names('data-user');
-
-
+        Route::resource('data-kategori', KategoriTugasController::class)->names('data-kategori');
     });
 });
 
