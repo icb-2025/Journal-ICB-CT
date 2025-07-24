@@ -5,18 +5,24 @@ namespace App\Http\Controllers\Guru;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Siswa;
+use App\Exports\SiswaExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf; // Update this line
+use Illuminate\Support\Str;
 
 class DataSiswaController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Siswa::query();
-
-        if ($request->filled('search')) {
-            $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
-        }
-
+        $query = $this->getFilteredQuery($request);
         $siswas = $query->paginate(10);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('guru.data-siswa.partials.table', compact('siswas'))->render(),
+                'pagination' => $siswas->links()->toHtml()
+            ]);
+        }
 
         return view('guru.data-siswa.index', compact('siswas'));
     }
@@ -43,7 +49,6 @@ class DataSiswaController extends Controller
         ]);
 
         $validated['input_by'] = auth()->id();
-
         Siswa::create($validated);
 
         return redirect()->route('guru.data-siswa.index')->with('success', 'Data siswa berhasil ditambahkan.');
@@ -80,7 +85,6 @@ class DataSiswaController extends Controller
         ]);
 
         $validated['input_by'] = auth()->id();
-
         $siswa->update($validated);
 
         return redirect()->route('guru.data-siswa.index')->with('success', 'Data siswa berhasil diperbarui.');
@@ -92,5 +96,56 @@ class DataSiswaController extends Controller
         $siswa->delete();
 
         return redirect()->route('guru.data-siswa.index')->with('success', 'Data siswa berhasil dihapus.');
+    }
+
+    public function exportExcel(Request $request)
+    {
+        $query = $this->getFilteredQuery($request);
+        $filename = 'data-siswa-'.now()->format('Y-m-d');
+        
+        // Tambahkan filter ke nama file jika ada
+        if ($request->filled('search')) {
+            $filename .= '-search-'.$request->search;
+        }
+        if ($request->filled('gol_darah')) {
+            $filename .= '-gol-'.$request->gol_darah;
+        }
+        if ($request->filled('sekolah')) {
+            $filename .= '-sekolah-'.Str::slug($request->sekolah);
+        }
+        
+        return Excel::download(new SiswaExport($query), $filename.'.xlsx');
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $query = $this->getFilteredQuery($request);
+        $siswas = $query->get();
+        
+        $filename = 'data-siswa-'.now()->format('Y-m-d');
+        // Logika penamaan file yang sama seperti di Excel bisa diterapkan
+        
+        $pdf = PDF::loadView('guru.data-siswa.export.pdf', [
+            'siswas' => $siswas,
+            'filters' => $request->only(['search', 'gol_darah', 'sekolah']) // Kirim filter ke view
+        ])->setPaper('a4', 'landscape');
+        
+        return $pdf->download($filename.'.pdf');
+    }
+
+    private function getFilteredQuery(Request $request)
+    {
+        return Siswa::when($request->filled('search'), function($query) use ($request) {
+                $query->where(function($q) use ($request) {
+                    $q->where('nama_lengkap', 'like', '%'.$request->search.'%')
+                    ->orWhere('nis', 'like', '%'.$request->search.'%');
+                });
+            })
+            ->when($request->filled('gol_darah'), function($query) use ($request) {
+                $query->where('gol_darah', $request->gol_darah);
+            })
+            ->when($request->filled('sekolah'), function($query) use ($request) {
+                $query->where('sekolah', 'like', '%'.$request->sekolah.'%');
+            });
     }
 }

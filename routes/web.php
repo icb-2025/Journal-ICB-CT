@@ -6,6 +6,11 @@ use App\Http\Controllers\Guru\DataSiswaController;
 use App\Http\Controllers\Guru\DataPerusahaanController;
 use App\Http\Controllers\Guru\UserController;
 
+Route::prefix('guru')->middleware(['auth', 'role:guru'])->group(function() {
+    Route::resource('data-siswa', \App\Http\Controllers\Guru\DataSiswaController::class);
+    Route::get('data-siswa/export/excel', [\App\Http\Controllers\Guru\DataSiswaController::class, 'exportExcel'])->name('guru.data-siswa.export.excel');
+    Route::get('data-siswa/export/pdf', [\App\Http\Controllers\Guru\DataSiswaController::class, 'exportPdf'])->name('guru.data-siswa.export.pdf');
+});
 Route::get('/', function () {
     return view('index');
 });
