@@ -5,10 +5,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Guru\DataSiswaController;
 use App\Http\Controllers\Guru\DataPerusahaanController;
 use App\Http\Controllers\Guru\UserController;
+use App\Http\Controllers\KegiatanController;
+use App\Http\Controllers\Guru\KategoriTugasController;
+use App\Http\Controllers\AktivitasSiswaController;
 
-Route::get('/', function () {
-    return view('index');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/', [AktivitasSiswaController::class, 'create']);
 });
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -33,6 +37,11 @@ Route::middleware(['auth'])->group(function () {
         };
     })->name('dashboard');
 
+    Route::middleware('role:siswa')->prefix('siswa')->name('siswa.')->group(function () {
+   Route::get('input-kategori', [AktivitasSiswaController::class, 'create'])->name('input-kategori.create');
+    Route::post('input-kategori', [AktivitasSiswaController::class, 'store'])->name('input-kategori.store');
+});
+
     // Superuser
     Route::middleware('role:superuser')->group(function () {
         Route::get('/superuser', fn() => view('superuser.dashboard'))->name('superuser.dashboard');
@@ -50,8 +59,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('data-siswa', DataSiswaController::class);
         Route::resource('data-perusahaan', DataPerusahaanController::class);
         Route::resource('data-user', UserController::class)->names('data-user');
-
-
+        Route::resource('data-kategori', KategoriTugasController::class)->names('data-kategori');
     });
 });
 
