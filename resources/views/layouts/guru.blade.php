@@ -24,6 +24,78 @@
         .profile-avatar {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
+        @keyframes slideInFromLeft {
+            0% {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        .animate-slide-in {
+            animation: slideInFromLeft 0.5s ease-out forwards;
+        }
+        
+        /* Enhanced school title style with animation */
+        .school-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #ffffff;
+            text-align: center;
+            margin: 0.5rem 0.5rem 1rem;
+            padding: 0.5rem 0;
+            background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 50%, #4f46e5 100%);
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.375rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        .school-title::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 3.5s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% {
+                left: -100%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+        
+        /* Scrolling text animation */
+        .scrolling-text-container {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+        
+        .scrolling-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: scrollText 18s linear infinite;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        
+        @keyframes scrollText {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
     </style>
 </head>
 <body class="font-sans bg-gray-50" x-data="{ isSidebarOpen: false }">
@@ -60,6 +132,11 @@
                 </div>
 
                 <nav class="flex-1 mt-4">
+                    <div class="school-title">
+                        <div class="scrolling-text-container">
+                            <div class="scrolling-text">SMK ICB CINTA TEKNIKA</div>
+                        </div>
+                    </div>
                     <div x-data="{ open: true }" class="mb-2">
                         <button @click="open = !open" class="flex items-center justify-between w-full px-4 py-3 text-left transition duration-150 hover:bg-indigo-700 focus:outline-none">
                             <span class="flex items-center">
@@ -97,6 +174,18 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                                 </svg>
                                 Data Kategori
+                            </a>
+                            <a href="#" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                </svg>
+                                Input Kegiatan
+                            </a>
+                            <a href="#" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Laporan
                             </a>
                         </div>
                     </div>
@@ -133,7 +222,7 @@
             </div>
         </aside>
 
-        <!-- Desktop Sidebar -->
+        <!-- Desktop Sidebar - No toggle button needed -->
         <aside class="hidden w-64 text-white bg-indigo-800 shadow-lg lg:flex lg:flex-shrink-0">
             <div class="flex flex-col w-full h-full">
                 <div class="flex items-center p-4 border-b border-indigo-700">
@@ -145,7 +234,12 @@
                     <h1 class="text-lg font-semibold">Panel Guru</h1>
                 </div>
 
-                <nav class="flex-1 mt-4 overflow-y-auto hide-scrollbar">
+                <nav class="flex-1 mt-4">
+                    <div class="school-title">
+                        <div class="scrolling-text-container">
+                            <div class="scrolling-text">SMK ICB CINTA BANGSA - PRAKERIN SYSTEM</div>
+                        </div>
+                    </div>
                     <div x-data="{ open: true }" class="mb-2">
                         <button @click="open = !open" class="flex items-center justify-between w-full px-4 py-3 text-left transition duration-150 hover:bg-indigo-700 focus:outline-none">
                             <span class="flex items-center">
@@ -184,9 +278,23 @@
                                 </svg>
                                 Data Kategori
                             </a>
+
+                            <a href="#" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                </svg>
+                                Input Kegiatan
+                            </a>
+                            <a href="#" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Laporan
+                            </a>
                         </div>
                     </div>
                 </nav>
+
 
                 <!-- Enhanced Profile Section -->
                 <div class="mt-auto p-4 border-t border-indigo-700 bg-indigo-900">
@@ -224,7 +332,7 @@
             <!-- Header -->
             <header class="bg-white shadow-sm">
                 <div class="flex items-center justify-between p-4">
-                    <!-- Mobile menu button -->
+                    <!-- Mobile menu button (only visible on mobile) -->
                     <button @click="isSidebarOpen = !isSidebarOpen" class="p-2 -ml-2 rounded-md text-gray-500 lg:hidden focus:outline-none">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -251,7 +359,7 @@
                                 </div>
                                 <div class="hidden text-left md:block">
                                     <p class="text-sm font-medium text-gray-700">{{ Auth::user()->name }}</p>
-                                    <p class="text-xs text-gray-500">Guru</p>
+                                    <p class="text-xs text-gray-500">SuperUser</p>
                                 </div>
                                 <svg class="w-4 h-4 text-gray-500" :class="{ 'transform rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
