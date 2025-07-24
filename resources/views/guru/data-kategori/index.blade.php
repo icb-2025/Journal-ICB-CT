@@ -19,9 +19,18 @@
         <!-- Header -->
         <div class="flex justify-between items-center mb-8">
             <h1 class="text-2xl font-bold text-gray-800">Data Kategori</h1>
-            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center">
-                <i class="fas fa-plus mr-2"></i> Tambah Data
-            </button>
+            <div class="flex space-x-4">
+                <!-- Search Bar -->
+                <div class="relative">
+                    <input type="text" placeholder="Search..." class="pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                </div>
+                <!-- Add Button -->
+                <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center">
+                    <i class="fas fa-plus mr-2"></i>
+                    Tambah Data
+                </button>
+            </div>
         </div>
 
         <!-- Table -->
@@ -30,57 +39,117 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tempat</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mulai Pukul</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Selesai Pukul</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kegiatan</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                No
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Username
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Data Kategori
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Kegiatan
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Input By
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Date
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Actions
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         <!-- Sample Data Row 1 -->
                         <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">1</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Jakarta</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">15 Jan 2023</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">08:00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">10:00</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">Rapat Tim</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                1
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">john_doe</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">Elektronik</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">Pengadaan Laptop</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">Admin</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">2023-05-15</div>
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <button class="text-blue-600 hover:text-blue-900 mr-3"><i class="fas fa-edit"></i></button>
-                                <button class="text-red-600 hover:text-red-900"><i class="fas fa-trash"></i></button>
+                                <a href="#" class="text-blue-600 hover:text-blue-900 mr-3"><i class="fas fa-edit"></i></a>
+                                <a href="#" class="text-red-600 hover:text-red-900"><i class="fas fa-trash"></i></a>
                             </td>
                         </tr>
-                        
+
                         <!-- Sample Data Row 2 -->
                         <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">2</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Bandung</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">16 Jan 2023</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">13:00</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">15:30</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">Pelatihan</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                2
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">jane_smith</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">Furniture</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">Pembelian Meja</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">Supervisor</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">2023-05-16</div>
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <button class="text-blue-600 hover:text-blue-900 mr-3"><i class="fas fa-edit"></i></button>
-                                <button class="text-red-600 hover:text-red-900"><i class="fas fa-trash"></i></button>
+                                <a href="#" class="text-blue-600 hover:text-blue-900 mr-3"><i class="fas fa-edit"></i></a>
+                                <a href="#" class="text-red-600 hover:text-red-900"><i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
+
+                        <!-- Sample Data Row 3 -->
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                3
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">mike_jones</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">ATK</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">Pembelian Kertas</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">Staff</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">2023-05-17</div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <a href="#" class="text-blue-600 hover:text-blue-900 mr-3"><i class="fas fa-edit"></i></a>
+                                <a href="#" class="text-red-600 hover:text-red-900"><i class="fas fa-trash"></i></a>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            
+
             <!-- Pagination -->
             <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-                <div class="flex-1 flex justify-between sm:hidden">
-                    <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"> Previous </a>
-                    <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"> Next </a>
-                </div>
                 <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
                     <div>
                         <p class="text-sm text-gray-700">
-                            Showing <span class="font-medium">1</span> to <span class="font-medium">2</span> of <span class="font-medium">2</span> results
+                            Showing <span class="font-medium">1</span> to <span class="font-medium">3</span> of <span class="font-medium">10</span> results
                         </p>
                     </div>
                     <div>
@@ -89,8 +158,15 @@
                                 <span class="sr-only">Previous</span>
                                 <i class="fas fa-chevron-left"></i>
                             </a>
-                            <a href="#" aria-current="page" class="z-10 bg-blue-50 border-blue-500 text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium"> 1 </a>
-                            <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"> 2 </a>
+                            <a href="#" aria-current="page" class="z-10 bg-blue-50 border-blue-500 text-blue-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                                1
+                            </a>
+                            <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                                2
+                            </a>
+                            <a href="#" class="bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium">
+                                3
+                            </a>
                             <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
                                 <span class="sr-only">Next</span>
                                 <i class="fas fa-chevron-right"></i>
@@ -101,66 +177,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Modal (for create/edit) -->
-    <div class="fixed z-10 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true" id="modal">
-        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
-            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4" id="modal-title">Tambah Data Kategori</h3>
-                    <form>
-                        <div class="grid grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label for="tempat" class="block text-sm font-medium text-gray-700 mb-1">Tempat</label>
-                                <input type="text" id="tempat" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            </div>
-                            <div>
-                                <label for="tanggal" class="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
-                                <input type="date" id="tanggal" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label for="mulai-pukul" class="block text-sm font-medium text-gray-700 mb-1">Mulai Pukul</label>
-                                <input type="time" id="mulai-pukul" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            </div>
-                            <div>
-                                <label for="selesai-pukul" class="block text-sm font-medium text-gray-700 mb-1">Selesai Pukul</label>
-                                <input type="time" id="selesai-pukul" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            </div>
-                        </div>
-                        <div class="mb-4">
-                            <label for="kegiatan" class="block text-sm font-medium text-gray-700 mb-1">Kegiatan</label>
-                            <textarea id="kegiatan" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">Simpan</button>
-                    <button type="button" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Batal</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Simple script to toggle modal (for demo purposes)
-        document.addEventListener('DOMContentLoaded', function() {
-            const addButton = document.querySelector('button.bg-blue-600');
-            const modal = document.getElementById('modal');
-            const cancelButton = document.querySelector('button.bg-white');
-            
-            addButton.addEventListener('click', function() {
-                modal.classList.remove('hidden');
-            });
-            
-            cancelButton.addEventListener('click', function() {
-                modal.classList.add('hidden');
-            });
-        });
-    </script>
 </body>
 </html>
 @endsection
