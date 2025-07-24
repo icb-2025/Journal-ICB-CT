@@ -1,28 +1,82 @@
 @extends('layouts.user')
 
-@section('title')
+@section('title', 'Input Data Kategori')
 
 @section('content')
-<div class="space-y-6">
-    <!-- Welcome Banner with improved design -->
-    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 shadow-lg rounded-xl p-6 text-white">
-        <div class="flex flex-col md:flex-row items-center justify-between">
-            <div class="mb-4 md:mb-0">
-                <h2 class="text-2xl md:text-3xl font-bold">
-                    Welcome back, {{ Auth::user()->name ?? 'User' }}!
-                </h2>
-                <p class="mt-2 opacity-90">Here's what's happening with your account today.</p>
-                <button class="mt-4 px-4 py-2 bg-white text-indigo-600 rounded-lg font-medium hover:bg-opacity-90 transition-all">
-                    View Reports
+<div class="container mx-auto px-4 py-8">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Form Input Data Kategori</h1>
+        
+        <form method="POST" action="">
+            @csrf
+            
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kode Perusahaan</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Input</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mulai Pukul</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Selesai Pukul</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kegiatan</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data Kategori</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-4 py-4 text-sm font-medium text-gray-900">1</td>
+                            <td class="px-4 py-4">
+                                <input type="text" name="company_code[]" value="PRSHN-001" 
+                                    class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                                    readonly>
+                            </td>
+                            <td class="px-4 py-4">
+                                <input type="date" name="input_date[]" value="{{ date('Y-m-d') }}"
+                                    class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                            </td>
+                            <td class="px-4 py-4">
+                                <input type="time" name="start_time[]" 
+                                    class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                            </td>
+                            <td class="px-4 py-4">
+                                <input type="time" name="end_time[]" 
+                                    class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                            </td>
+                            <td class="px-4 py-4">
+                                <textarea name="description[]" rows="3"
+                                    class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                    placeholder="Masukkan Kegiatan"></textarea>
+                            </td>
+                            <td class="px-4 py-4">
+                                <select name="category[]" 
+                                    class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                    <option value="">Pilih Kategori</option>
+                                    <option value="A">A. Pembelajaran dan Eksplorasi</option>
+                                    <option value="B">B. Perencanaan dan Desain</option>
+                                    <option value="C">C. Pengembangan / Implementasi</option>
+                                    <option value="D">D. Pengujian dan Debugging</option>
+                                    <option value="E">E. Kolaborasi dan Manajemen Proyek</option>
+                                    <option value="F">F. Deployment dan Maintenance</option>
+                                    <option value="G">G. Dokumentasi</option>
+                                    <option value="H">H. Edukasi, Presentasi, dan Publikasi</option>
+                                    <option value="REFACTOR">🔄 Aktivitas Refactor dan Optimasi</option>
+                                    <option value="SECURITY">🔒 Keamanan dan Validasi</option>
+                                    <option value="UIUX">🎨 UI/UX</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="mt-6 flex justify-end">
+                <button type="submit" class="text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">
+                    Simpan Data
                 </button>
             </div>
-            <div class="bg-white bg-opacity-20 p-4 rounded-full backdrop-blur-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2h-1V9z" clip-rule="evenodd" />
-                </svg>
-            </div>
-        </div>
+
+        </form>
     </div>
 </div>
 @endsection
-

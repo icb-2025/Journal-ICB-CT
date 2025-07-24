@@ -8,7 +8,7 @@ use App\Http\Controllers\Guru\UserController;
 
 Route::get('/', function () {
     return view('index');
-})->middleware('auth'); 
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -29,7 +29,7 @@ Route::middleware(['auth'])->group(function () {
         return match ($role) {
             'superuser' => redirect()->route('superuser.dashboard'),
             'guru' => redirect()->route('guru.dashboard'),
-            default => view('dashboard'),
+            default => view('dashboard'), // siswa tetap di dashboard
         };
     })->name('dashboard');
 
@@ -44,12 +44,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/guru/data-perusahaan', [DataPerusahaanController::class, 'index'])->name('guru.data-perusahaan.index');
         Route::get('/guru/data-siswa', fn() => view('guru.data-siswa.index'))->name('guru.data-siswa.index');
         Route::get('/guru/data-kategori', fn() => view('guru.data-kategori.index'))->name('guru.data-kategori.index');
+         Route::get('/guru/laporan', fn() => view('guru.laporan.index'))->name('guru.laporan.index');
     });
     Route::middleware('role:superuser,guru')->prefix('guru')->name('guru.')->group(function () {
         Route::resource('data-siswa', DataSiswaController::class);
         Route::resource('data-perusahaan', DataPerusahaanController::class);
         Route::resource('data-user', UserController::class)->names('data-user');
-
 
 
     });
