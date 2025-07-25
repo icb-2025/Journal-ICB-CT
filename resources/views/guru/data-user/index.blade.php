@@ -70,6 +70,10 @@
                         @endforeach
                     </tbody>
                 </table>
+                <div class="mt-4" id="pagination-container">
+    {{ $users->links() }}
+</div>
+
             </div>
         </div>
     </div>
