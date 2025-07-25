@@ -30,4 +30,9 @@ class Siswa extends Model
     {
         return $this->belongsTo(User::class, 'input_by');
     }
+    public function inputBy()
+{
+    return $this->belongsTo(User::class, 'input_by');
+}
+
 }
