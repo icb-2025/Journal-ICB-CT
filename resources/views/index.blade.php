@@ -34,18 +34,34 @@
 @endphp
 
 
+@php
+    use Illuminate\Support\Facades\Auth;
+
+    $user = Auth::user();
+    $role = $user->role; // asumsi field 'role' ada
+    $isSiswa = $role === 'siswa';
+    $akunAktif = $user->status === 'aktif'; // atau sesuaikan dengan field yg Anda pakai
+@endphp
+
 <td class="px-4 py-4">
     @if ($perusahaanUser)
         <input type="hidden" name="company_code[]" value="{{ $perusahaanUser->id }}">
         <div class="p-2.5 bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg">
-    {{ $kodeBelakang }} - {{ $perusahaanUser->nama_industri }}
-</div>
+            {{ $kodeBelakang }} - {{ $perusahaanUser->nama_industri }}
+        </div>
     @else
         <div class="p-2.5 text-red-600 text-sm">
-            Perusahaan tidak ditemukan atau belum dikaitkan dengan user ini.
+            @if (!$isSiswa)
+                Anda Bukan Siswa
+            @elseif (!$akunAktif)
+                Akun Anda Telah expired silahkan hubungi guru
+            @else
+                Perusahaan tidak ditemukan atau belum dikaitkan dengan user ini.
+            @endif
         </div>
     @endif
 </td>
+
 
 
 

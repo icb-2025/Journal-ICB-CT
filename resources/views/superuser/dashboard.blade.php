@@ -1,4 +1,4 @@
-@extends('layouts.guru')
+@extends('layouts.super')
 
 @section('title', 'Dashboard Super Admin')
 
