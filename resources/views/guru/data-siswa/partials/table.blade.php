@@ -30,7 +30,7 @@
             <td class="px-6 py-4 whitespace-nowrap">{{ $siswa->nama_wali }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $siswa->alamat_wali }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $siswa->telepon_wali }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ $siswa->inputBy->name ?? '-' }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $siswa->inputBy->name?? '-' }}</td>
             <td class="flex px-6 py-4 space-x-2 whitespace-nowrap">
                 <a href="{{ route('guru.data-siswa.show', $siswa->id) }}" class="text-blue-600 hover:text-blue-900" title="Lihat">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">

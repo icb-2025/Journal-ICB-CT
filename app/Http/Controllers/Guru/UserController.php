@@ -29,7 +29,7 @@ class UserController extends Controller
     public function create()
     {
         $perusahaans = Perusahaan::all();
-        return view('guru.data-user.create', compact('perusahaans'));
+        return view('guru.data-user.create', compact('perusahaans', 'users'));
     }
 
     /**
