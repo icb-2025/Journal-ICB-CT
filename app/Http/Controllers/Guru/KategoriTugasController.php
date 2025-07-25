@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Guru;
 use App\Http\Controllers\Controller;
 use App\Models\KategoriTugas;
 use Illuminate\Http\Request;
+use App\Models\AktivitasSiswa;
 
 class KategoriTugasController extends Controller
 {
