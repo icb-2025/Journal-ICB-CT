@@ -213,11 +213,11 @@
     "perapihan": "11",
 
     // Tambahan Kategori: Security
-    "validasi": "12",
-    "keamanan": "12",
-    "secure": "12",
-    "proteksi": "12",
-    "safety": "12",
+    "validasi": "2",
+    "keamanan": "2",
+    "secure": "2",
+    "proteksi": "2",
+    "safety": "2",
 
     // Tambahan Kategori: UI/UX
     "ui": "13",

@@ -21,32 +21,42 @@ class SiswaExport implements FromQuery, WithHeadings, WithMapping
 
     public function query()
     {
-        return $this->query;
+        return $this->query->with('inputBy'); 
     }
 
     public function headings(): array
     {
         return [
+            'No',
             'Nama Lengkap',
-            'NIS',
-            'Tempat Lahir',
-            'Tanggal Lahir',
+            'NIS', 
+            'Tempat, Tanggal Lahir',
             'Golongan Darah',
             'Sekolah',
-            'Nama Wali'
+            'Alamat Sekolah',
+            'Nomor Telepon/Faximile',
+            'Nama Orang Tua/Wali',
+            'Alamat Orang Tua/Wali',
+            'No Telepon Orang Tua/Wali',
+            // 'Input By'
         ];
     }
 
     public function map($siswa): array
     {
         return [
+            $siswa->id, // or use $this->row++ if you want sequential numbers
             $siswa->nama_lengkap,
             $siswa->nis,
-            $siswa->tempat_lahir,
-            $this->formatTanggal($siswa->tanggal_lahir),
+            $siswa->tempat_lahir . ', ' . $this->formatTanggal($siswa->tanggal_lahir),
             $siswa->gol_darah,
             $siswa->sekolah,
-            $siswa->nama_wali
+            $siswa->alamat_sekolah,
+            $siswa->telepon_sekolah,
+            $siswa->nama_wali,
+            $siswa->alamat_wali,
+            $siswa->telepon_wali,
+            // $siswa->inputBy->name ?? 'System' // Display the name instead of ID
         ];
     }
 

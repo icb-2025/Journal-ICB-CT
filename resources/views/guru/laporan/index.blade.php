@@ -4,39 +4,41 @@
 
 @section('content')
     <div class="container mt-4">
-        <h3>Data Aktivitas Siswa</h3>
+        <h3 class="text-2xl font-semibold text-gray-800 mb-4">Data Aktivitas Siswa</h3>
 
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Nama Siswa</th>
-                    <th>Perusahaan</th>
-                    <th>Tanggal</th>
-                    <th>Jam Mulai</th>
-                    <th>Jam Selesai</th>
-                    <th>Kegiatan</th>
-                    <th>Kategori Tugas</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($aktivitas as $item)
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+            <table class="table table-bordered min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
                     <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $item->siswa->name ?? '-' }}</td>
-                        <td>{{ $item->perusahaan->nama_industri ?? '-' }}</td>
-                        <td>{{ $item->tanggal }}</td>
-                        <td>{{ $item->mulai }}</td>
-                        <td>{{ $item->selesai }}</td>
-                        <td>{{ $item->deskripsi }}</td>
-                        <td>{{ $item->kategoriTugas->nama_kategori ?? '-' }}</td>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Siswa</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Perusahaan</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jam Mulai</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jam Selesai</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kegiatan</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori Tugas</th>
                     </tr>
-                @empty
-                    <tr>
-                        <td colspan="8">Tidak ada data aktivitas.</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    @forelse($aktivitas as $item)
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $loop->iteration }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $item->siswa->name ?? '-' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $item->perusahaan->nama_industri ?? '-' }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $item->tanggal }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $item->mulai }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $item->selesai }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-500">{{ $item->deskripsi }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $item->kategoriTugas->nama_kategori ?? '-' }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="8" class="px-6 py-4 text-center text-sm text-gray-500">Tidak ada data aktivitas.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 @endsection
