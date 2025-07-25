@@ -15,4 +15,18 @@ class AktivitasSiswa extends Model
         'deskripsi',
         'kategori_tugas_id'   
     ];
+
+    public function perusahaan() {
+    return $this->belongsTo(Perusahaan::class, 'perusahaan_id');
+}
+
+public function kategoriTugas() {
+    return $this->belongsTo(KategoriTugas::class, 'kategori_tugas_id');
+}
+
+
+public function siswa() {
+    return $this->belongsTo(User::class, 'siswa_id'); // pastikan relasi ini benar
+}
+
 }

@@ -9,6 +9,14 @@ use App\Models\KategoriTugas;
 
 class AktivitasSiswaController extends Controller
 {
+
+    public function index()
+{
+    $aktivitas = AktivitasSiswa::with(['perusahaan', 'kategoriTugas', 'siswa'])->get();
+
+    return view('guru.laporan.index', compact('aktivitas'));
+}
+
     public function create()
 {
     $user = auth()->user();
@@ -16,8 +24,10 @@ class AktivitasSiswaController extends Controller
     // Ambil perusahaan berdasarkan kode_perusahaan user
     $perusahaanUser = Perusahaan::where('kode_perusahaan', $user->kode_perusahaan)->first();
 
+    $kategoriTugas = KategoriTugas::all(); // ambil semua kategori tugas
+
     // Kirim ke view (ubah 'index' jika view-nya bukan itu)
-    return view('index', compact('perusahaanUser'));
+    return view('index', compact('perusahaanUser', 'kategoriTugas'));
 }
 
 
@@ -46,6 +56,7 @@ class AktivitasSiswaController extends Controller
                 'deskripsi' => $deskripsi,
                 'kategori_tugas_id' => $kategori_id,
                 'siswa_id' => auth()->id(),
+                'id' => auth()->id(),
             ]);
         }
 

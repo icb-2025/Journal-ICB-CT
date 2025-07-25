@@ -80,20 +80,12 @@
                             <!-- Kategori Tugas -->
                             <td class="px-4 py-4">
                                 <select name="category[]" required
-                                    class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                                    <option value="">Pilih Kategori</option>
-                                    <option value="A">A. Pembelajaran dan Eksplorasi</option>
-                                    <option value="B">B. Perencanaan dan Desain</option>
-                                    <option value="C">C. Pengembangan / Implementasi</option>
-                                    <option value="D">D. Pengujian dan Debugging</option>
-                                    <option value="E">E. Kolaborasi dan Manajemen Proyek</option>
-                                    <option value="F">F. Deployment dan Maintenance</option>
-                                    <option value="G">G. Dokumentasi</option>
-                                    <option value="H">H. Edukasi, Presentasi, dan Publikasi</option>
-                                    <option value="REFACTOR">🔄 Refactor dan Optimasi</option>
-                                    <option value="SECURITY">🔒 Keamanan dan Validasi</option>
-                                    <option value="UIUX">🎨 UI/UX</option>
-                                </select>
+    class="border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+    <option value="">Kategori</option>
+    @foreach($kategoriTugas as $kategori)
+        <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
+    @endforeach
+</select>
                             </td>
                         </tr>
                     </tbody>
@@ -114,127 +106,127 @@
     document.addEventListener('DOMContentLoaded', function () {
         const kategoriMapping = {
     // Kategori A: Pembelajaran
-    "belajar": "A",
-    "mempelajari": "A",
-    "mempelajarinya": "A",
-    "pelajari": "A",
-    "explore": "A",
-    "menjelajahi": "A",
-    "eksplorasi": "A",
-    "memahami": "A",
-    "mengetahui": "A",
-    "memperdalam": "A",
-    "menganalisis": "A",
-    "mengobservasi": "A",
+    "belajar": "3",
+    "mempelajari": "3",
+    "mempelajarinya": "3",
+    "pelajari": "3",
+    "explore": "3",
+    "menjelajahi": "3",
+    "eksplorasi": "3",
+    "memahami": "3",
+    "mengetahui": "3",
+    "memperdalam": "3",
+    "menganalisis": "3",
+    "mengobservasi": "3",
 
     // Kategori B: Perencanaan & Desain
-    "rencana": "B",
-    "perencanaan": "B",
-    "perancang": "B",
-    "desain": "B",
-    "merancang": "B",
-    "mendesain": "B",
-    "menggambar": "B",
-    "mockup": "B",
-    "wireframe": "B",
-    "flowchart": "B",
-    "struktur": "B",
+    "rencana": "4",
+    "perencanaan": "4",
+    "perancang": "4",
+    "desain": "4",
+    "merancang": "4",
+    "mendesain": "4",
+    "menggambar": "4",
+    "mockup": "4",
+    "wireframe": "4",
+    "flowchart": "4",
+    "struktur": "4",
 
     // Kategori C: Implementasi / Pengembangan
-    "buat": "C",
-    "membuat": "C",
-    "membikin": "C",
-    "mengembangkan": "C",
-    "mengimplementasikan": "C",
-    "implementasi": "C",
-    "development": "C",
-    "pengembangan": "C",
-    "code": "C",
-    "coding": "C",
-    "menulis": "C",
-    "menuliskan": "C",
-    "program": "C",
-    "pemrograman": "C",
-    "script": "C",
-    "koding": "C",
+    "buat": "5",
+    "membuat": "5",
+    "membikin": "5",
+    "mengembangkan": "5",
+    "mengimplementasikan": "5",
+    "implementasi": "5",
+    "development": "5",
+    "pengembangan": "5",
+    "code": "5",
+    "coding": "5",
+    "menulis": "5",
+    "menuliskan": "5",
+    "program": "5",
+    "pemrograman": "5",
+    "script": "5",
+    "koding": "5",
 
     // Kategori D: Pengujian & Perbaikan
-    "debug": "D",
-    "error": "D",
-    "perbaikan": "D",
-    "bug": "D",
-    "tes": "D",
-    "testing": "D",
-    "pengujian": "D",
-    "uji": "D",
-    "pengetesan": "D",
-    "review": "D",
-    "evaluasi": "D",
+    "debug": "6",
+    "error": "6",
+    "perbaikan": "6",
+    "bug": "6",
+    "tes": "6",
+    "testing": "6",
+    "pengujian": "6",
+    "uji": "6",
+    "pengetesan": "6",
+    "review": "6",
+    "evaluasi": "6",
 
     // Kategori E: Kolaborasi / Tim
-    "team": "E",
-    "kelompok": "E",
-    "kolaborasi": "E",
-    "diskusi": "E",
-    "brainstorming": "E",
-    "bareng": "E",
-    "bersama": "E",
-    "sharing": "E",
-    "kerja sama": "E",
+    "team": "7",
+    "kelompok": "7",
+    "kolaborasi": "7",
+    "diskusi": "7",
+    "brainstorming": "7",
+    "bareng": "7",
+    "bersama": "7",
+    "sharing": "7",
+    "kerja sama": "7",
 
     // Kategori F: Deployment / Maintenance
-    "deploy": "F",
-    "deployment": "F",
-    "rilis": "F",
-    "publish": "F",
-    "launch": "F",
-    "maintenance": "F",
-    "pemeliharaan": "F",
-    "update": "F",
-    "upgrade": "F",
-    "revisi": "F",
+    "deploy": "8",
+    "deployment": "8",
+    "rilis": "8",
+    "publish": "8",
+    "launch": "8",
+    "maintenance": "8",
+    "pemeliharaan": "8",
+    "update": "8",
+    "upgrade": "8",
+    "revisi": "8",
 
     // Kategori G: Dokumentasi
-    "dokumen": "G",
-    "dokumentasi": "G",
-    "catatan": "G",
-    "penulisan": "G",
-    "menuliskan": "G",
-    "menulis": "G",
-    "laporan": "G",
-    "report": "G",
-    "ringkasan": "G",
+    "dokumen": "9",
+    "dokumentasi": "9",
+    "catatan": "9",
+    "penulisan": "9",
+    "menuliskan": "9",
+    "menulis": "9",
+    "laporan": "9",
+    "report": "9",
+    "ringkasan": "9",
 
     // Kategori H: Presentasi / Publikasi
-    "presentasi": "H",
-    "slide": "H",
-    "tampilan": "H",
-    "publikasi": "H",
-    "pemaparan": "H",
-    "menjelaskan": "H",
-    "showcase": "H",
-    "demo": "H",
+    "presentasi": "10",
+    "slide": "10",
+    "tampilan": "10",
+    "publikasi": "10",
+    "pemaparan": "10",
+    "menjelaskan": "10",
+    "showcase": "10",
+    "demo": "10",
 
     // Tambahan Kategori: Refactor
-    "refactor": "REFACTOR",
-    "refactoring": "REFACTOR",
-    "perapihan": "REFACTOR",
+    "refactor": "11",
+    "refactoring": "11",
+    "perapihan": "11",
 
     // Tambahan Kategori: Security
-    "validasi": "SECURITY",
-    "keamanan": "SECURITY",
-    "secure": "SECURITY",
-    "proteksi": "SECURITY",
-    "safety": "SECURITY",
+    "validasi": "12",
+    "keamanan": "12",
+    "secure": "12",
+    "proteksi": "12",
+    "safety": "12",
 
     // Tambahan Kategori: UI/UX
-    "ui": "UIUX",
-    "ux": "UIUX",
-    "antarmuka": "UIUX",
-    "tampilan": "UIUX",
-    "pengalaman": "UIUX",
-    "desainui": "UIUX",
-    "desainux": "UIUX"
+    "ui": "13",
+    "ux": "13",
+    "antarmuka": "13",
+    "tampilan": "13",
+    "pengalaman": "13",
+    "desainui": "13",
+    "desainux": "13"
 };
 
 

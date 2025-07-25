@@ -19,6 +19,8 @@ class UserController extends Controller
         $users = User::with('inputBy')->get();
         $perusahaans = Perusahaan::all();
 
+        $paginated = User::with('inputBy')->oldest()->paginate(10);
+
         return view('guru.data-user.index', compact('users', 'perusahaans'));
     }
 

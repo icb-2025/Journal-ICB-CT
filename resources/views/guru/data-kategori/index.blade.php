@@ -50,6 +50,9 @@
                 @endforelse
             </tbody>
         </table>
+        <div class="mt-4" id="pagination-container">
+            {{ $kategoris->links() }}
+        </div>
     </div>
 </div>
 @endsection
