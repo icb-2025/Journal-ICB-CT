@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Guru;
 use App\Http\Controllers\Controller;
 use App\Models\KategoriTugas;
 use Illuminate\Http\Request;
+use App\Models\AktivitasSiswa;
 
 class KategoriTugasController extends Controller
 {
     public function index()
     {
-        $kategoris = KategoriTugas::all();
+        $kategoris = KategoriTugas::oldest()->paginate(10);
         return view('guru.data-kategori.index', compact('kategoris'));
     }
 
@@ -22,19 +23,20 @@ class KategoriTugasController extends Controller
     public function store(Request $request)
 {
     $request->validate([
-        'deskripsi' => 'required|string',
+        'nama_kategori' => 'required|string|max:255',
+        'deskripsi' => 'nullable|string',
+        'keywords' => 'nullable|string',
     ]);
 
-    $kategori_id = $this->deteksiKategori($request->deskripsi);
-
-    AktivitasSiswa::create([
+    KategoriTugas::create([
+        'nama_kategori' => $request->nama_kategori,
         'deskripsi' => $request->deskripsi,
-        'kategori_tugas_id' => $kategori_id,
-        'siswa_id' => auth()->id(),
+        'keywords' => $request->keywords,
     ]);
 
-    return back()->with('success', 'Aktivitas berhasil dicatat.');
+    return redirect()->route('guru.data-kategori.index')->with('success', 'Kategori berhasil ditambahkan.');
 }
+
 
     public function edit($id)
     {
