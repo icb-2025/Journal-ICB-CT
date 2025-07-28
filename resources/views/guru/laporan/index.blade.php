@@ -1,44 +1,50 @@
 @extends('layouts.guru')
 
-@section('title', 'Data Aktivitas Siswa')
+@section('title', 'Laporan Aktivitas Siswa')
 
 @section('content')
-    <div class="container mt-4">
-        <h3 class="text-2xl font-semibold text-gray-800 mb-4">Data Aktivitas Siswa</h3>
-
-        <div class="bg-white rounded-lg shadow overflow-hidden">
-            <table class="table table-bordered min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Siswa</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Perusahaan</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jam Mulai</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jam Selesai</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kegiatan</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori Tugas</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($aktivitas as $item)
-                        <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $loop->iteration }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $item->siswa->name ?? '-' }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $item->perusahaan->nama_industri ?? '-' }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $item->tanggal }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $item->mulai }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $item->selesai }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-500">{{ $item->deskripsi }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $item->kategoriTugas->nama_kategori ?? '-' }}</td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="8" class="px-6 py-4 text-center text-sm text-gray-500">Tidak ada data aktivitas.</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3>Laporan Aktivitas Siswa</h3>
+        <div>
+            <a href="{{ route('laporan.export.excel') }}" class="btn btn-success">
+                <i class="fas fa-file-excel"></i> Export Excel
+            </a>
+            <a href="{{ route('guru.laporan.export') }}" class="btn btn-danger ml-2">
+                <i class="fas fa-file-pdf"></i> Export PDF
+            </a>
         </div>
     </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="mb-3">
+                <input type="text" id="search" class="form-control" placeholder="Cari aktivitas...">
+            </div>
+            
+            <div id="table-container">
+                @include('guru.laporan.partials.table', ['aktivitas' => $aktivitas])
+            </div>
+        </div>
+    </div>
+</div>
+
+@push('scripts')
+<script>
+$(document).ready(function() {
+    $('#search').on('keyup', function() {
+        let search = $(this).val();
+        
+        $.ajax({
+            url: "{{ route('laporan.index') }}",
+            type: "GET",
+            data: { search: search },
+            success: function(data) {
+                $('#table-container').html(data);
+            }
+        });
+    });
+});
+</script>
+@endpush
 @endsection
