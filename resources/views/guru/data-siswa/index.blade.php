@@ -67,8 +67,139 @@
     </div>
 </div>
 
-<!-- Modal View -->
+<!-- Modal View - SESUAI GAMBAR ANDA -->
 <div id="viewModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
-    <!-- Modal content remains the same -->
+    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Background overlay -->
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+        
+        <!-- Modal content -->
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="sm:flex sm:items-start">
+                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">
+                            Detail Siswa
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Baris 1: NIS dan Nama -->
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">NIS:</p>
+                                <p class="mt-1 text-sm text-gray-900" id="modal-nis">-</p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Nama Lengkap:</p>
+                                <p class="mt-1 text-sm text-gray-900" id="modal-nama">-</p>
+                            </div>
+                            
+                            <!-- Baris 2: Tempat Lahir dan Tanggal Lahir -->
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Tempat Lahir:</p>
+                                <p class="mt-1 text-sm text-gray-900" id="modal-tempat-lahir">-</p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Tanggal Lahir:</p>
+                                <p class="mt-1 text-sm text-gray-900" id="modal-tgl-lahir">-</p>
+                            </div>
+                            
+                            <!-- Baris 3: Golongan Darah dan Sekolah -->
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Gol. Darah:</p>
+                                <p class="mt-1 text-sm text-gray-900" id="modal-goldarah">-</p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Sekolah:</p>
+                                <p class="mt-1 text-sm text-gray-900" id="modal-sekolah">-</p>
+                            </div>
+                            
+                            <!-- Baris 4: Alamat Sekolah dan Telepon Sekolah -->
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Alamat Sekolah:</p>
+                                <p class="mt-1 text-sm text-gray-900" id="modal-alamat-sekolah">-</p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Telepon Sekolah:</p>
+                                <p class="mt-1 text-sm text-gray-900" id="modal-telepon-sekolah">-</p>
+                            </div>
+                            
+                            <!-- Baris 5: Nama Wali dan Alamat Wali -->
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Nama Wali:</p>
+                                <p class="mt-1 text-sm text-gray-900" id="modal-nama-wali">-</p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Alamat Wali:</p>
+                                <p class="mt-1 text-sm text-gray-900" id="modal-alamat-wali">-</p>
+                            </div>
+                            
+                            <!-- Baris 6: Telepon Wali -->
+                            <div>
+                                <p class="text-sm font-medium text-gray-500">Telepon Wali:</p>
+                                <p class="mt-1 text-sm text-gray-900" id="modal-telepon-wali">-</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button type="button" onclick="hideModal()" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
-@endsection 
+
+<script>
+    // FUNGSI YANG 100% SESUAI GAMBAR ANDA
+    function showStudentDetail(
+        nis, 
+        nama, 
+        tempat_lahir, 
+        tgl_lahir, 
+        goldarah, // PERHATIKAN INI "goldarah" BUKAN "goldar"
+        sekolah, 
+        alamat_sekolah, 
+        telepon_sekolah, 
+        nama_wali, 
+        alamat_wali, 
+        telepon_wali
+    ) {
+        // Debugging - bisa dihapus setelah fix
+        console.log("Data masuk:", arguments);
+        
+        // Mapping data ke modal
+        const dataMapping = {
+            'modal-nis': nis,
+            'modal-nama': nama,
+            'modal-tempat-lahir': tempat_lahir,
+            'modal-tgl-lahir': tgl_lahir,
+            'modal-goldarah': goldarah, // ID disesuaikan
+            'modal-sekolah': sekolah,
+            'modal-alamat-sekolah': alamat_sekolah,
+            'modal-telepon-sekolah': telepon_sekolah,
+            'modal-nama-wali': nama_wali,
+            'modal-alamat-wali': alamat_wali,
+            'modal-telepon-wali': telepon_wali
+        };
+
+        // Isi data ke modal
+        Object.entries(dataMapping).forEach(([id, value]) => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = value || '-';
+            } else {
+                console.error(`ERROR: Element dengan ID '${id}' tidak ditemukan!`);
+            }
+        });
+
+        document.getElementById('viewModal').classList.remove('hidden');
+    }
+
+    function hideModal() {
+        document.getElementById('viewModal').classList.add('hidden');
+    }
+</script>
+@endsection
