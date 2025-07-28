@@ -181,7 +181,7 @@
                                 </svg>
                                 Input Kegiatan
                             </a>
-                            <a href="#" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
+                            <a href="{{ route('superuser.laporan.index') }}" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>
@@ -293,7 +293,7 @@
                                 </svg>
                                 Input Kegiatan
                             </a>
-                            <a href="#" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
+                            <a href="{{ route('superuser.laporan.index') }}" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>

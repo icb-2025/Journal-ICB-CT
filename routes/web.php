@@ -9,7 +9,11 @@ use App\Http\Controllers\KegiatanController;
 use App\Http\Controllers\Guru\KategoriTugasController;
 use App\Http\Controllers\AktivitasSiswaController;
 use App\Http\Controllers\LaporankeseluruhanController; 
+use App\Http\Controllers\Superuser\LaporankeseluruhanController as SuperuserLaporankeseluruhanController; 
 use App\Http\Controllers\superuser\DataPerusahaanController as SuperuserDataPerusahaanController;
+use App\Http\Controllers\superuser\UserController as SuperuserUserController;
+use App\Http\Controllers\superuser\DataSiswaController as SuperuserDataSiswaController;
+use App\Http\Controllers\superuser\KategoriTugasController as SuperuserKategoriTugasController;
 
 
 
@@ -59,12 +63,22 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/superuser/data-siswa', fn() => view('superuser.data-siswa.index'))->name('superuser.data-siswa.index');
         Route::get('/superuser/data-kategori', fn() => view('superuser.data-kategori.index'))->name('superuser.data-kategori.index');
         Route::get('/superuser/data-user', fn() => view('superuser.data-user.index'))->name('superuser.data-user.index');
-        Route::get('/superuser/laporan', [LaporankeseluruhanController::class, 'index'])->name('superuser.laporan.index');
+        Route::get('/superuser/laporan', [SuperuserLaporankeseluruhanController::class, 'index'])->name('superuser.laporan.index');
         Route::resource('data-siswa', DataSiswaController::class);
         Route::get('/superuser/data-perusahaan', [SuperuserDataPerusahaanController::class, 'index'])->name('superuser.data-perusahaan.index');
+        Route::get('/superuser/data-user', [SuperuserUserController::class, 'index'])->name('superuser.data-user.index');
+        Route::get('/superuser/data-siswa', [SuperuserDataSiswaController::class, 'index'])->name('superuser.data-siswa.index');
+        Route::get('/superuser/data-kategori', [SuperuserKategoriTugasController::class, 'index'])->name('superuser.data-kategori.index');
         Route::resource('data-perusahaan', SuperuserDataPerusahaanController::class)->names('data-perusahaan');
-        Route::resource('data-user', UserController::class)->names('data-user');
-        Route::resource('data-kategori', KategoriTugasController::class)->names('data-kategori');
+        Route::resource('data-user', SuperuserUserController::class)->names('data-user');
+        Route::resource('data-siswa', SuperuserDataSiswaController::class)->names('data-siswa');
+        Route::resource('data-kategori', SuperuserKategoriTugasController::class)->names('data-kategori');
+        
+          Route::get('/data-siswa/export/excel', [DataSiswaController::class, 'exportExcel'])
+        ->name('data-siswa.export.excel');
+    
+    Route::get('/data-siswa/export/pdf', [DataSiswaController::class, 'exportPdf'])
+        ->name('data-siswa.export.pdf');
     });
 
     // Guru
