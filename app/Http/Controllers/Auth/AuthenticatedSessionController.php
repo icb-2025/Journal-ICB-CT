@@ -13,7 +13,7 @@ class AuthenticatedSessionController extends Controller
 {
     /**
      * Display the login view.
-     */
+    */
     public function create(): View
     {
         return view('auth.login');
@@ -33,10 +33,10 @@ class AuthenticatedSessionController extends Controller
     $redirect = match ($user->role) {
         'superuser' => route('superuser.dashboard'),
         'guru' => route('guru.dashboard'),
-        default => route('dashboard'), // untuk siswa atau role lain
+        default => route('dashboard'),
     };
-
-    return redirect()->intended($redirect);
+    
+    return redirect($redirect);
 }
 
 

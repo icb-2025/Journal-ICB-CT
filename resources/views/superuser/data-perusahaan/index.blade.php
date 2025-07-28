@@ -8,12 +8,12 @@
         <div class="flex items-center justify-between mb-6">
             <h2 class="text-2xl font-semibold text-gray-800">Data Perusahaan</h2>
             <div class="flex space-x-3">
-                <a href="{{ route('superuser.data-perusahaan.create') }}" class="flex items-center px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700">
+                <!-- <a href="{{ route('superuser.data-perusahaan.create') }}" class="flex items-center px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                     </svg>
                     Tambah Perusahaan
-                </a>
+                </a> -->
             </div>
         </div>
 
@@ -34,7 +34,7 @@
                         <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+                <!-- <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($perusahaans as $perusahaan)
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap">{{ $loop->iteration }}</td>
@@ -85,13 +85,13 @@
                         <td colspan="11" class="px-6 py-4 text-center text-gray-500">Tidak ada data perusahaan.</td>
                     </tr>
                     @endforelse
-                </tbody>
+                </tbody> -->
             </table>
         </div>
 
-        <div class="mt-4">
+        <!-- <div class="mt-4">
             {{ $perusahaans->links() }}
-        </div>
+        </div> -->
     </div>
 </div>
 
@@ -161,7 +161,7 @@
     </div>
 </div>
 
-<script>
+<!-- <script>
     function showModal(kode, nama, bidang, alamat, telepon, direktur, pembimbing, inputby, inputdate) {
         document.getElementById('modal-kode').textContent = kode;
         document.getElementById('modal-nama').textContent = nama;
@@ -195,5 +195,5 @@
             hideModal();
         }
     };
-</script>
+</script> -->
 @endsection
