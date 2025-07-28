@@ -388,6 +388,119 @@
             </main>
         </div>
     </div>
+
+
+
+
+    <!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Global Script -->
+<script>
+$(document).ready(function() {
+    // Debounce function untuk delay pencarian
+    function debounce(func, wait) {
+        let timeout;
+        return function() {
+            const context = this, args = arguments;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(context, args), wait);
+        };
+    }
+
+    // Fungsi untuk memuat data siswa dengan AJAX
+    function loadSiswaData() {
+        const search = $('#search').val();
+        const gol_darah = $('#gol_darah').val();
+        const sekolah = $('#sekolah').val();
+
+        // Show loading indicator
+        $('#table-container').html(`
+            <div class="text-center py-8">
+                <i class="fas fa-spinner fa-spin fa-2x text-indigo-600"></i>
+                <p class="mt-2 text-gray-600">Memuat data siswa...</p>
+            </div>
+        `);
+
+        $.ajax({
+            url: "{{ route('guru.data-siswa.index') }}",
+            type: "GET",
+            data: {
+                search: search,
+                gol_darah: gol_darah,
+                sekolah: sekolah
+            },
+            success: function(response) {
+                $('#table-container').html(response.html);
+                $('#pagination-container').html(response.pagination);
+            },
+            error: function(xhr) {
+                $('#table-container').html(`
+                    <div class="text-center py-8 text-red-600">
+                        <i class="fas fa-exclamation-circle fa-2x"></i>
+                        <p class="mt-2">Gagal memuat data. Silakan coba lagi.</p>
+                    </div>
+                `);
+                console.error(xhr.responseText);
+            }
+        });
+    }
+
+    // Fungsi untuk memuat data laporan dengan AJAX
+    function loadLaporanData() {
+        const searchTerm = $('#search').val().trim();
+        const tableBody = $('tbody');
+        const paginationContainer = $('.bg-gray-50');
+        
+        // Tampilkan loading
+        tableBody.html(`
+            <tr>
+                <td colspan="8" class="px-6 py-4 text-center text-sm text-gray-500">
+                    <i class="fas fa-spinner fa-spin mr-2"></i> Mencari data...
+                </td>
+            </tr>
+        `);
+        
+        $.ajax({
+            url: "{{ route('laporan.index') }}",
+            type: "GET",
+            data: { search: searchTerm },
+            success: function(response) {
+                if (response.success) {
+                    tableBody.html($(response.html).find('tbody').html());
+                    paginationContainer.html($(response.html).filter('.bg-gray-50').html());
+                }
+            },
+            error: function(xhr) {
+                tableBody.html(`
+                    <tr>
+                        <td colspan="8" class="px-6 py-4 text-center text-sm text-red-500">
+                            <i class="fas fa-exclamation-circle mr-2"></i> Error: ${xhr.statusText}
+                        </td>
+                    </tr>
+                `);
+                console.error('Error:', xhr.responseText);
+            }
+        });
+    }
+
+    // Handle search untuk data-siswa jika elemen ada
+    if ($('#data-siswa-container').length) {
+        const handleSiswaSearch = debounce(loadSiswaData, 500);
+        
+        $(document).on('keyup', '#search', handleSiswaSearch);
+        $(document).on('change', '#gol_darah, #sekolah', handleSiswaSearch);
+    }
+
+    // Handle search untuk laporan jika elemen ada
+    if ($('#laporan-container').length) {
+        const handleLaporanSearch = debounce(loadLaporanData, 500);
+        $(document).on('input', '#search', handleLaporanSearch);
+    }
+});
+</script>
+
+@stack('scripts') <!-- Untuk script tambahan dari view -->
     
 </body>
 </html>
