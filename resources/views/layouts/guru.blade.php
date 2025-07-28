@@ -22,7 +22,7 @@
             display: none;
         }
         .profile-avatar {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #667eea 0%, #5d4872 100%);
         }
         @keyframes slideInFromLeft {
             0% {
@@ -200,7 +200,7 @@
                         </div>
                     </div>
                     <div class="space-y-1">
-                        <a href="#" class="flex items-center px-3 py-2 text-sm rounded-lg hover:bg-indigo-700 transition-colors">
+                        <a href="{{ route('profile.edit') }}" class="flex items-center px-3 py-2 text-sm rounded-lg hover:bg-indigo-700 transition-colors">
                             <i class="fas fa-user-circle w-5 mr-2 text-center"></i>
                             <span>Profil Saya</span>
                         </a>
@@ -298,7 +298,7 @@
                         </div>
                     </div>
                     <div class="space-y-1">
-                        <a href="#" class="flex items-center px-3 py-2 text-sm rounded-lg hover:bg-indigo-700 transition-colors">
+                        <a href="{{ route('profile.edit') }}" class="flex items-center px-3 py-2 text-sm rounded-lg hover:bg-indigo-700 transition-colors">
                             <i class="fas fa-user-circle w-5 mr-2 text-center"></i>
                             <span>Profil Saya</span>
                         </a>
@@ -361,7 +361,7 @@
                                  x-transition:leave-start="transform opacity-100 scale-100"
                                  x-transition:leave-end="transform opacity-0 scale-95"
                                  class="absolute right-0 z-50 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg">
-                                <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <a href="{{ route('profile.edit') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     <i class="fas fa-user-circle w-5 mr-2 text-center"></i>
                                     <span>Profil Saya</span>
                                 </a>
@@ -410,11 +410,12 @@ $(document).ready(function() {
 
     // Fungsi untuk memuat data siswa dengan AJAX
     function loadSiswaData() {
-        const search = $('#search').val();
-        const gol_darah = $('#gol_darah').val();
-        const sekolah = $('#sekolah').val();
+        // Ambil semua nilai filter
+        const nama = $('#search').val().trim();       // Live search nama_lengkap
+        const gol_darah = $('#gol_darah').val();      // Filter golongan darah
+        const sekolah = $('#sekolah').val();          // Filter sekolah
 
-        // Show loading indicator
+        // Tampilkan loading indicator
         $('#table-container').html(`
             <div class="text-center py-8">
                 <i class="fas fa-spinner fa-spin fa-2x text-indigo-600"></i>
@@ -422,29 +423,48 @@ $(document).ready(function() {
             </div>
         `);
 
-        $.ajax({
-            url: "{{ route('guru.data-siswa.index') }}",
-            type: "GET",
-            data: {
-                search: search,
-                gol_darah: gol_darah,
-                sekolah: sekolah
-            },
-            success: function(response) {
-                $('#table-container').html(response.html);
-                $('#pagination-container').html(response.pagination);
-            },
-            error: function(xhr) {
-                $('#table-container').html(`
-                    <div class="text-center py-8 text-red-600">
-                        <i class="fas fa-exclamation-circle fa-2x"></i>
-                        <p class="mt-2">Gagal memuat data. Silakan coba lagi.</p>
-                    </div>
-                `);
-                console.error(xhr.responseText);
-            }
-        });
+        // Gunakan debounce untuk optimasi performa
+        clearTimeout(loadSiswaData.debounce);
+        loadSiswaData.debounce = setTimeout(() => {
+            $.ajax({
+                url: "{{ route('guru.data-siswa.index') }}",
+                type: "GET",
+                data: {
+                    search: nama,          // Untuk search nama_lengkap
+                    gol_darah: gol_darah, // Filter golongan darah
+                    sekolah: sekolah      // Filter sekolah
+                },
+                success: function(response) {
+                    $('#table-container').html(response.html);
+                    $('#pagination-container').html(response.pagination);
+                },
+                error: function(xhr) {
+                    $('#table-container').html(`
+                        <div class="text-center py-8 text-red-600">
+                            <i class="fas fa-exclamation-circle fa-2x"></i>
+                            <p class="mt-2">Gagal memuat data. Silakan coba lagi.</p>
+                        </div>
+                    `);
+                    console.error(xhr.responseText);
+                }
+            });
+        }, 300);
     }
+
+    // Event listeners untuk semua filter
+    $(document).ready(function() {
+        // Live search nama
+        $('#search').on('input', loadSiswaData);
+        
+        // Filter golongan darah
+        $('#gol_darah').on('change', loadSiswaData);
+        
+        // Filter sekolah
+        $('#sekolah').on('change', loadSiswaData);
+
+        // Load data pertama kali
+        loadSiswaData();
+    });
 
     // Fungsi untuk memuat data laporan dengan AJAX
     function loadLaporanData() {
