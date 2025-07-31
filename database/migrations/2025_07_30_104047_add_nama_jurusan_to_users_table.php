@@ -1,3 +1,5 @@
+<!--2025_07_30_104047_add_nama_jurusan_to_users_table.php->
+
 <?php
 
 use Illuminate\Database\Migrations\Migration;

@@ -13,6 +13,7 @@ use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use App\Models\Perusahaan;
 use App\Models\Jurusan;
+use App\Models\Siswa;
 class RegisteredUserController extends Controller
 {
     /**
@@ -32,29 +33,38 @@ class RegisteredUserController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-    'name' => ['required', 'string', 'max:255'],
-    'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-    'password' => ['required', 'confirmed', Rules\Password::defaults()],
-    'kode_perusahaan' => ['nullable'],
-    'nama_jurusan' => ['nullable'],
-]);
+{
+    $request->validate([
+        'name' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+        'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        'nisn' => ['required', 'string'],
+    ]);
 
-$user = User::create([
+    // Cek apakah NISN ada di tabel siswa
+    $siswa = Siswa::where('nis', $request->nisn)->first();
+
+    if (!$siswa) {
+        return back()->withErrors(['nisn' => 'NISN tidak ditemukan dalam data siswa.']);
+    }
+
+    // Buat user baru
+   $user = User::create([
     'name' => $request->name,
     'email' => $request->email,
     'password' => Hash::make($request->password),
-    'kode_perusahaan' => $request->kode_perusahaan,
-    'nama_jurusan' => $request->nama_jurusan,
-    
+    'kode_perusahaan' => $siswa->kode_perusahaan,
+    'role' => 'siswa',
+    'nisn' => $request->nisn, // ⬅ Tambahkan ini
+    'input_by' => null,
+    'input_date' => now(),
 ]);
 
 
-        event(new Registered($user));
+    event(new Registered($user));
 
-        Auth::login($user);
+    Auth::login($user);
 
-        return redirect(route('index', absolute: false));
-    }
+    return redirect(route('index', absolute: false));
+}
 }

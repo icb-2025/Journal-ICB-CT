@@ -24,6 +24,7 @@ class Siswa extends Model
         'alamat_wali',
         'telepon_wali',
         'input_by',
+        'kode_perusahaan', 
     ];
 
     public function guru()
