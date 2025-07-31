@@ -18,6 +18,8 @@ class User extends Authenticatable
     'kode_perusahaan',
     'input_by',
     'input_date',
+    'nama_jurusan',
+    'nisn'
 ];
 
 

@@ -40,15 +40,14 @@
                 <nav class="flex-1 overflow-y-auto py-4">
                     <ul class="space-y-1 px-2">
                         <li>
-                            <a href="{{ route('dashboard') }}" 
+                            <a href="{{ route('index') }}" 
                                class="flex items-center p-3 rounded-lg hover:bg-gray-100 transition-colors {{ request()->routeIs('dashboard') ? 'bg-indigo-50 text-indigo-600 border-l-4 border-indigo-600' : '' }}">
                                 <i class="fas fa-home w-5 text-center mr-3"></i>
                                 <span>Dashboard</span>
                             </a>
                         </li>
-                        
                         <li>
-                            <a href="#" 
+                            <a href="{{ route('users') }}" 
                                class="flex items-center p-3 rounded-lg hover:bg-gray-100 transition-colors">
                                 <i class="fas fa-users w-5 text-center mr-3"></i>
                                 <span>Users</span>

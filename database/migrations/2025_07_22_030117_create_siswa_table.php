@@ -1,3 +1,5 @@
+<!--2025_07_22_030117_create_siswa_table.php->
+
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -26,6 +28,7 @@ public function up()
         $table->string('nama_wali');
         $table->text('alamat_wali');
         $table->string('telepon_wali')->nullable();
+        // $table->string('kode_perusahaan')->nullable()->after('telepon_wali'); (ini saya ambil dari migration untuk menamabahkan tabel kode_perusahaan ke users)
         $table->unsignedBigInteger('input_by'); // user_id dari guru
         $table->timestamps();
 

@@ -1,4 +1,4 @@
-@extends('layouts.guru')
+<!-- @extends('layouts.guru')
 
 @section('title', 'Tambah Perusahaan')
 
@@ -40,4 +40,4 @@
         </form>
     </div>
 </div>
-@endsection
+@endsection -->

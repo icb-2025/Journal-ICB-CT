@@ -13,7 +13,7 @@ class AuthenticatedSessionController extends Controller
 {
     /**
      * Display the login view.
-     */
+    */
     public function create(): View
     {
         return view('auth.login');
@@ -22,14 +22,23 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
-    {
-        $request->authenticate();
+    public function store(LoginRequest $request)
+{
+    $request->authenticate();
 
-        $request->session()->regenerate();
+    $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
-    }
+    $user = auth()->user();
+
+    $redirect = match ($user->role) {
+        'superuser' => route('superuser.dashboard'),
+        'guru' => route('guru.dashboard'),
+        default => route('index'),
+    };
+    
+    return redirect($redirect);
+}
+
 
     /**
      * Destroy an authenticated session.

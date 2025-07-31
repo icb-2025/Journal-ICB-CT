@@ -22,7 +22,79 @@
             display: none;
         }
         .profile-avatar {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #667eea 0%, #5d4872 100%);
+        }
+        @keyframes slideInFromLeft {
+            0% {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        .animate-slide-in {
+            animation: slideInFromLeft 0.5s ease-out forwards;
+        }
+        
+        /* Enhanced school title style with animation */
+        .school-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #ffffff;
+            text-align: center;
+            margin: 0.5rem 0.5rem 1rem;
+            padding: 0.5rem 0;
+            background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 50%, #4f46e5 100%);
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.375rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        .school-title::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 3.5s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% {
+                left: -100%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+        
+        /* Scrolling text animation */
+        .scrolling-text-container {
+            width: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+        
+        .scrolling-text {
+            display: inline-block;
+            padding-left: 100%;
+            animation: scrollText 18s linear infinite;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        
+        @keyframes scrollText {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
         }
     </style>
 </head>
@@ -60,6 +132,11 @@
                 </div>
 
                 <nav class="flex-1 mt-4">
+                    <div class="school-title">
+                        <div class="scrolling-text-container">
+                            <div class="scrolling-text">SMK ICB CINTA TEKNIKA</div>
+                        </div>
+                    </div>
                     <div x-data="{ open: true }" class="mb-2">
                         <button @click="open = !open" class="flex items-center justify-between w-full px-4 py-3 text-left transition duration-150 hover:bg-indigo-700 focus:outline-none">
                             <span class="flex items-center">
@@ -74,18 +151,25 @@
                         </button>
 
                         <div x-show="open" x-transition class="bg-indigo-900">
+                            <a href="{{ route('guru.dashboard') }}" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24"                               stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9.75L12 3l9 6.75V21a1.5                                1.5 0 01-1.5 1.5H4.5A1.5 1.5 0 013 21V9.75z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 22V12h6v10" />
+                                </svg>
+                                Dashboard
+                           </a>
                             <a href="{{ route('guru.data-perusahaan.index') }}" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                                 </svg>
                                 Data Perusahaan
                             </a>
-                            <a href="{{ route('guru.data-user.index') }}" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
+                            <!-- <a href="{{ route('guru.data-user.index') }}" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                                 </svg>
                                 Data User
-                            </a>
+                            </a> -->
                             <a href="{{route('guru.data-siswa.index')}}" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -97,6 +181,12 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                                 </svg>
                                 Data Kategori
+                            </a>
+                            <a href="{{ route('guru.laporan.index') }}" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Laporan
                             </a>
                         </div>
                     </div>
@@ -117,7 +207,7 @@
                         </div>
                     </div>
                     <div class="space-y-1">
-                        <a href="#" class="flex items-center px-3 py-2 text-sm rounded-lg hover:bg-indigo-700 transition-colors">
+                        <a href="{{ route('profile.edit') }}" class="flex items-center px-3 py-2 text-sm rounded-lg hover:bg-indigo-700 transition-colors">
                             <i class="fas fa-user-circle w-5 mr-2 text-center"></i>
                             <span>Profil Saya</span>
                         </a>
@@ -133,7 +223,7 @@
             </div>
         </aside>
 
-        <!-- Desktop Sidebar -->
+        <!-- Desktop Sidebar - No toggle button needed -->
         <aside class="hidden w-64 text-white bg-indigo-800 shadow-lg lg:flex lg:flex-shrink-0">
             <div class="flex flex-col w-full h-full">
                 <div class="flex items-center p-4 border-b border-indigo-700">
@@ -145,7 +235,12 @@
                     <h1 class="text-lg font-semibold">Panel Guru</h1>
                 </div>
 
-                <nav class="flex-1 mt-4 overflow-y-auto hide-scrollbar">
+                <nav class="flex-1 mt-4">
+                    <div class="school-title">
+                        <div class="scrolling-text-container">
+                            <div class="scrolling-text">SMK ICB CINTA TEKNIKA</div>
+                        </div>
+                    </div>
                     <div x-data="{ open: true }" class="mb-2">
                         <button @click="open = !open" class="flex items-center justify-between w-full px-4 py-3 text-left transition duration-150 hover:bg-indigo-700 focus:outline-none">
                             <span class="flex items-center">
@@ -160,18 +255,25 @@
                         </button>
 
                         <div x-show="open" x-transition class="bg-indigo-900">
+                            <a href="{{ route('guru.dashboard') }}" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24"                               stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9.75L12 3l9 6.75V21a1.5                                1.5 0 01-1.5 1.5H4.5A1.5 1.5 0 013 21V9.75z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 22V12h6v10" />
+                                </svg>
+                                Dashboard
+                           </a>
                             <a href="{{ route('guru.data-perusahaan.index') }}" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                                 </svg>
                                 Data Perusahaan
                             </a>
-                            <a href="{{ route('guru.data-user.index') }}" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
+                            <!-- <a href="{{ route('guru.data-user.index') }}" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                                 </svg>
                                 Data User
-                            </a>
+                            </a> -->
                             <a href="{{route('guru.data-siswa.index')}}" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -184,9 +286,16 @@
                                 </svg>
                                 Data Kategori
                             </a>
+                            <a href="{{ route('guru.laporan.index') }}" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                Laporan
+                            </a>
                         </div>
                     </div>
                 </nav>
+
 
                 <!-- Enhanced Profile Section -->
                 <div class="mt-auto p-4 border-t border-indigo-700 bg-indigo-900">
@@ -203,7 +312,7 @@
                         </div>
                     </div>
                     <div class="space-y-1">
-                        <a href="#" class="flex items-center px-3 py-2 text-sm rounded-lg hover:bg-indigo-700 transition-colors">
+                        <a href="{{ route('profile.edit') }}" class="flex items-center px-3 py-2 text-sm rounded-lg hover:bg-indigo-700 transition-colors">
                             <i class="fas fa-user-circle w-5 mr-2 text-center"></i>
                             <span>Profil Saya</span>
                         </a>
@@ -224,14 +333,14 @@
             <!-- Header -->
             <header class="bg-white shadow-sm">
                 <div class="flex items-center justify-between p-4">
-                    <!-- Mobile menu button -->
+                    <!-- Mobile menu button (only visible on mobile) -->
                     <button @click="isSidebarOpen = !isSidebarOpen" class="p-2 -ml-2 rounded-md text-gray-500 lg:hidden focus:outline-none">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
                     
-                    <h2 class="text-xl font-semibold text-gray-800">@yield('title', 'Dashboard')</h2>
+                    <h2 class="text-xl font-semibold text-gray-500">@yield('title')</h2>
                     <div class="flex items-center space-x-4">
                         <button class="p-2 rounded-full hover:bg-gray-100 relative">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -266,7 +375,7 @@
                                  x-transition:leave-start="transform opacity-100 scale-100"
                                  x-transition:leave-end="transform opacity-0 scale-95"
                                  class="absolute right-0 z-50 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg">
-                                <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <a href="{{ route('profile.edit') }}" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     <i class="fas fa-user-circle w-5 mr-2 text-center"></i>
                                     <span>Profil Saya</span>
                                 </a>
@@ -293,5 +402,139 @@
             </main>
         </div>
     </div>
+
+
+
+
+    <!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Global Script -->
+<script>
+$(document).ready(function() {
+    // Debounce function untuk delay pencarian
+    function debounce(func, wait) {
+        let timeout;
+        return function() {
+            const context = this, args = arguments;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(context, args), wait);
+        };
+    }
+
+    // // Fungsi untuk memuat data siswa dengan AJAX
+    // function loadSiswaData() {
+    //     // Ambil semua nilai filter
+    //     const nama = $('#search').val().trim();       // Live search nama_lengkap
+    //     const gol_darah = $('#gol_darah').val();      // Filter golongan darah
+    //     const sekolah = $('#sekolah').val();          // Filter sekolah
+
+    //     // Tampilkan loading indicator
+    //     $('#table-container').html(`
+    //         <div class="text-center py-8">
+    //             <i class="fas fa-spinner fa-spin fa-2x text-indigo-600"></i>
+    //             <p class="mt-2 text-gray-600">Memuat data siswa...</p>
+    //         </div>
+    //     `);
+
+    //     // Gunakan debounce untuk optimasi performa
+    //     clearTimeout(loadSiswaData.debounce);
+    //     loadSiswaData.debounce = setTimeout(() => {
+    //         $.ajax({
+    //             url: "{{ route('guru.data-siswa.index') }}",
+    //             type: "GET",
+    //             data: {
+    //                 search: nama,          // Untuk search nama_lengkap
+    //                 gol_darah: gol_darah, // Filter golongan darah
+    //                 sekolah: sekolah      // Filter sekolah
+    //             },
+    //             success: function(response) {
+    //                 $('#table-container').html(response.html);
+    //                 $('#pagination-container').html(response.pagination);
+    //             },
+    //             error: function(xhr) {
+    //                 $('#table-container').html(`
+    //                     <div class="text-center py-8 text-red-600">
+    //                         <i class="fas fa-exclamation-circle fa-2x"></i>
+    //                         <p class="mt-2">Gagal memuat data. Silakan coba lagi.</p>
+    //                     </div>
+    //                 `);
+    //                 console.error(xhr.responseText);
+    //             }
+    //         });
+    //     }, 300);
+    // }
+
+    // // Event listeners untuk semua filter
+    // $(document).ready(function() {
+    //     // Live search nama
+    //     $('#search').on('input', loadSiswaData);
+        
+    //     // Filter golongan darah
+    //     $('#gol_darah').on('change', loadSiswaData);
+        
+    //     // Filter sekolah
+    //     $('#sekolah').on('change', loadSiswaData);
+
+    //     // Load data pertama kali
+    //     loadSiswaData();
+    // });
+
+    // Fungsi untuk memuat data laporan dengan AJAX
+    function loadLaporanData() {
+        const searchTerm = $('#search').val().trim();
+        const tableBody = $('tbody');
+        const paginationContainer = $('.bg-gray-50');
+        
+        // Tampilkan loading
+        tableBody.html(`
+            <tr>
+                <td colspan="8" class="px-6 py-4 text-center text-sm text-gray-500">
+                    <i class="fas fa-spinner fa-spin mr-2"></i> Mencari data...
+                </td>
+            </tr>
+        `);
+        
+        $.ajax({
+            url: "{{ route('laporan.index') }}",
+            type: "GET",
+            data: { search: searchTerm },
+            success: function(response) {
+                if (response.success) {
+                    tableBody.html($(response.html).find('tbody').html());
+                    paginationContainer.html($(response.html).filter('.bg-gray-50').html());
+                }
+            },
+            error: function(xhr) {
+                tableBody.html(`
+                    <tr>
+                        <td colspan="8" class="px-6 py-4 text-center text-sm text-red-500">
+                            <i class="fas fa-exclamation-circle mr-2"></i> Error: ${xhr.statusText}
+                        </td>
+                    </tr>
+                `);
+                console.error('Error:', xhr.responseText);
+            }
+        });
+    }
+
+    // Handle search untuk data-siswa jika elemen ada
+    if ($('#data-siswa-container').length) {
+        const handleSiswaSearch = debounce(loadSiswaData, 500);
+        
+        $(document).on('keyup', '#search', handleSiswaSearch);
+        $(document).on('change', '#gol_darah, #sekolah', handleSiswaSearch);
+    }
+
+    // Handle search untuk laporan jika elemen ada
+    if ($('#laporan-container').length) {
+        const handleLaporanSearch = debounce(loadLaporanData, 500);
+        $(document).on('input', '#search', handleLaporanSearch);
+    }
+});
+</script>
+
+@stack('scripts') <!-- Untuk script tambahan dari view -->
+    
 </body>
 </html>

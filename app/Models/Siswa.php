@@ -24,10 +24,16 @@ class Siswa extends Model
         'alamat_wali',
         'telepon_wali',
         'input_by',
+        'kode_perusahaan', 
     ];
 
     public function guru()
     {
         return $this->belongsTo(User::class, 'input_by');
     }
+    public function inputBy()
+{
+    return $this->belongsTo(User::class, 'input_by');
+}
+
 }
