@@ -1,3 +1,5 @@
+<!--2025_07_23_050520_add_kode_perusahaan_to_users_table.php->
+
 <?php
 
 use Illuminate\Database\Migrations\Migration;

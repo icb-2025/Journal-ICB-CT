@@ -7,7 +7,7 @@
     <div class="p-6 bg-white rounded-lg shadow-md">
         <h2 class="mb-4 text-xl font-semibold">Tambah Data Siswa</h2>
 
-        <form action="{{ route('data-siswa.store') }}" method="POST">
+        <form action="{{ route('superuser.data-siswa.store') }}" method="POST">
             @csrf
 
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -55,6 +55,17 @@
                     <label class="block">No. Telepon Orang Tua / Wali</label>
                     <input type="text" name="telepon_wali" class="w-full p-2 border rounded">
                 </div>
+               <div>
+    <label for="kode_perusahaan" class="block">Perusahaan</label>
+    <select name="kode_perusahaan" class="w-full p-2 border rounded" required>
+        <option value="">-- Pilih Perusahaan --</option>
+        @foreach($perusahaans as $perusahaan)
+            <option value="{{ $perusahaan->kode_perusahaan }}">{{ $perusahaan->nama_industri }}</option>
+        @endforeach
+    </select>
+</div>
+
+
             </div>
 
             <div class="mt-4">

@@ -1,3 +1,5 @@
+<!--0001_01_01_000000_create_users_table.php->
+
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -17,6 +19,10 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
             $table->string('role')->default('siswa'); // hanya gunakan role
+            // $table->string('nik', 20)->nullable()->after('role'); ini dari migration untuk menambahkan nik ke users
+            // $table->string('nisn', 20)->nullable()->after('nik'); ini dari migration untuk menambahkan nik ke users
+            // $table->string('nama_jurusan')->nullable()->after('role'); ini dari migration untuk menambahkan nik ke users
+            // $table->string('kode_perusahaan')->nullable()->after('role'); ini dari migration untuk menambahkan nik ke users
             $table->unsignedBigInteger('input_by')->nullable(); // user id yang menginput
             $table->timestamp('input_date')->nullable(); // tanggal input
         });

@@ -9,6 +9,7 @@ use App\Exports\SiswaExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf; // Update this line
 use Illuminate\Support\Str;
+use App\Models\Perusahaan; // Pastikan sudah di-import di atas
 
 class DataSiswaController extends Controller
 {
@@ -16,21 +17,23 @@ class DataSiswaController extends Controller
     {
         $query = $this->getFilteredQuery($request);
         $siswas = $query->paginate(10);
+        $perusahaans = Perusahaan::all(); // tambahkan ini
 
         if ($request->ajax()) {
             return response()->json([
                 'success' => true,
-                'html' => view('superuser.data-siswa.partials.table', compact('siswas'))->render(),
+                'html' => view('superuser.data-siswa.partials.table', compact('siswas', 'perusahaans'))->render(),
                 'pagination' => $siswas->links()->toHtml()
             ]);
         }
 
-        return view('superuser.data-siswa.index', compact('siswas'));
+        return view('superuser.data-siswa.index', compact('siswas', 'perusahaans'));
     }
 
     public function create()
     {
-        return view('superuser.data-siswa.create');
+        $perusahaans = Perusahaan::all();
+        return view('superuser.data-siswa.create', compact('perusahaans'));
     }
 
     public function store(Request $request)
@@ -47,6 +50,7 @@ class DataSiswaController extends Controller
             'nama_wali'        => 'required|string|max:255',
             'alamat_wali'      => 'required|string',
             'telepon_wali'     => 'nullable|string|max:20',
+            'kode_perusahaan'  => 'required|exists:perusahaans,kode_perusahaan',
         ]);
 
         $validated['input_by'] = auth()->id();
@@ -64,7 +68,8 @@ class DataSiswaController extends Controller
     public function edit(string $id)
     {
         $siswa = Siswa::findOrFail($id);
-        return view('superuser.data-siswa.edit', compact('siswa'));
+        $perusahaans = Perusahaan::all();
+        return view('superuser.data-siswa.edit', compact('siswa', 'perusahaans'));
     }
 
     public function update(Request $request, string $id)
@@ -83,6 +88,7 @@ class DataSiswaController extends Controller
             'nama_wali'        => 'required|string|max:255',
             'alamat_wali'      => 'required|string',
             'telepon_wali'     => 'nullable|string|max:20',
+            'kode_perusahaan'  => 'required|exists:perusahaans,kode_perusahaan',
         ]);
 
         $validated['input_by'] = auth()->id();
