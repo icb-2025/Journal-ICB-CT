@@ -1,6 +1,6 @@
 @extends('layouts.super')
 
-@section('title', 'Data Siswa')
+@section('page-id', 'data-siswa')
 
 @section('content')
 <div class="container px-4 py-6 mx-auto">
@@ -8,7 +8,7 @@
     <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
         <h2 class="text-2xl font-semibold text-gray-800">Data Siswa</h2>
         <div class="flex space-x-2 mt-4 md:mt-0">
-            <a href="{{ route('data-siswa.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center transition-colors duration-200">
+            <a href="{{ route('superuser.data-siswa.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center transition-colors duration-200">
                 <i class="fas fa-plus mr-2"></i> Tambah Data
             </a>
             <a href="{{ route('data-siswa.export.excel') }}" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 flex items-center transition-colors duration-200">
@@ -72,89 +72,6 @@
     <!-- Modal content remains the same -->
 </div>
 
-<script>
-    // Modal functions remain the same
-    function showModal(nis, nama, jenisKelamin, golDarah, tanggalLahir, alamat, sekolah, kelas, namaOrtu, noHpOrtu, status, inputBy) {
-        // Existing implementation
-    }
 
-    function hideModal() {
-        // Existing implementation
-    }
 
-    // Close modal handlers remain the same
-    window.onclick = function(event) {
-        // Existing implementation
-    }
-
-    document.onkeydown = function(evt) {
-        // Existing implementation
-    };
-</script>
-
-@push('scripts')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-$(document).ready(function() {
-    // Debounce function remains the same
-    function debounce(func, wait, immediate) {
-        // Existing implementation
-    }
-
-    // Enhanced loadData function with better loading state
-    function loadData() {
-        var search = $('#search').val();
-        var gol_darah = $('#gol_darah').val();
-        var sekolah = $('#sekolah').val();
-
-        // Show loading indicator with animation
-        $('#table-container').html(`
-            <div class="text-center py-8 animate-pulse">
-                <div class="mx-auto w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center">
-                    <i class="fas fa-spinner fa-spin fa-lg text-indigo-600"></i>
-                </div>
-                <p class="mt-3 text-gray-600">Memuat data siswa...</p>
-            </div>
-        `);
-
-        $.ajax({
-            url: "{{ route('superuser.data-siswa.index') }}",
-            type: "GET",
-            data: {
-                search: search,
-                gol_darah: gol_darah,
-                sekolah: sekolah
-            },
-            success: function(response) {
-                $('#table-container').html(response.html);
-                $('#pagination-container').html(response.pagination);
-                
-                // Add smooth transition
-                $('#table-container').hide().fadeIn(300);
-            },
-            error: function(xhr) {
-                $('#table-container').html(`
-                    <div class="text-center py-8">
-                        <div class="mx-auto w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
-                            <i class="fas fa-exclamation-circle fa-lg text-red-600"></i>
-                        </div>
-                        <p class="mt-3 text-red-600">Gagal memuat data. Silakan coba lagi.</p>
-                        <button onclick="loadData()" class="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 text-sm">
-                            <i class="fas fa-sync-alt mr-1"></i> Coba Lagi
-                        </button>
-                    </div>
-                `);
-                console.error(xhr.responseText);
-            }
-        });
-    }
-
-    // Event listeners with better debounce
-    const searchHandler = debounce(loadData, 500);
-    
-    $('#search').on('keyup', searchHandler);
-    $('#gol_darah, #sekolah').on('change', loadData);
-});
-</script>
-@endpush
 @endsection 

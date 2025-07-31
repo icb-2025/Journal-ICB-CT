@@ -14,7 +14,7 @@
 
     <!-- Tombol Tambah -->
     <div class="mb-6">
-        <a href="{{ route('data-kategori.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Tambah Kategori</a>
+        <a href="{{ route('superuser.data-kategori.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">+ Tambah Kategori</a>
     </div>
 
     <!-- Tabel Kategori -->
@@ -35,8 +35,8 @@
                         <td class="py-3 px-4 font-semibold">{{ $kategori->nama_kategori }}</td>
                         <td class="py-3 px-4 text-sm text-gray-600">{{ $kategori->deskripsi ?? '-' }}</td>
                         <td class="py-3 px-4 text-center">
-                            <a href="{{ route('data-kategori.edit', $kategori->id) }}" class="text-blue-600 hover:underline mr-3">Edit</a>
-                            <form action="{{ route('data-kategori.destroy', $kategori->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin hapus kategori ini?')">
+                            <a href="{{ route('superuser.data-kategori.edit', $kategori->id) }}" class="text-blue-600 hover:underline mr-3">Edit</a>
+                            <form action="{{ route('superuser.data-kategori.destroy', $kategori->id) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin ingin hapus kategori ini?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-red-600 hover:underline">Hapus</button>

@@ -8,33 +8,52 @@ use App\Models\Aktivitas; // Pastikan model Aktivitas ada
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\AktivitasExport;
 use Barryvdh\DomPDF\Facade\Pdf; // Perbaikan import PDF
+use App\Models\Perusahaan;
+use App\Models\Jurusan;
 
 class LaporankeseluruhanController extends Controller
 {
-    public function index(Request $request)
-    {
+public function index(Request $request)
+{
+    if ($request->ajax()) {
         $query = Aktivitas::with(['siswa', 'perusahaan', 'kategoriTugas']);
-        
-        if ($request->has('search') && !empty($request->search)) {
-            $search = $request->search;
-            $query->whereHas('siswa', function($q) use ($search) {
-                $q->where('name', 'like', "%$search%");
+
+        if ($request->search) {
+            $query->whereHas('siswa', function ($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%');
             });
         }
-        
-        $aktivitas = $query->orderBy('tanggal', 'desc')
-                        ->orderBy('mulai', 'desc')
-                        ->paginate(10);
-        
-        if ($request->ajax()) {
-            return response()->json([
-                'success' => true,
-                'html' => view('superuser.laporan.partials.table', compact('aktivitas'))->render()
-            ]);
+
+        if ($request->jurusan) {
+            $query->whereHas('siswa', function ($q) use ($request) {
+                $q->where('nama_jurusan', $request->jurusan);
+            });
         }
-        
-        return view('superuser.laporan.index', compact('aktivitas'));
+
+        if ($request->perusahaan) {
+            $query->whereHas('perusahaan', function ($q) use ($request) {
+                $q->where('nama_industri', $request->perusahaan);
+            });
+        }
+
+        $aktivitas = $query->oldest()->get();
+
+        $html = view('superuser.laporan.partials.table', compact('aktivitas'))->render();
+
+        return response()->json([
+            'success' => true,
+            'html' => $html
+        ]);
     }
+
+    // Untuk non-AJAX: halaman awal
+    return view('superuser.laporan.index', [
+        'aktivitas' => Aktivitas::with(['siswa', 'perusahaan', 'kategoriTugas'])->latest()->get(),
+        'jurusans' => Jurusan::all(),
+        'perusahaans' => Perusahaan::all(),
+    ]);
+}
+
     
     public function exportExcel()
     {

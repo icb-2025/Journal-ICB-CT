@@ -35,12 +35,12 @@
                 <h2 class="mt-6 text-3xl font-extrabold text-gray-900">
                     Sign in to your account
                 </h2>
-                <!-- <p class="mt-2 text-sm text-gray-600">
+                <p class="mt-2 text-sm text-gray-600">
                     Or
                     <a href="{{ route('register') }}" class="font-medium text-indigo-600 hover:text-indigo-500">
                         create a new account
                     </a>
-                </p> -->
+                </p>
             </div>
 
             <!-- Session Status -->
@@ -52,17 +52,17 @@
                 <div class="rounded-md shadow-sm space-y-4">
                     <!-- Email Address -->
                     <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email address</label>
+                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
                         <input 
-                            id="email" 
-                            name="email" 
-                            type="email" 
-                            autocomplete="email" 
+                            id="name" 
+                            name="name" 
+                            type="name" 
+                            autocomplete="name" 
                             required 
-                            value="{{ old('email') }}"
+                            value="{{ old('name') }}"
                             class="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg input-focus focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                            placeholder="you@example.com">
-                        <x-input-error :messages="$errors->get('email')" class="mt-2 text-sm text-red-600" />
+                            placeholder="Username">
+                        <x-input-error :messages="$errors->get('name')" class="mt-2 text-sm text-red-600" />
                     </div>
 
                     <!-- Password -->

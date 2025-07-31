@@ -19,6 +19,7 @@ class DataSiswaController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
+                'success' => true,
                 'html' => view('superuser.data-siswa.partials.table', compact('siswas'))->render(),
                 'pagination' => $siswas->links()->toHtml()
             ]);

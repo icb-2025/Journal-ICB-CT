@@ -94,6 +94,39 @@
                             <x-input-error :messages="$errors->get('email')" class="mt-1 text-sm text-red-600" />
                         </div>
 
+                        <!-- Kode Perusahaan -->
+<!-- <div>
+    <label for="kode_perusahaan" class="block text-sm font-medium text-gray-700">Filter Perusahaan:</label>
+    <select name="kode_perusahaan" id="kode_perusahaan" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+        <option value="">-- Semua Perusahaan --</option>
+        @foreach($perusahaans as $perusahaan)
+            <option value="{{ $perusahaan->kode_perusahaan }}"
+                {{ old('kode_perusahaan', $selectedPerusahaan ?? '') == $perusahaan->kode_perusahaan ? 'selected' : '' }}>
+                {{ $perusahaan->nama_industri }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
+
+
+
+Nama Jurusan -->
+<!-- <div>
+    <label for="nama_jurusan" class="block text-sm font-medium text-gray-700 mb-1">Jurusan</label>
+    <select name="nama_jurusan" id="nama_jurusan" required
+        class="block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-indigo-500">
+        <option value="">-- Pilih Jurusan --</option>
+        @foreach ($jurusans as $jurusan)
+            <option value="{{ $jurusan->nama_jurusan }}" {{ old('nama_jurusan') == $jurusan->nama_jurusan ? 'selected' : '' }}>
+                {{ $jurusan->nama_jurusan }}
+            </option>
+        @endforeach
+    </select>
+    <x-input-error :messages="$errors->get('nama_jurusan')" class="mt-1 text-sm text-red-600" />
+</div> --> 
+
+
                         <!-- Password -->
                         <div>
                             <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
@@ -147,9 +180,6 @@
 
                         <button type="submit" class="group relative flex justify-center py-3 px-6 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out btn-hover shadow-md">
                             <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-                                <svg class="h-5 w-5 text-indigo-400 group-hover:text-indigo-300 transition duration-150 ease-in-out" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clip-rule="evenodd" />
-                                </svg>
                             </span>
                             Register
                         </button>

@@ -55,12 +55,12 @@
                 </button>
                 
                 <!-- Edit and Delete buttons remain the same -->
-                <a href="{{ route('data-siswa.edit', $siswa->id) }}" class="text-indigo-600 hover:text-indigo-900" title="Edit">
+                <a href="{{ route('superuser.data-siswa.edit', $siswa->id) }}" class="text-indigo-600 hover:text-indigo-900" title="Edit">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M13.586 3.586a2 2 0 112.828 2.828L14.828 8l-2.828-2.828L13.586 3.586zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
                     </svg>
                 </a>
-                <form action="{{ route('data-siswa.destroy', $siswa->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus siswa ini?')">
+                <form action="{{ route('superuser.data-siswa.destroy', $siswa->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus siswa ini?')">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="text-red-600 hover:text-red-900" title="Hapus">

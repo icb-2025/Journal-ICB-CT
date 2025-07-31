@@ -33,7 +33,7 @@ class AuthenticatedSessionController extends Controller
     $redirect = match ($user->role) {
         'superuser' => route('superuser.dashboard'),
         'guru' => route('guru.dashboard'),
-        default => route('dashboard'),
+        default => route('index'),
     };
     
     return redirect($redirect);

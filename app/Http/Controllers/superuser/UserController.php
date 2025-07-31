@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Perusahaan;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use App\Models\Jurusan;
 
 class UserController extends Controller
 {
@@ -17,10 +18,11 @@ class UserController extends Controller
     public function index()
     {
         $users = User::with('inputBy')->paginate(10);
+        $jurusans = Jurusan::all();
         $perusahaans = Perusahaan::all();
 
 
-        return view('superuser.data-user.index', compact('users', 'perusahaans'));
+        return view('superuser.data-user.index', compact('users', 'perusahaans', 'jurusans'));
     }
 
     /**
@@ -29,7 +31,8 @@ class UserController extends Controller
     public function create()
     {
         $perusahaans = Perusahaan::all();
-        return view('superuser.data-user.create', compact('perusahaans'));
+        $jurusans = Jurusan::all();
+        return view('superuser.data-user.create', compact('perusahaans', 'jurusans'));
     }
 
     /**
@@ -38,27 +41,28 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6',
-            'role' => 'required|in:superuser,superuser,siswa',
-            'kode_perusahaan' => 'nullable|string',
-        ]);
+    'name' => 'required|string|max:255',
+    'email' => 'required|email|unique:users,email',
+    'password' => 'required|string|min:6',
+    'role' => 'required|in:superuser,guru,siswa',
+    'kode_perusahaan' => 'nullable|string',
+    'jurusan_id' => 'required|exists:jurusans,id'
+]);
 
-        // Otomatis isi '-' jika role superuser/superuser
-        if (in_array($request->role, ['superuser', 'superuser'])) {
-            $validated['kode_perusahaan'] = '-';
-        }
+// Ambil nama jurusan berdasarkan ID
+$jurusan = Jurusan::findOrFail($request->jurusan_id);
 
-        User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'password' => Hash::make($validated['password']),
-            'role' => $validated['role'],
-            'kode_perusahaan' => $validated['kode_perusahaan'],
-            'input_by' => auth()->id(),
-            'input_date' => Carbon::now(),
-        ]);
+User::create([
+    'name' => $validated['name'],
+    'email' => $validated['email'],
+    'password' => Hash::make($validated['password']),
+    'role' => $validated['role'],
+    'kode_perusahaan' => $validated['kode_perusahaan'],
+    'nama_jurusan' => $jurusan->nama_jurusan, // simpan nama jurusan di field users.nama_jurusan
+    'input_by' => auth()->id(),
+    'input_date' => now(),
+]);
+
 
         return redirect()->route('superuser.data-user.index')->with('success', 'User berhasil ditambahkan.');
     }

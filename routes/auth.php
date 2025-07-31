@@ -15,12 +15,12 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('guest')->group(function () {
 
 // routes/auth.php atau routes/web.php
-    Route::middleware(['auth', 'role:superuser,guru'])->group(function () {
+    
         Route::get('/register', [RegisteredUserController::class, 'create'])
             ->name('register');
 
         Route::post('/register', [RegisteredUserController::class, 'store']);
-    });
+ 
 
 
 

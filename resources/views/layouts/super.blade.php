@@ -98,7 +98,7 @@
         }
     </style>
 </head>
-<body class="font-sans bg-gray-50" x-data="{ isSidebarOpen: false }">
+<body data-page="@yield('page-id')" class="font-sans bg-gray-50" x-data="{ isSidebarOpen: false }">
     <div class="flex h-screen overflow-hidden">
         <!-- Mobile sidebar backdrop -->
         <div x-show="isSidebarOpen" @click="isSidebarOpen = false" 
@@ -174,6 +174,12 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                                 </svg>
                                 Data Kategori
+                            </a>
+                            <a href="{{ route('superuser.data-jurusan.index') }}" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                </svg>
+                                Data Jurusan
                             </a>
                             <a href="{{ route('superuser.laporan.index') }}" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -255,7 +261,7 @@
                 <nav class="flex-1 mt-4">
                     <div class="school-title">
                         <div class="scrolling-text-container">
-                            <div class="scrolling-text">SMK ICB CINTA BANGSA - PRAKERIN SYSTEM</div>
+                            <div class="scrolling-text">SMK ICB CINTA TEKNIKA</div>
                         </div>
                     </div>
                     <div x-data="{ open: true }" class="mb-2">
@@ -304,6 +310,13 @@
                                 </svg>
                                 Data Kategori
                             </a>
+                            <a href="{{ route('superuser.data-jurusan.index') }}" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
+   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
+</svg>
+    Data Jurusan
+</a>
+
                             <a href="{{ route('superuser.laporan.index') }}" class="flex items-center block px-8 py-2 transition duration-150 hover:bg-indigo-700">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -446,5 +459,128 @@
             </main>
         </div>
     </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function () {
+    // Global debounce function
+    function debounce(func, wait) {
+        let timeout;
+        return function () {
+            const context = this, args = arguments;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(context, args), wait);
+        };
+    }
+
+    // Reusable loader
+    const showLoading = (containerSelector, style = 'table') => {
+        const loadingHTML = style === 'card' ? `
+            <div class="text-center py-8 animate-pulse">
+                <div class="mx-auto w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center">
+                    <i class="fas fa-spinner fa-spin fa-lg text-indigo-600"></i>
+                </div>
+                <p class="mt-3 text-gray-600">Memuat data...</p>
+            </div>
+        ` : `
+            <tr>
+                <td colspan="8" class="px-6 py-4 text-center">
+                    <div class="flex justify-center items-center space-x-2 text-gray-500">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <span>Memuat data...</span>
+                    </div>
+                </td>
+            </tr>
+        `;
+        $(containerSelector).html(loadingHTML);
+    };
+
+    // Reusable error handler
+    const showError = (containerSelector, message, style = 'table') => {
+        const errorHTML = style === 'card' ? `
+            <div class="text-center py-8">
+                <div class="mx-auto w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+                    <i class="fas fa-exclamation-circle fa-lg text-red-600"></i>
+                </div>
+                <p class="mt-3 text-red-600">${message}</p>
+            </div>
+        ` : `
+            <tr>
+                <td colspan="8" class="px-6 py-4 text-center text-red-500">
+                    <i class="fas fa-exclamation-circle"></i> ${message}
+                </td>
+            </tr>
+        `;
+        $(containerSelector).html(errorHTML);
+    };
+
+    // === CONFIGURATIONS PER PAGE ===
+    const pages = {
+        'data-siswa': {
+            url: "{{ route('superuser.data-siswa.index') }}",
+            inputs: ['#search', '#gol_darah', '#sekolah'],
+            target: '#table-container',
+            type: 'card'
+        },
+        'laporan': {
+            url: "{{ route('superuser.laporan.index') }}",
+            inputs: ['#search', '#jurusan', '#perusahaan'],
+            target: '#table-container tbody',
+            type: 'table'
+        }
+    };
+
+    // DETECT current page using body ID/class or any container
+    const currentPage = $('body').data('page'); // e.g., <body data-page="laporan">
+    const page = pages[currentPage];
+
+    if (page) {
+        const fetchData = debounce(function () {
+            // Build data from inputs
+            let requestData = {};
+            page.inputs.forEach(selector => {
+                const input = $(selector);
+                if (input.length) requestData[input.attr('id')] = input.val();
+            });
+
+            // Show loader
+            showLoading(page.target, page.type);
+
+            $.ajax({
+                url: page.url,
+                type: "GET",
+                data: requestData,
+                success: function (response) {
+                    if (response.success) {
+                        if (page.type === 'table') {
+                            $('#table-container').html(response.html);
+                        } else {
+                            $(page.target).html(response.html).hide().fadeIn(300);
+                        }
+                    } else {
+                        showError(page.target, 'Data tidak ditemukan', page.type);
+                    }
+                },
+                error: function (xhr) {
+                    console.error(xhr.responseText);
+                    showError(page.target, 'Terjadi kesalahan', page.type);
+                }
+            });
+        }, 500);
+
+        // Bind events
+        page.inputs.forEach(selector => {
+            const input = $(selector);
+            if (input.length) {
+                if (input.is('input')) {
+                    input.on('keyup', fetchData);
+                } else {
+                    input.on('change', fetchData);
+                }
+            }
+        });
+    }
+});
+</script>
+
 </body>
 </html>

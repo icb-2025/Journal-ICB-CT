@@ -9,6 +9,7 @@
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jam Selesai</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kegiatan</th>
             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori Tugas</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Jurusan</th>
         </tr>
     </thead>
     <tbody class="bg-white divide-y divide-gray-200">
@@ -36,6 +37,9 @@
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 {{ $item->kategoriTugas->nama_kategori ?? '-' }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+               {{ $item->siswa->nama_jurusan ?? '-' }}
             </td>
         </tr>
         @endforeach

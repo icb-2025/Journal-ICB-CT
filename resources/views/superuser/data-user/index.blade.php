@@ -6,7 +6,7 @@
 <div class="container mx-auto px-4 py-6">
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <h2 class="text-2xl font-semibold text-gray-800">Data User</h2>
-        <a href="{{ route('data-user.create') }}" class="flex items-center px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 transition-colors">
+        <a href="{{ route('superuser.data-user.create') }}" class="flex items-center px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
             </svg>
@@ -27,6 +27,7 @@
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kode Perusahaan</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Input By</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Tanggal Input</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">Nama Jurusan</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                         </tr>
                     </thead>
@@ -47,15 +48,16 @@
                                 {{ $user->kode_perusahaan ? Str::afterLast($user->kode_perusahaan, '-') : '-' }}
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-500">{{ $user->inputBy->name ?? 'System' }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{{ $user->input_date ? \Carbon\Carbon::parse($user->input_date)->format('Y-m-d H:i') : '-' }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">{{ $user->input_date ? \Carbon\Carbon::parse($user->input_date)->format('Y-m-d') : '-' }}</td>
+                            <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $user->nama_jurusan }}</td>
                             <td class="px-6 py-4 text-sm font-medium">
                                 <div class="flex items-center space-x-2">
-                                    <a href="{{ route('data-user.edit', $user->id) }}" class="text-indigo-600 hover:text-indigo-900 p-1 rounded-full hover:bg-indigo-50 transition-colors" title="Edit">
+                                    <a href="{{ route('superuser.data-user.edit', $user->id) }}" class="text-indigo-600 hover:text-indigo-900 p-1 rounded-full hover:bg-indigo-50 transition-colors" title="Edit">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                         </svg>
                                     </a>
-                                    <form action="{{ route('data-user.destroy', ['data_user' => $user->id]) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus user ini?');">
+                                    <form action="{{ route('superuser.data-user.destroy', ['data_user' => $user->id]) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus user ini?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="text-red-600 hover:text-red-800 p-1 rounded-full hover:bg-red-50 transition-colors" title="Delete">
