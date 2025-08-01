@@ -38,7 +38,7 @@
                 <p class="mt-2 text-sm text-gray-600">
                     Or
                     <a href="{{ route('register') }}" class="font-medium text-indigo-600 hover:text-indigo-500">
-                        create a new account
+                        Register
                     </a>
                 </p>
             </div>

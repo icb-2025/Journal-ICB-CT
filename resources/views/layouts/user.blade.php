@@ -10,6 +10,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -29,7 +30,7 @@
                 <div class="flex items-center justify-between p-4 border-b">
                     <a href="/" class="flex items-center space-x-2">
                         <x-application-logo class="h-8 w-auto fill-current text-indigo-600" />
-                        <span class="text-xl font-bold whitespace-nowrap">MyApp</span>
+                        <span class="text-xl font-bold whitespace-nowrap">Journal-ICB-CT</span>
                     </a>
                     <button id="close-sidebar" class="md:hidden p-1 rounded-lg hover:bg-gray-100">
                         <i class="fas fa-times text-gray-500"></i>
@@ -54,13 +55,13 @@
                             </a>
                         </li>
                         
-                        <li>
+                        <!-- <li>
                             <a href="#" 
                                class="flex items-center p-3 rounded-lg hover:bg-gray-100 transition-colors">
                                 <i class="fas fa-cog w-5 text-center mr-3"></i>
                                 <span>Settings</span>
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
                 </nav>
 
@@ -138,6 +139,9 @@
             </main>
         </div>
     </div>
+
+    <!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         // Mobile sidebar toggle
