@@ -146,11 +146,15 @@
     </div>
     @endif
 </div>
+@endsection
 
+@section('scripts')
+<!-- Include jQuery first -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Sidebar Toggle Script -->
+
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    $(document).ready(function() {
+        // Sidebar toggle functionality
         const sidebarToggle = document.getElementById('sidebar-toggle');
         const sidebar = document.getElementById('sidebar');
         
@@ -161,8 +165,8 @@
             });
         }
 
-        // Pagination functionality
-        $(document).on('click', '.pagination a', function(e) {
+        // Pagination functionality with jQuery
+        $(document).on('click', '#history-container .pagination a', function(e) {
             e.preventDefault();
             let url = $(this).attr('href');
             
@@ -188,6 +192,19 @@
                     `);
                 }
             });
+        });
+
+        // Auto-category detection based on activity description
+        $(document).on('keyup', 'textarea[name="description[]"]', function() {
+            const description = $(this).val().toLowerCase();
+            const categorySelect = $(this).closest('tr').find('select[name="category[]"]');
+            
+            if (description.includes('meeting') || description.includes('rapat')) {
+                categorySelect.val('1').trigger('change');
+            } else if (description.includes('coding') || description.includes('programming')) {
+                categorySelect.val('2').trigger('change');
+            }
+            // Add more conditions as needed for your categories
         });
     });
 </script>

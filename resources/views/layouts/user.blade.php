@@ -2,11 +2,10 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', config('app.name', 'Laravel'))</title>
-
+    <title>{{ config('app.name', 'Laravel') }} - @yield('title')</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -57,7 +56,6 @@
         .top-nav {
             position: fixed;
             top: 0;
-            left: 0;
             right: 0;
             left: 0;
             z-index: 30;
@@ -183,34 +181,22 @@
 </head>
 <body class="bg-gray-50 font-sans antialiased">
     <!-- Mobile Sidebar Overlay -->
-    <div id="mobile-sidebar-overlay" class="fixed inset-0 z-40"></div>
+    <div id="mobile-sidebar-overlay" class="fixed inset-0 z-40 hidden opacity-0 smooth-transition"></div>
 
+    
     <!-- Sidebar -->
     <aside id="sidebar" class="text-gray-800 shadow-lg smooth-transition -translate-x-full md:translate-x-0">
         <div class="flex flex-col h-full">
-            <!-- Header -->
+            <!-- Logo & Toggle -->
             <div class="flex items-center justify-between p-4 border-b">
                 <a href="/" class="flex items-center space-x-2">
                     <x-application-logo class="h-8 w-auto fill-current text-indigo-600" />
-                    <span class="text-xl font-bold">Journal-ICB-CT</span>
+                    <span class="text-xl font-bold whitespace-nowrap">Journal-ICB-CT</span>
                 </a>
                 <button id="close-sidebar" class="md:hidden mobile-tap-target">
                     <i class="fas fa-times text-gray-500 text-lg"></i>
                 </button>
             </div>
-        <!-- Sidebar -->
-        <aside id="sidebar" class="bg-white text-gray-800 shadow-lg smooth-transition -translate-x-full md:translate-x-0">
-            <div class="flex flex-col h-full">
-                <!-- Logo & Toggle -->
-                <div class="flex items-center justify-between p-4 border-b">
-                    <a href="/" class="flex items-center space-x-2">
-                        <x-application-logo class="h-8 w-auto fill-current text-indigo-600" />
-                        <span class="text-xl font-bold whitespace-nowrap">Journal-ICBCT</span>
-                    </a>
-                    <button id="close-sidebar" class="md:hidden mobile-tap-target">
-                        <i class="fas fa-times text-gray-500 text-lg"></i>
-                    </button>
-                </div>
 
             <!-- Scrollable Navigation -->
             <nav class="flex-1 overflow-y-auto py-4">
@@ -264,20 +250,22 @@
     </aside>
 
     <!-- Main Content -->
-    <div class="min-h-screen flex flex-col main-content">
-        <!-- Top Navigation -->
-        <header class="bg-white shadow-sm sticky top-0 z-30">
-            <div class="flex items-center justify-between px-4 py-3">
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Fixed Top Navigation -->
+        <header class="top-nav bg-white shadow-sm">
+            <div class="flex items-center justify-between px-4 py-3 sm:px-6 h-16">
                 <div class="flex items-center">
                     <button id="open-sidebar" class="md:hidden mobile-tap-target" aria-label="Open menu">
                         <i class="fas fa-bars text-gray-600 text-lg"></i>
                     </button>
                     <h1 class="text-lg sm:text-xl font-semibold text-gray-900 ml-2">@yield('title')</h1>
                 </div>
+                
                 @auth
                 <div class="flex items-center space-x-3">
                     <button class="p-2 rounded-full hover:bg-gray-100">
                         <i class="fas fa-bell text-gray-600 text-lg"></i>
+                        <span class="sr-only">Notifications</span>
                     </button>
                 </div>
                 @endauth
@@ -285,15 +273,13 @@
         </header>
 
         <!-- Page Content -->
-        <main class="flex-1 overflow-y-auto p-4 sm:p-6 bg-gray-50">
+        <main class="main-content overflow-y-auto p-4 sm:p-6 bg-gray-50">
             <div class="max-w-7xl mx-auto">
                 @yield('content')
             </div>
         </main>
     </div>
 
-    <!-- Tambahkan ini sebelum <script> Swal -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         // Enhanced Sidebar Toggle
         document.addEventListener('DOMContentLoaded', function() {
@@ -302,53 +288,91 @@
             const openBtn = document.getElementById('open-sidebar');
             const closeBtn = document.getElementById('close-sidebar');
             const body = document.body;
-
-            function toggleSidebar(open) {
-                if (open) {
-                    sidebar.classList.add('active');
-                    overlay.classList.add('active');
-                    body.classList.add('sidebar-open');
-                } else {
-                    sidebar.classList.remove('active');
-                    overlay.classList.remove('active');
-                    body.classList.remove('sidebar-open');
-                }
-            }
+            
+            let isSidebarOpen = false;
+            let isAnimating = false;
 
             // Open sidebar
-            openBtn.addEventListener('click', function() {
-                toggleSidebar(true);
-            });
+            function openSidebar() {
+                if (isSidebarOpen || isAnimating) return;
+                
+                isAnimating = true;
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                body.classList.add('sidebar-open');
+                
+                // Force reflow to ensure transition works
+                void sidebar.offsetWidth;
+                
+                overlay.classList.add('opacity-100');
+                overlay.classList.remove('opacity-0');
+                
+                setTimeout(() => {
+                    isSidebarOpen = true;
+                    isAnimating = false;
+                }, 300);
+            }
 
             // Close sidebar
-            closeBtn.addEventListener('click', function() {
-                toggleSidebar(false);
-            });
+            function closeSidebar() {
+                if (!isSidebarOpen || isAnimating) return;
+                
+                isAnimating = true;
+                overlay.classList.add('opacity-0');
+                overlay.classList.remove('opacity-100');
+                body.classList.remove('sidebar-open');
+                
+                setTimeout(() => {
+                    sidebar.classList.add('-translate-x-full');
+                    overlay.classList.add('hidden');
+                    isSidebarOpen = false;
+                    isAnimating = false;
+                }, 300);
+            }
 
-            overlay.addEventListener('click', function() {
-                toggleSidebar(false);
-            });
+            // Event listeners
+            if (openBtn) {
+                openBtn.addEventListener('click', openSidebar);
+                openBtn.addEventListener('touchstart', openSidebar, {passive: true});
+            }
+
+            if (closeBtn) {
+                closeBtn.addEventListener('click', closeSidebar);
+                closeBtn.addEventListener('touchstart', closeSidebar, {passive: true});
+            }
+
+            overlay.addEventListener('click', closeSidebar);
+            overlay.addEventListener('touchstart', closeSidebar, {passive: true});
 
             // Close when clicking outside on mobile
             document.addEventListener('click', function(e) {
-                if (window.innerWidth < 768 && 
-                    sidebar.classList.contains('active') && 
+                if (window.innerWidth < 768 && isSidebarOpen && 
                     !sidebar.contains(e.target) && 
                     e.target !== openBtn) {
-                    toggleSidebar(false);
+                    closeSidebar();
                 }
             });
 
             // Handle window resize
             function handleResize() {
                 if (window.innerWidth >= 768) {
-                    sidebar.classList.remove('active');
-                    overlay.classList.remove('active');
+                    sidebar.classList.remove('-translate-x-full');
+                    overlay.classList.add('hidden');
+                    overlay.classList.remove('opacity-100');
                     body.classList.remove('sidebar-open');
+                    isSidebarOpen = true;
+                } else {
+                    if (!isSidebarOpen) {
+                        sidebar.classList.add('-translate-x-full');
+                    }
+                    overlay.classList.add('hidden');
+                    isSidebarOpen = false;
                 }
+                isAnimating = false;
             }
 
             window.addEventListener('resize', handleResize);
+            handleResize();
         });
     </script>
 </body>
