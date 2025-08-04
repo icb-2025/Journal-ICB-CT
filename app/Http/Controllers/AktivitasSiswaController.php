@@ -20,17 +20,22 @@ class AktivitasSiswaController extends Controller
    public function create()
 {
     $user = auth()->user();
-
-    // Ambil perusahaan berdasarkan kode_perusahaan user
     $perusahaanUser = Perusahaan::where('kode_perusahaan', $user->kode_perusahaan)->first();
+    $kategoriTugas = KategoriTugas::all();
 
-    $kategoriTugas = KategoriTugas::all(); // ambil semua kategori tugas
-
-    // Ambil data aktivitas siswa yang login
     $aktivitasSiswa = AktivitasSiswa::where('siswa_id', $user->id)
-                        ->with('kategoriTugas')
-                        ->orderByDesc('tanggal')
-                        ->get();
+                    ->with('kategoriTugas')
+                    ->orderByDesc('tanggal')
+                    ->paginate(5);
+
+    // Check if it's an AJAX request
+    if (request()->ajax()) {
+        return view('partials.activity-history', [
+            'aktivitasSiswa' => $aktivitasSiswa,
+            'perusahaanUser' => $perusahaanUser,
+            'kodeBelakang' => $perusahaanUser ? Str::afterLast($perusahaanUser->kode_perusahaan, '-') : null
+        ]);
+    }
 
     return view('index', compact('perusahaanUser', 'kategoriTugas', 'aktivitasSiswa'));
 }

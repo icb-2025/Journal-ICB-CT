@@ -140,58 +140,14 @@
             <p class="text-sm text-gray-600 mt-1">Daftar kegiatan yang telah Anda input sebelumnya</p>
         </div>
         
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-blue-50">
-                    <tr>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">No</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider hidden sm:table-cell">Kode</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Tanggal</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Waktu</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Kegiatan</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Kategori</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    @foreach($aktivitasSiswa as $index => $item)
-                        <tr class="hover:bg-gray-50 transition duration-150">
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">{{ $index + 1 }}</td>
-                            
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">
-                                @if ($perusahaanUser)
-                                    <span class="font-semibold">{{ $kodeBelakang }}</span>
-                                @else
-                                    <span class="text-red-500">-</span>
-                                @endif
-                            </td>
-                            
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ \Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') }}
-                            </td>
-                            
-                            <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-                                <span class="block">{{ $item->mulai }}</span>
-                                <span class="block">- {{ $item->selesai }}</span>
-                            </td>
-                            
-                            <td class="px-4 py-4 text-sm text-gray-500 max-w-xs truncate sm:max-w-none sm:whitespace-normal">
-                                {{ $item->deskripsi }}
-                            </td>
-                            
-                            <td class="px-4 py-4 whitespace-nowrap">
-                                <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                                    {{ $item->kategoriTugas->nama_kategori ?? '-' }}
-                                </span>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        <div id="history-container">
+            @include('partials.activity-history', ['aktivitasSiswa' => $aktivitasSiswa])
         </div>
     </div>
     @endif
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- Sidebar Toggle Script -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -204,6 +160,35 @@
                 sidebar.classList.toggle('transform-none');
             });
         }
+
+        // Pagination functionality
+        $(document).on('click', '.pagination a', function(e) {
+            e.preventDefault();
+            let url = $(this).attr('href');
+            
+            // Show loading state
+            $('#history-container').html(`
+                <div class="flex justify-center items-center p-8">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                </div>
+            `);
+            
+            // Fetch the paginated data
+            $.ajax({
+                url: url,
+                type: 'get',
+                success: function(data) {
+                    $('#history-container').html(data);
+                },
+                error: function(xhr) {
+                    $('#history-container').html(`
+                        <div class="p-4 text-red-500">
+                            Gagal memuat data. Silakan coba lagi.
+                        </div>
+                    `);
+                }
+            });
+        });
     });
 </script>
 @endsection
