@@ -1,7 +1,7 @@
 @extends('layouts.user')
 
 @section('content')
-<!-- <div class="flex items-center justify-center min-h-[calc(100vh-200px)]">
+<div class="flex items-center justify-center min-h-[calc(100vh-200px)]">
     <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
         <div class="text-center">
             <span class="inline-block px-4 py-2 text-lg font-semibold rounded-full bg-blue-100 text-blue-800 mb-4">
@@ -16,24 +16,23 @@
             </svg>
         </div>
     </div>
-</div> -->
+</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         Swal.fire({
             icon: 'info',
             title: 'Halaman Sedang Dalam Perbaikan',
-            text: 'Silahkan Kembali Lagi Nanti',
+            text: 'Silakan kembali lagi nanti',
             confirmButtonText: 'Oke',
             timer: 4000,
             timerProgressBar: true,
             willClose: () => {
-                // Redirect ke halaman sebelumnya jika ada, jika tidak ke dashboard
                 const previous = document.referrer;
-                if (previous) {
+                if (previous && new URL(previous).origin === window.location.origin) {
                     window.location.href = previous;
                 } else {
-                    window.location.href = "{{ route('index') }}"; // Ganti dengan route tujuan kamu
+                    window.location.href = @json(route('index'));
                 }
             }
         });
