@@ -1,5 +1,7 @@
 @extends('layouts.user')
 
+@section('title','Profile')
+
 @section('content')
     {{-- Header --}}
     <x-slot name="header">

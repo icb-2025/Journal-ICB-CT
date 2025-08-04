@@ -1,6 +1,6 @@
 @extends('layouts.user')
 
-@section('title', 'Input Data Kategori')
+@section('title','Dashboard')
 
 @section('content')
 <div class="container mx-auto px-4 py-4 sm:px-6 lg:px-8">

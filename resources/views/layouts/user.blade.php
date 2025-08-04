@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }} - @yield('title')</title>
+    <title>@yield('title', config('app.name', 'Laravel'))</title>
+
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -82,7 +83,7 @@
                 <div class="flex items-center justify-between p-4 border-b">
                     <a href="/" class="flex items-center space-x-2">
                         <x-application-logo class="h-8 w-auto fill-current text-indigo-600" />
-                        <span class="text-xl font-bold whitespace-nowrap">Journal-ICB-CT</span>
+                        <span class="text-xl font-bold whitespace-nowrap">Journal-ICBCT</span>
                     </a>
                     <button id="close-sidebar" class="md:hidden p-2 rounded-lg hover:bg-gray-100 mobile-tap-target">
                         <i class="fas fa-times text-gray-500 text-lg"></i>
@@ -121,7 +122,6 @@
                         </div>
                         <div>
                             <p class="text-sm font-semibold text-gray-800">{{ Auth::user()->name }}</p>
-                            <p class="text-xs text-gray-500">Manage your account</p>
                         </div>
                     </div>
                     <div class="mt-3 space-y-1">
@@ -157,10 +157,10 @@
                     
                     @auth
                     <div class="flex items-center space-x-3">
-                        <button class="p-2 rounded-full hover:bg-gray-100 relative mobile-tap-target">
+                        <!-- <button class="p-2 rounded-full hover:bg-gray-100 relative mobile-tap-target">
                             <i class="fas fa-bell text-gray-600 text-lg"></i>
                             <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
-                        </button>
+                        </button> -->
                         
                         <!-- Mobile Logout Button (visible only on mobile) -->
                         <div class="md:hidden">

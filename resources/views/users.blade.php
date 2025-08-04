@@ -1,5 +1,7 @@
 @extends('layouts.user')
 
+@section('title','Users')
+
 @section('content')
 <div class="flex items-center justify-center min-h-[calc(100vh-200px)]">
     <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
