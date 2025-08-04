@@ -138,7 +138,7 @@
                         </a>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <button type="submit" class="flex items-center w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-200 rounded-lg smooth-transition mobile-tap-target">
+                            <button type="submit" class="flex items-center w-full px-3 py-2 text-sm text-gray-700 bg-red-500 rounded-lg smooth-transition mobile-tap-target">
                                 <i class="fas fa-sign-out-alt mr-3 w-5 text-center mobile-text-lg"></i>
                                 <span class="mobile-text-lg">Sign Out</span>
                             </button>
@@ -167,25 +167,6 @@
                             <i class="fas fa-bell text-gray-600 text-lg"></i>
                             <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
                         </button>
-                        
-                        <!-- Mobile Logout Button (visible only on mobile) -->
-                        <div class="md:hidden">
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-                                <button type="submit" class="mobile-logout-btn" title="Sign Out">
-                                    <i class="fas fa-sign-out-alt text-white text-xl"></i>
-                                </button>
-                            </form>
-                        </div>
-                        
-                        <div class="relative hidden md:block">
-                            <button id="user-menu-button" class="flex items-center space-x-2 focus:outline-none mobile-tap-target">
-                                <span class="hidden sm:inline text-sm font-medium text-gray-700">{{ Auth::user()->name }}</span>
-                                <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=6366f1&color=fff" 
-                                     alt="User" 
-                                     class="h-8 w-8 rounded-full border-2 border-indigo-200">
-                            </button>
-                        </div>
                     </div>
                     @endauth
                 </div>
