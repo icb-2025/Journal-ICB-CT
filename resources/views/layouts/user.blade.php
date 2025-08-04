@@ -105,9 +105,14 @@
                 pointer-events: auto;
             }
             
-            /* Touch targets */
-            #open-sidebar, #close-sidebar {
+            #open-sidebar,
+            #close-sidebar {
                 padding: 1rem;
+                background: none;      /* hapus background default */
+                border: none;          /* hapus border default */
+                outline: none;         /* hapus outline saat fokus */
+                box-shadow: none;      /* hapus shadow fokus (misal Safari/Chrome mobile) */
+                -webkit-tap-highlight-color: transparent; /* hapus highlight biru di iOS/Android */
             }
             
             /* Scroll improvement */
