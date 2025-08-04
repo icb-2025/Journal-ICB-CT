@@ -61,7 +61,7 @@
                                     value="{{ old('name') }}"
                                     autocomplete="name"
                                     class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg input-focus focus:outline-none focus:ring-1 focus:ring-indigo-500 placeholder-gray-400 transition duration-150 ease-in-out"
-                                    placeholder="John Doe">
+                                    placeholder="Your Name">
                                 <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                                     <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                         <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />

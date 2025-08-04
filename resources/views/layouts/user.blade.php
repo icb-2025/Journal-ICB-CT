@@ -1,4 +1,4 @@
-<!DOCaaskYPE html>
+<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -53,15 +53,30 @@
         .smooth-transition {
             transition: all 0.3s ease-in-out;
         }
+        
+        /* Fixed sidebar styles */
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        
+        @media (min-width: 768px) {
+            .main-content {
+                margin-left: 16rem; /* 64 * 4 = 256px (w-64 sidebar width) */
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans antialiased">
-    <div class="min-h-screen flex flex-col md:flex-row">
+    <div class="min-h-screen flex">
         <!-- Mobile Sidebar Overlay -->
         <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden hidden opacity-0 smooth-transition"></div>
 
         <!-- Sidebar -->
-        <aside id="sidebar" class="fixed md:relative z-50 w-64 h-screen bg-white text-gray-800 transform -translate-x-full md:translate-x-0 shadow-lg smooth-transition">
+        <aside id="sidebar" class="z-50 w-64 bg-white text-gray-800 transform -translate-x-full md:translate-x-0 shadow-lg smooth-transition">
             <div class="flex flex-col h-full">
                 <!-- Logo & Toggle -->
                 <div class="flex items-center justify-between p-4 border-b">
@@ -129,7 +144,7 @@
         </aside>
 
         <!-- Main Content -->
-        <div class="flex-1 flex flex-col overflow-hidden">
+        <div class="flex-1 flex flex-col overflow-hidden main-content">
             <!-- Top Navigation -->
             <header class="bg-white shadow-sm sticky top-0 z-30">
                 <div class="flex items-center justify-between px-4 py-3 sm:px-6">
