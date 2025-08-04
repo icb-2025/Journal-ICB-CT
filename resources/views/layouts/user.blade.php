@@ -183,6 +183,7 @@
     <!-- Mobile Sidebar Overlay -->
     <div id="mobile-sidebar-overlay" class="fixed inset-0 z-40 hidden opacity-0 smooth-transition"></div>
 
+    
     <!-- Sidebar -->
     <aside id="sidebar" class="text-gray-800 shadow-lg smooth-transition -translate-x-full md:translate-x-0">
         <div class="flex flex-col h-full">
