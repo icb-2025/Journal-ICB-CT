@@ -31,23 +31,27 @@
                 padding: 0.75rem;
             }
         }
-        
+
         .smooth-transition {
             transition: all 0.3s ease-in-out;
         }
-        
+
         /* Fixed sidebar styles */
         #sidebar {
             position: fixed;
             top: 0;
             left: 0;
-            height: 100vh;
+            height: 100vh;   /* fallback untuk browser lama */
+            height: 100dvh;  /* pakai tinggi layar real di mobile */
             width: 16rem;
-            overflow-y: auto;
+            overflow: hidden;
             z-index: 40;
             transform: translateX(0);
+            display: flex;
+            flex-direction: column;
+            background-color: white;
         }
-        
+
         /* Fixed top navigation */
         .top-nav {
             position: fixed;
@@ -56,14 +60,14 @@
             left: 0;
             z-index: 30;
         }
-        
+
         /* Main content with padding for fixed header */
         .main-content {
-            margin-top: 64px; /* Height of top nav */
+            margin-top: 64px;
             margin-left: 16rem;
-            min-height: calc(100vh - 64px);
+            min-height: calc(100dvh - 64px); /* update juga di sini */
         }
-        
+
         /* Mobile Overlay */
         #mobile-sidebar-overlay {
             position: fixed;
@@ -74,7 +78,7 @@
             pointer-events: none;
             transition: opacity 0.3s ease-out;
         }
-        
+
         /* Mobile Sidebar */
         @media (max-width: 767px) {
             #sidebar {
@@ -108,37 +112,58 @@
             
             /* Scroll improvement */
             #sidebar {
-                touch-action: none;
-                will-change: transform;
-                z-index: 50;
+                position: fixed;
                 top: 0;
-                height: 100vh;
-            }
-            
-            /* Adjust top nav for mobile */
-            .top-nav {
                 left: 0;
+                height: 100%;
+                width: 16rem;
+                z-index: 40;
+                transform: translateX(0);
+                display: flex;
+                flex-direction: column;
+                background-color: white;
             }
         }
-        
+
         /* Layout Structure */
         html, body {
             height: 100%;
             overflow-x: hidden;
         }
-        
-        #sidebar .flex-col {
+
+       #sidebar .flex-col {
             display: flex;
             flex-direction: column;
             height: 100%;
+            overflow-y: auto; /* biar bisa discroll */
         }
-        
+
         #sidebar nav {
             flex: 1;
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
+            padding-bottom: 1rem;
         }
-        
+
+        /* Fixed user section */
+        /* User section selalu nempel bawah */
+        .user-section {
+            position: sticky;
+            bottom: 0;
+            background-color: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+            padding: 1rem;
+            flex-shrink: 0; /* jangan ikut mengecil */
+        }
+
+        .sidebar-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            /* hapus overflow: hidden; */
+        }
+
         /* Prevent body scroll when sidebar is open */
         body.sidebar-open {
             overflow: hidden;
@@ -146,6 +171,7 @@
             width: 100%;
             height: 100%;
         }
+
     </style>
 </head>
 <body class="bg-gray-50 font-sans antialiased">
@@ -153,7 +179,7 @@
     <div id="mobile-sidebar-overlay" class="fixed inset-0 z-40 hidden opacity-0 smooth-transition"></div>
 
     <!-- Sidebar -->
-    <aside id="sidebar" class="bg-white text-gray-800 shadow-lg smooth-transition -translate-x-full md:translate-x-0">
+    <aside id="sidebar" class="text-gray-800 shadow-lg smooth-transition -translate-x-full md:translate-x-0">
         <div class="flex flex-col h-full">
             <!-- Logo & Toggle -->
             <div class="flex items-center justify-between p-4 border-b">
@@ -166,7 +192,7 @@
                 </button>
             </div>
 
-            <!-- Navigation -->
+            <!-- Scrollable Navigation -->
             <nav class="flex-1 overflow-y-auto py-4">
                 <ul class="space-y-1 px-2">
                     <li>
@@ -181,12 +207,13 @@
                             <span>Users</span>
                         </a>
                     </li>
+                    <!-- Additional navigation items can be added here -->
                 </ul>
             </nav>
 
-            <!-- User Section -->
-            @auth
-            <div class="mt-auto p-4 border-t bg-gray-50">
+            <!-- Fixed User Section -->
+            <div class="user-section">
+                @auth
                 <div class="flex items-center space-x-3">
                     <div class="relative">
                         <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::user()->name) }}&background=6366f1&color=fff" 
@@ -211,8 +238,8 @@
                         </button>
                     </form>
                 </div>
+                @endauth
             </div>
-            @endauth
         </div>
     </aside>
 
