@@ -33,22 +33,7 @@
             .mobile-p-3 {
                 padding: 0.75rem;
             }
-            /* Fixed logout button for mobile */
-            .mobile-logout-btn {
-                position: fixed;
-                bottom: 20px;
-                right: 20px;
-                z-index: 50;
-                background: #ef4444;
-                color: white;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            }
+            
         }
         
         .smooth-transition {
@@ -67,6 +52,27 @@
         @media (min-width: 768px) {
             .main-content {
                 margin-left: 16rem; /* 64 * 4 = 256px (w-64 sidebar width) */
+            }
+        }
+
+         /* Improved mobile sidebar */
+        #sidebar {
+            touch-action: none; /* Prevent browser touch behaviors */
+            will-change: transform; /* Optimize animations */
+        }
+        
+        #mobile-sidebar-overlay {
+            will-change: opacity; /* Optimize animations */
+        }
+        
+        /* Larger tap targets for mobile */
+        @media (max-width: 767px) {
+            #open-sidebar, #close-sidebar {
+                padding: 1rem;
+            }
+            
+            #sidebar {
+                z-index: 50; /* Higher than overlay */
             }
         }
     </style>
@@ -149,8 +155,8 @@
             <header class="bg-white shadow-sm sticky top-0 z-30">
                 <div class="flex items-center justify-between px-4 py-3 sm:px-6">
                     <div class="flex items-center">
-                        <button id="open-sidebar" class="md:hidden p-2 rounded-lg hover:bg-gray-100 mr-2 mobile-tap-target">
-                            <i class="fas fa-bars text-gray-600 text-lg"></i>
+                        <button id="open-sidebar" class="md:hidden p-4 rounded-lg hover:bg-gray-100 mr-2 mobile-tap-target" aria-label="Open menu">
+                            <i class="fas fa-bars text-gray-600 text-lg pointer-events-none"></i>
                         </button>
                         <h1 class="text-lg sm:text-xl font-semibold text-gray-900">@yield('title')</h1>
                     </div>
@@ -195,34 +201,57 @@
     </div>
 
     <script>
-        // Mobile sidebar toggle
+        // Mobile sidebar toggle - improved version
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('mobile-sidebar-overlay');
         const openBtn = document.getElementById('open-sidebar');
         const closeBtn = document.getElementById('close-sidebar');
 
+        // Variable to track sidebar state
+        let isSidebarOpen = false;
+        let isAnimating = false;
+
         // Open sidebar with animation
-        if (openBtn) {
-            openBtn.addEventListener('click', function() {
-                sidebar.classList.remove('-translate-x-full');
-                overlay.classList.remove('hidden');
-                setTimeout(() => {
-                    overlay.classList.add('opacity-100');
-                    overlay.classList.remove('opacity-0');
-                }, 10);
-                document.body.style.overflow = 'hidden';
-            });
+        function openSidebar() {
+            if (isSidebarOpen || isAnimating) return;
+            
+            isAnimating = true;
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+            
+            // Force reflow to ensure transition works
+            void sidebar.offsetWidth;
+            
+            overlay.classList.add('opacity-100');
+            overlay.classList.remove('opacity-0');
+            document.body.style.overflow = 'hidden';
+            
+            setTimeout(() => {
+                isSidebarOpen = true;
+                isAnimating = false;
+            }, 300);
         }
 
         // Close sidebar with animation
         function closeSidebar() {
+            if (!isSidebarOpen || isAnimating) return;
+            
+            isAnimating = true;
             overlay.classList.add('opacity-0');
             overlay.classList.remove('opacity-100');
+            
             setTimeout(() => {
                 sidebar.classList.add('-translate-x-full');
                 overlay.classList.add('hidden');
                 document.body.style.overflow = '';
+                isSidebarOpen = false;
+                isAnimating = false;
             }, 300);
+        }
+
+        // Event listeners
+        if (openBtn) {
+            openBtn.addEventListener('click', openSidebar);
         }
 
         if (closeBtn) {
@@ -235,7 +264,10 @@
 
         // Close sidebar when clicking outside on mobile
         document.addEventListener('click', function(event) {
-            if (window.innerWidth < 768 && !sidebar.contains(event.target) && event.target !== openBtn) {
+            if (window.innerWidth < 768 && 
+                !sidebar.contains(event.target) && 
+                event.target !== openBtn && 
+                isSidebarOpen) {
                 closeSidebar();
             }
         });
@@ -247,7 +279,13 @@
                 overlay.classList.add('hidden');
                 overlay.classList.remove('opacity-100');
                 document.body.style.overflow = '';
+                isSidebarOpen = true;
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+                isSidebarOpen = false;
             }
+            isAnimating = false;
         }
 
         window.addEventListener('resize', handleResize);
