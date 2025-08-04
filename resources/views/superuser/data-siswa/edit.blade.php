@@ -7,7 +7,7 @@
     <div class="p-6 bg-white rounded-lg shadow-md">
         <h2 class="mb-4 text-xl font-semibold">Tambah Data Siswa</h2>
 
-        <form action="{{ route('data-siswa.update', $siswa) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('superuser.data-siswa.update', $siswa) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -55,6 +55,31 @@
                     <label class="block">No. Telepon Orang Tua / Wali</label>
                     <input type="text" value="{{ $siswa->telepon_wali }}" name="telepon_wali" class="w-full p-2 border rounded">
                 </div>
+                <div>
+    <label for="kode_perusahaan" class="block">Perusahaan</label>
+    <select name="kode_perusahaan" class="w-full p-2 border rounded" required>
+        <option value="">-- Pilih Perusahaan --</option>
+        @foreach($perusahaans as $perusahaan)
+            <option value="{{ $perusahaan->kode_perusahaan }}" 
+                {{ $siswa->kode_perusahaan == $perusahaan->kode_perusahaan ? 'selected' : '' }}>
+                {{ $perusahaan->nama_industri }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
+                <div>
+    <label class="block">Jurusan</label>
+    <select name="id_jurusan" class="w-full p-2 border rounded" required>
+        <option value="">-- Pilih Jurusan --</option>
+        @foreach($jurusans as $jurusan)
+            <option value="{{ $jurusan->id }}" {{ $siswa->id_jurusan == $jurusan->id ? 'selected' : '' }}>
+                {{ $jurusan->nama_jurusan }}
+            </option>
+        @endforeach
+    </select>
+</div>
+
             </div>
 
             <div class="mt-4">

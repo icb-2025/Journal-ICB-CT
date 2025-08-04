@@ -65,6 +65,16 @@
     </select>
 </div>
 
+<div>
+    <label class="block">Jurusan</label>
+    <select name="id_jurusan" class="w-full p-2 border rounded" required>
+        <option value="">-- Pilih Jurusan --</option>
+        @foreach($jurusans as $jurusan)
+            <option value="{{ $jurusan->id }}">{{ $jurusan->nama_jurusan }}</option>
+        @endforeach
+    </select>
+</div>
+
 
             </div>
 

@@ -25,6 +25,7 @@ class Siswa extends Model
         'telepon_wali',
         'input_by',
         'kode_perusahaan', 
+        'id_jurusan'
     ];
 
     public function guru()
@@ -35,5 +36,11 @@ class Siswa extends Model
 {
     return $this->belongsTo(User::class, 'input_by');
 }
+
+public function jurusan()
+{
+    return $this->belongsTo(Jurusan::class, 'id_jurusan');
+}
+
 
 }

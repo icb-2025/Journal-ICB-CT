@@ -10,7 +10,9 @@ class Jurusan extends Model
   protected $fillable = ['nama_jurusan', 'kode_jurusan'];
 
 
-  public function jurusan() {
-    return $this->belongsTo(Jurusan::class, 'nama_jurusan'); // pastikan relasi ini benar
+public function siswas()
+{
+    return $this->hasMany(Siswa::class, 'id_jurusan');
 }
+
 }

@@ -10,6 +10,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf; // Update this line
 use Illuminate\Support\Str;
 use App\Models\Perusahaan; // Pastikan sudah di-import di atas
+use App\Models\Jurusan; 
 
 class DataSiswaController extends Controller
 {
@@ -33,7 +34,8 @@ class DataSiswaController extends Controller
     public function create()
     {
         $perusahaans = Perusahaan::all();
-        return view('superuser.data-siswa.create', compact('perusahaans'));
+        $jurusans = Jurusan::all();
+        return view('superuser.data-siswa.create', compact('perusahaans', 'jurusans'));
     }
 
     public function store(Request $request)
@@ -51,9 +53,12 @@ class DataSiswaController extends Controller
             'alamat_wali'      => 'required|string',
             'telepon_wali'     => 'nullable|string|max:20',
             'kode_perusahaan'  => 'required|exists:perusahaans,kode_perusahaan',
+            'id_jurusan' => 'required|exists:jurusans,id',
+
         ]);
 
         $validated['input_by'] = auth()->id();
+        $validated['id_jurusan'] = $request->id_jurusan;
         Siswa::create($validated);
 
         return redirect()->route('superuser.data-siswa.index')->with('success', 'Data siswa berhasil ditambahkan.');
@@ -69,7 +74,8 @@ class DataSiswaController extends Controller
     {
         $siswa = Siswa::findOrFail($id);
         $perusahaans = Perusahaan::all();
-        return view('superuser.data-siswa.edit', compact('siswa', 'perusahaans'));
+        $jurusans = Jurusan::all();
+        return view('superuser.data-siswa.edit', compact('siswa', 'perusahaans', 'jurusans'));
     }
 
     public function update(Request $request, string $id)
@@ -89,9 +95,12 @@ class DataSiswaController extends Controller
             'alamat_wali'      => 'required|string',
             'telepon_wali'     => 'nullable|string|max:20',
             'kode_perusahaan'  => 'required|exists:perusahaans,kode_perusahaan',
+            'id_jurusan' => 'required|exists:jurusans,id',
+
         ]);
 
         $validated['input_by'] = auth()->id();
+        $validated['id_jurusan'] = $request->id_jurusan;
         $siswa->update($validated);
 
         return redirect()->route('superuser.data-siswa.index')->with('success', 'Data siswa berhasil diperbarui.');

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Perusahaan;
 use App\Models\AktivitasSiswa;
 use App\Models\KategoriTugas;
-
+use Illuminate\Support\Str;
 class AktivitasSiswaController extends Controller
 {
 

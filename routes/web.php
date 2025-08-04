@@ -9,6 +9,7 @@ use App\Http\Controllers\KegiatanController;
 use App\Http\Controllers\Guru\KategoriTugasController;
 use App\Http\Controllers\AktivitasSiswaController;
 use App\Http\Controllers\LaporankeseluruhanController; 
+use App\Http\Controllers\Superuser\DashboardController; 
 use App\Http\Controllers\Superuser\SuperuserDataJurusanController;
 use App\Http\Controllers\Superuser\LaporankeseluruhanController as SuperuserLaporankeseluruhanController; 
 use App\Http\Controllers\superuser\DataPerusahaanController as SuperuserDataPerusahaanController;
@@ -60,7 +61,7 @@ Route::get('/users', fn() => view('users'))->name('users');
 
     // Superuser
     Route::middleware('role:superuser')->group(function () {
-        Route::get('/superuser', fn() => view('superuser.dashboard'))->name('superuser.dashboard');
+        Route::get('/superuser', [DashboardController::class, 'index'])->name('superuser.dashboard');
         Route::get('/superuser/data-perusahaan', [DataPerusahaanController::class, 'index'])->name('superuser.data-perusahaan.index');
         Route::get('/superuser/data-siswa', fn() => view('superuser.data-siswa.index'))->name('superuser.data-siswa.index');
         Route::get('/superuser/data-kategori', fn() => view('superuser.data-kategori.index'))->name('superuser.data-kategori.index');

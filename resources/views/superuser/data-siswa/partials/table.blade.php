@@ -12,6 +12,7 @@
             <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Nama Orang Tua / Wali</th>
             <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Alamat Orang Tua / Wali</th>
             <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">No Telepon Orang Tua / Wali</th>
+            <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Jurusan</th>
             <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Input by</th>
             <th class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">Aksi</th>
         </tr>
@@ -30,6 +31,7 @@
             <td class="px-6 py-4 whitespace-nowrap">{{ $siswa->nama_wali }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $siswa->alamat_wali }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $siswa->telepon_wali }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $siswa->jurusan->nama_jurusan ?? '-' }}</td>
             <td class="px-6 py-4 whitespace-nowrap">{{ $siswa->inputBy->name?? '-' }}</td>
             <td class="flex px-6 py-4 space-x-2 whitespace-nowrap">
                 <td class="flex px-6 py-4 space-x-2 whitespace-nowrap">
@@ -46,6 +48,7 @@
                     '{{ $siswa->nama_wali }}',
                     '{{ $siswa->telepon_wali }}',
                     '{{ $siswa->status }}',
+                     {{ $siswa->jurusan->nama_jurusan ?? '-' }}
                     '{{ $siswa->inputBy->name ?? 'System' }}'
                 )" class="text-blue-600 hover:text-blue-900" title="Lihat">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
