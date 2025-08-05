@@ -411,74 +411,102 @@
 
 <!-- Global Script -->
 <script>
-$(document).ready(function() {
-    // Debounce function untuk delay pencarian
-    function debounce(func, wait) {
-        let timeout;
-        return function() {
-            const context = this, args = arguments;
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(context, args), wait);
-        };
-    }
+    $(document).ready(function() {
+        // Debounce function untuk delay pencarian
+        function debounce(func, wait) {
+            let timeout;
+            return function() {
+                const context = this, args = arguments;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), wait);
+            };
+        }
 
-    // // Fungsi untuk memuat data siswa dengan AJAX
-    // function loadSiswaData() {
-    //     // Ambil semua nilai filter
-    //     const nama = $('#search').val().trim();       // Live search nama_lengkap
-    //     const gol_darah = $('#gol_darah').val();      // Filter golongan darah
-    //     const sekolah = $('#sekolah').val();          // Filter sekolah
+        // Fungsi untuk memuat data siswa dengan AJAX
+        $(document).ready(function() {
+        // Debounce function untuk delay pencarian
+        function debounce(func, wait) {
+            let timeout;
+            return function() {
+                const context = this, args = arguments;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), wait);
+            };
+        }
 
-    //     // Tampilkan loading indicator
-    //     $('#table-container').html(`
-    //         <div class="text-center py-8">
-    //             <i class="fas fa-spinner fa-spin fa-2x text-indigo-600"></i>
-    //             <p class="mt-2 text-gray-600">Memuat data siswa...</p>
-    //         </div>
-    //     `);
+        // Fungsi untuk memuat data siswa dengan AJAX
+        function loadSiswaData() {
+            // Only proceed if we're on the siswa data page
+            const tableContainer = $('#table-container');
+            if (!tableContainer.length) return;
 
-    //     // Gunakan debounce untuk optimasi performa
-    //     clearTimeout(loadSiswaData.debounce);
-    //     loadSiswaData.debounce = setTimeout(() => {
-    //         $.ajax({
-    //             url: "{{ route('guru.data-siswa.index') }}",
-    //             type: "GET",
-    //             data: {
-    //                 search: nama,          // Untuk search nama_lengkap
-    //                 gol_darah: gol_darah, // Filter golongan darah
-    //                 sekolah: sekolah      // Filter sekolah
-    //             },
-    //             success: function(response) {
-    //                 $('#table-container').html(response.html);
-    //                 $('#pagination-container').html(response.pagination);
-    //             },
-    //             error: function(xhr) {
-    //                 $('#table-container').html(`
-    //                     <div class="text-center py-8 text-red-600">
-    //                         <i class="fas fa-exclamation-circle fa-2x"></i>
-    //                         <p class="mt-2">Gagal memuat data. Silakan coba lagi.</p>
-    //                     </div>
-    //                 `);
-    //                 console.error(xhr.responseText);
-    //             }
-    //         });
-    //     }, 300);
-    // }
+            // Safely get filter values with null checks
+            const nama = $('#search').length ? $('#search').val().trim() : '';
+            const gol_darah = $('#gol_darah').length ? $('#gol_darah').val() : '';
+            const sekolah = $('#sekolah').length ? $('#sekolah').val() : '';
 
-    // // Event listeners untuk semua filter
-    // $(document).ready(function() {
-    //     // Live search nama
-    //     $('#search').on('input', loadSiswaData);
-        
-    //     // Filter golongan darah
-    //     $('#gol_darah').on('change', loadSiswaData);
-        
-    //     // Filter sekolah
-    //     $('#sekolah').on('change', loadSiswaData);
+            // Tampilkan loading indicator
+            tableContainer.html(`
+                <div class="text-center py-8">
+                    <i class="fas fa-spinner fa-spin fa-2x text-indigo-600"></i>
+                    <p class="mt-2 text-gray-600">Memuat data siswa...</p>
+                </div>
+            `);
 
-    //     // Load data pertama kali
-    //     loadSiswaData();
-    // });
+            // Gunakan debounce untuk optimasi performa
+            clearTimeout(loadSiswaData.debounce);
+            loadSiswaData.debounce = setTimeout(() => {
+                $.ajax({
+                    url: "{{ route('guru.data-siswa.index') }}",
+                    type: "GET",
+                    data: {
+                        search: nama,
+                        gol_darah: gol_darah,
+                        sekolah: sekolah
+                    },
+                    success: function(response) {
+                        tableContainer.html(response.html);
+                        if ($('#pagination-container').length) {
+                            $('#pagination-container').html(response.pagination);
+                        }
+                    },
+                    error: function(xhr) {
+                        tableContainer.html(`
+                            <div class="text-center py-8 text-red-600">
+                                <i class="fas fa-exclamation-circle fa-2x"></i>
+                                <p class="mt-2">Gagal memuat data. Silakan coba lagi.</p>
+                            </div>
+                        `);
+                        console.error('Error loading data:', xhr.responseText);
+                    }
+                });
+            }, 300);
+        }
+
+        // Initialize based on which page we're on
+        if ($('#data-siswa-container').length) {
+            // Setup for siswa data page
+            const handleSiswaSearch = debounce(loadSiswaData, 500);
+            
+            // Attach live search event handler
+            $(document).on('keyup', '#search', handleSiswaSearch);
+            
+            // Attach filter change handlers
+            if ($('#gol_darah').length) {
+                $('#gol_darah').on('change', handleSiswaSearch);
+            }
+            
+            if ($('#sekolah').length) {
+                $('#sekolah').on('change', handleSiswaSearch);
+            }
+
+            // Load initial data
+            if ($('#table-container').length) {
+                loadSiswaData();
+            }
+        }
+    });
+
 
     // Fungsi untuk memuat data laporan dengan AJAX
     function loadLaporanData() {
