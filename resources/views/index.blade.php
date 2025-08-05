@@ -28,6 +28,7 @@
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kode Perusahaan</th>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Input</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mulai Pukul</th>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Selesai Pukul</th>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kegiatan</th>
@@ -71,7 +72,15 @@
                                     <input type="date" name="input_date[]" value="{{ date('Y-m-d') }}" required
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm">
                                 </td>
-
+                                 <!-- Status -->
+                                <td class="px-4 py-4 whitespace-nowrap align-top">
+                                    <label class="sm:hidden block text-xs text-gray-500 mb-1">Status</label>
+                                    <select name="status[]" class="status-select w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                        <option value="masuk" selected>Masuk</option>
+                                        <option value="izin">Izin</option>
+                                        <option value="sakit">Sakit</option>
+                                    </select>
+                                </td>
                                 <!-- Jam Mulai -->
                                 <td class="px-4 py-4 whitespace-nowrap align-top">
                                     <label class="sm:hidden block text-xs text-gray-500 mb-1">Mulai Pukul</label>
@@ -92,7 +101,6 @@
                                     <textarea name="description[]" rows="3" maxlength="300" required
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm resize-none max-h-[6.5rem] focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
                                         placeholder="Deskripsikan kegiatan Anda..."></textarea>
-                                    <p class="text-xs text-gray-500 mt-1">Ketik kegiatan untuk deteksi otomatis kategori</p>
                                 </td>
 
                                 <!-- Kategori Tugas -->
@@ -105,7 +113,6 @@
                                             <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
                                         @endforeach
                                     </select>
-                                    <p class="text-xs text-gray-500 mt-1">Akan terdeteksi otomatis</p>
                                 </td>
                             </tr>
                         </tbody>
@@ -207,5 +214,35 @@
             // Add more conditions as needed for your categories
         });
     });
+
+    $(document).on('change', '.status-select', function() {
+    const status = $(this).val();
+    const row = $(this).closest('tr');
+
+    const startInput = row.find('input[name="start_time[]"]');
+    const endInput = row.find('input[name="end_time[]"]');
+    const descInput = row.find('textarea[name="description[]"]');
+    const categorySelect = row.find('select[name="category[]"]');
+
+    if (status === 'masuk') {
+        // Normal
+        startInput.prop('disabled', false).val('');
+        endInput.prop('disabled', false).val('');
+        categorySelect.prop('disabled', false).val('');
+        descInput.prop('placeholder', 'Deskripsikan kegiatan Anda...');
+    } else if (status === 'izin') {
+        startInput.prop('disabled', false).val('');
+        endInput.prop('disabled', false).val('');
+        categorySelect.prop('disabled', true).val(''); // kosong & disable
+        descInput.prop('placeholder', 'Tulis alasan izin hari ini...');
+    } else if (status === 'sakit') {
+        startInput.prop('disabled', true).val('-');
+        endInput.prop('disabled', true).val('-');
+        categorySelect.prop('disabled', true).val('');
+        descInput.prop('placeholder', 'Tulis keterangan sakit jika perlu...');
+    }
+});
+
+
 </script>
 @endsection

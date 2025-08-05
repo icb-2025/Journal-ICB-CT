@@ -13,7 +13,8 @@ class AktivitasSiswa extends Model
         'mulai',
         'selesai',
         'deskripsi',
-        'kategori_tugas_id'   
+        'kategori_tugas_id',
+        'status' 
     ];
 
     public function perusahaan() {

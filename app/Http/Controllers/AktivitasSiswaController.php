@@ -44,42 +44,45 @@ class AktivitasSiswaController extends Controller
 
  public function store(Request $request)
 {
-    // Validasi basic
     $request->validate([
-        'company_code' => 'required|array',
-        'input_date' => 'required|array',
-        'start_time' => 'required|array',
-        'end_time' => 'required|array',
-        'description' => 'required|array',
-    ]);
+    'company_code' => 'required|array',
+    'input_date' => 'required|array',
+    'description' => 'required|array',
+    'status' => 'required|array',
+    // Jangan validasi time & category dulu, validasi manual di loop
+]);
 
-    $siswaId = auth()->id();
+    // $siswaId = auth()->id();
 
     foreach ($request->company_code as $i => $perusahaanId) {
-        $tanggal = $request->input_date[$i];
+    $status = $request->status[$i] ?? 'masuk';
 
-        // Cek apakah sudah ada data aktivitas untuk siswa ini di tanggal tersebut
-        $existing = AktivitasSiswa::where('siswa_id', $siswaId)
-                        ->where('tanggal', $tanggal)
-                        ->exists();
+    if ($status === 'sakit') {
+    $start = '-';
+    $end = '-';
+    $kategori_id = null;
+} elseif ($status === 'izin') {
+    $start = $request->start_time[$i];
+    $end = $request->end_time[$i];
+    $kategori_id = null;
+} else {
+    $start = $request->start_time[$i];
+    $end = $request->end_time[$i];
+    $kategori_id = $request->category[$i] ?? $this->deteksiKategori($request->description[$i]);
+}
 
-        if ($existing) {
-            return redirect()->back()->with('error', 'Data aktivitas untuk tanggal ' . $tanggal . ' sudah pernah disimpan.');
-        }
 
-        $deskripsi = $request->description[$i];
-        $kategori_id = $request->category[$i] ?? $this->deteksiKategori($deskripsi);
-
-        AktivitasSiswa::create([
-            'perusahaan_id' => $perusahaanId,
-            'tanggal' => $tanggal,
-            'mulai' => $request->start_time[$i],
-            'selesai' => $request->end_time[$i],
-            'deskripsi' => $deskripsi,
-            'kategori_tugas_id' => $kategori_id,
-            'siswa_id' => $siswaId,
-        ]);
-    }
+    AktivitasSiswa::create([
+        'perusahaan_id' => $perusahaanId,
+        'tanggal' => $request->input_date[$i],
+        'mulai' => $start,
+        'selesai' => $end,
+        'deskripsi' => $request->description[$i],
+        'kategori_tugas_id' => $kategori_id,
+        'siswa_id' => auth()->id(),
+        'status' => $status, // ✅ Tambahkan ini!
+    ]);
+}
 
     return redirect()->back()->with('success', 'Aktivitas berhasil disimpan.');
 }

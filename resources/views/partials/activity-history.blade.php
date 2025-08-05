@@ -5,6 +5,7 @@
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">No</th>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider hidden sm:table-cell">Kode</th>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Tanggal</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Status</th>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Waktu</th>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Kegiatan</th>
                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Kategori</th>
@@ -26,10 +27,14 @@
                     <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
                         {{ \Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') }}
                     </td>
+
+                    <td class="px-4 py-4 text-sm text-gray-500 max-w-xs truncate sm:max-w-none sm:whitespace-normal">
+                        {{ $item->status }}
+                    </td>
                     
                     <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <span class="block">{{ $item->mulai }}</span>
-                        <span class="block">- {{ $item->selesai }}</span>
+                        <span class="block">{{ $item->mulai ?? '-' }}</span>
+                        <span class="block">- {{ $item->selesai ?? '-'}}</span>
                     </td>
                     
                     <td class="px-4 py-4 text-sm text-gray-500 max-w-xs truncate sm:max-w-none sm:whitespace-normal">
