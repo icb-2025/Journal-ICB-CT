@@ -69,7 +69,7 @@
                                 <!-- Tanggal -->
                                 <td class="px-4 py-4 whitespace-nowrap align-top">
                                     <label class="sm:hidden block text-xs text-gray-500 mb-1">Tanggal Input</label>
-                                    <input type="date" name="input_date[]" value="{{ date('Y-m-d') }}" required
+                                    <input type="date" name="input_date[]" value="{{ date('Y-m-d') }}" required oninvalid="this.setCustomValidity('Data tidak boleh kosong')" oninput="setCustomValidity('')"
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm">
                                 </td>
                                  <!-- Status -->
@@ -103,7 +103,7 @@
                                 <!-- Deskripsi Kegiatan -->
                                 <td class="px-4 py-4 align-top">
                                     <label class="sm:hidden block text-xs text-gray-500 mb-1">Kegiatan</label>
-                                    <textarea name="description[]" rows="3" maxlength="300" required
+                                    <textarea name="description[]" rows="3" maxlength="300" required oninvalid="this.setCustomValidity('Data tidak boleh kosong')" oninput="setCustomValidity('')"
                                         class="desc-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm resize-none max-h-[6.5rem] focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
                                         placeholder="Deskripsikan kegiatan Anda..."></textarea>
                                 </td>

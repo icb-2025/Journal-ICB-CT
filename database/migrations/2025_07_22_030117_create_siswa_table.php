@@ -29,6 +29,8 @@ public function up()
         $table->text('alamat_wali');
         $table->string('telepon_wali')->nullable();
         // $table->string('kode_perusahaan')->nullable()->after('telepon_wali'); (ini saya ambil dari migration untuk menamabahkan tabel kode_perusahaan ke users)
+        //$table->unsignedBigInteger('id_jurusan')->nullable()->after('kode_perusahaan');
+        // $table->foreign('id_jurusan')->references('id')->on('jurusans'); #pokoknya sudah habis kode perusahaan itu id_jurusan
         $table->unsignedBigInteger('input_by'); // user_id dari guru
         $table->timestamps();
 

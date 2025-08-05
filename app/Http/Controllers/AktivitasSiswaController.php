@@ -44,6 +44,11 @@ class AktivitasSiswaController extends Controller
 
  public function store(Request $request)
 {
+
+    $user = auth()->user();
+    $dataSiswa = $user->siswa; // Ambil relasi siswa
+
+
     $request->validate([
     'company_code' => 'required|array',
     'input_date' => 'required|array',
@@ -81,6 +86,7 @@ class AktivitasSiswaController extends Controller
         'kategori_tugas_id' => $kategori_id,
         'siswa_id' => auth()->id(),
         'status' => $status, // ✅ Tambahkan ini!
+        'id_jurusan' => $dataSiswa?->id_jurusan, // ✅ Ambil dari relasi siswa
     ]);
 }
 

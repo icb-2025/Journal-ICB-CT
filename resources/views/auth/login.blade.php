@@ -108,7 +108,7 @@
                             name="name" 
                             type="name" 
                             autocomplete="name" 
-                            required 
+                            required oninvalid="this.setCustomValidity('Data tidak boleh kosong')" oninput="setCustomValidity('')" 
                             value="{{ old('name') }}"
                             class="input-field block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             placeholder="Username">
@@ -124,7 +124,7 @@
                                 name="password" 
                                 type="password" 
                                 autocomplete="current-password" 
-                                required 
+                                required oninvalid="this.setCustomValidity('Data tidak boleh kosong')" oninput="setCustomValidity('')" 
                                 class="input-field block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-10"
                                 placeholder="••••••••">
                             <button type="button" id="toggle-password" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-indigo-600 focus:outline-none">

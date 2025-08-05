@@ -16,6 +16,7 @@ return new class extends Migration
         $table->foreignId('siswa_id')->constrained('users');
         $table->foreignId('perusahaan_id')->constrained('perusahaans');
         $table->date('tanggal');
+        $table->string('status')->default('masuk');
         $table->time('mulai');
         $table->time('selesai');
         $table->text('deskripsi');

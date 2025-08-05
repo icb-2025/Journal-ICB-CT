@@ -4,7 +4,7 @@
 
 @section('content')
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- sudah aku pindahkan ke layout script chartjsnya -->
 
 <div class="mt-10 bg-white p-6 rounded-lg shadow">
     <h3 class="text-lg font-semibold text-gray-900 mb-4">Aktivitas Siswa per Hari (Senin - Jumat)</h3>
@@ -12,13 +12,19 @@
 </div>
 
 <script>
+    const labels = {!! json_encode($labels) !!};
+    const datasets = {!! json_encode($datasets) !!};
+
+    console.log("Labels:", labels);
+    console.log("Datasets:", datasets);
+
     const ctx = document.getElementById('chartAktivitasHarian').getContext('2d');
 
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: {!! json_encode($labels) !!},
-            datasets: {!! json_encode($datasets) !!}
+            labels: labels,
+            datasets: datasets
         },
         options: {
             responsive: true,
@@ -26,6 +32,9 @@
                 title: {
                     display: true,
                     text: 'Aktivitas Siswa per Jurusan (Senin - Jumat)'
+                },
+                legend: {
+                    position: 'bottom'
                 }
             },
             scales: {
@@ -46,6 +55,4 @@
         }
     });
 </script>
-
-    
 @endsection

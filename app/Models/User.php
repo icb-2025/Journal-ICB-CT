@@ -47,4 +47,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(User::class, 'input_by');
     }
+
+    public function siswa()
+{
+    return $this->hasOne(Siswa::class, 'nis', 'nisn'); // sesuaikan field-nya
+}
+
 }

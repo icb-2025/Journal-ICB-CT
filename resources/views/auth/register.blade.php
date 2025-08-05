@@ -56,7 +56,7 @@
                                     id="name" 
                                     name="name" 
                                     type="text" 
-                                    required 
+                                    required oninvalid="this.setCustomValidity('Data tidak boleh kosong')" oninput="setCustomValidity('')" 
                                     autofocus 
                                     value="{{ old('name') }}"
                                     autocomplete="name"
@@ -79,7 +79,7 @@
                                     id="email" 
                                     name="email" 
                                     type="email" 
-                                    required 
+                                    required oninvalid="this.setCustomValidity('Data tidak boleh kosong')" oninput="setCustomValidity('')"
                                     value="{{ old('email') }}"
                                     autocomplete="email"
                                     class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg input-focus focus:outline-none focus:ring-1 focus:ring-indigo-500 placeholder-gray-400 transition duration-150 ease-in-out"
@@ -101,7 +101,7 @@
             id="nisn" 
             name="nisn" 
             type="text" 
-            required 
+            required oninvalid="this.setCustomValidity('Data tidak boleh kosong')" oninput="setCustomValidity('')" 
             value="{{ old('nisn') }}"
             autocomplete="nisn"
             class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg input-focus focus:outline-none focus:ring-1 focus:ring-indigo-500 placeholder-gray-400 transition duration-150 ease-in-out"
@@ -123,7 +123,7 @@
                                     id="password" 
                                     name="password" 
                                     type="password" 
-                                    required 
+                                    required oninvalid="this.setCustomValidity('Data tidak boleh kosong')" oninput="setCustomValidity('')"
                                     autocomplete="new-password"
                                     class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg input-focus focus:outline-none focus:ring-1 focus:ring-indigo-500 placeholder-gray-400 transition duration-150 ease-in-out"
                                     placeholder="••••••••">
@@ -145,7 +145,7 @@
                                     id="password_confirmation" 
                                     name="password_confirmation" 
                                     type="password" 
-                                    required 
+                                    required oninvalid="this.setCustomValidity('Data tidak boleh kosong')" oninput="setCustomValidity('')"
                                     autocomplete="new-password"
                                     class="appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg input-focus focus:outline-none focus:ring-1 focus:ring-indigo-500 placeholder-gray-400 transition duration-150 ease-in-out"
                                     placeholder="••••••••">
