@@ -48,7 +48,7 @@ public function index(Request $request)
 
     // Untuk non-AJAX: halaman awal
     return view('superuser.laporan.index', [
-        'aktivitas' => Aktivitas::with(['siswa', 'perusahaan', 'kategoriTugas'])->latest()->get(),
+        'aktivitas' => Aktivitas::with(['siswa', 'perusahaan', 'kategoriTugas'])->latest()->paginate(25),
         'jurusans' => Jurusan::all(),
         'perusahaans' => Perusahaan::all(),
     ]);

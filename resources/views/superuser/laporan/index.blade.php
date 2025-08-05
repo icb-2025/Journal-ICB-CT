@@ -54,7 +54,7 @@
 <div class="overflow-x-auto">
     <!-- Table ONLY will be replaced by AJAX -->
     <div id="table-container">
-        <table class="table table-bordered min-w-full divide-y divide-gray-200">
+        <table class="table table-bordered min-w-full divide-y">
             @include('superuser.laporan.partials.table', ['aktivitas' => $aktivitas])
         </table>
     </div>

@@ -56,6 +56,7 @@ class RegisteredUserController extends Controller
     'kode_perusahaan' => $siswa->kode_perusahaan,
     'role' => 'siswa',
     'nisn' => $request->nisn, // ⬅ Tambahkan ini
+    'nama_jurusan' => optional($siswa->jurusan)->nama_jurusan,
     'input_by' => null,
     'input_date' => now(),
 ]);

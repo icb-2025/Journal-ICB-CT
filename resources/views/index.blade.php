@@ -73,25 +73,29 @@
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm">
                                 </td>
                                  <!-- Status -->
+                                  @php
+    $statusDefault = 'masuk'; // bisa disesuaikan
+@endphp
                                 <td class="px-4 py-4 whitespace-nowrap align-top">
                                     <label class="sm:hidden block text-xs text-gray-500 mb-1">Status</label>
-                                    <select name="status[]" class="status-select w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm">
-                                        <option value="masuk" selected>Masuk</option>
-                                        <option value="izin">Izin</option>
-                                        <option value="sakit">Sakit</option>
-                                    </select>
+                                    <select name="status[]" class="status-select ...">
+    <option value="masuk" {{ $statusDefault == 'masuk' ? 'selected' : '' }}>Masuk</option>
+    <option value="izin" {{ $statusDefault == 'izin' ? 'selected' : '' }}>Izin</option>
+    <option value="sakit" {{ $statusDefault == 'sakit' ? 'selected' : '' }}>Sakit</option>
+</select>
                                 </td>
                                 <!-- Jam Mulai -->
                                 <td class="px-4 py-4 whitespace-nowrap align-top">
                                     <label class="sm:hidden block text-xs text-gray-500 mb-1">Mulai Pukul</label>
-                                    <input type="time" name="start_time[]" required
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                   <input type="time" name="start_time[]" 
+    class="start-time-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm" 
+    {{ $statusDefault == 'sakit' ? 'disabled' : '' }}>
                                 </td>
 
                                 <!-- Jam Selesai -->
                                 <td class="px-4 py-4 whitespace-nowrap align-top">
                                     <label class="sm:hidden block text-xs text-gray-500 mb-1">Selesai Pukul</label>
-                                    <input type="time" name="end_time[]" required
+                                    <input type="time" name="end_time[]" class="end-time-input w-full ..." {{ $statusDefault == 'sakit' ? 'disabled' : '' }}
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm">
                                 </td>
 
@@ -99,21 +103,23 @@
                                 <td class="px-4 py-4 align-top">
                                     <label class="sm:hidden block text-xs text-gray-500 mb-1">Kegiatan</label>
                                     <textarea name="description[]" rows="3" maxlength="300" required
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm resize-none max-h-[6.5rem] focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
+                                        class="desc-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm resize-none max-h-[6.5rem] focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
                                         placeholder="Deskripsikan kegiatan Anda..."></textarea>
                                 </td>
 
                                 <!-- Kategori Tugas -->
-                                <td class="px-4 py-4 align-top">
-                                    <label class="sm:hidden block text-xs text-gray-500 mb-1">Kategori</label>
-                                    <select name="category[]" required
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm">
-                                        <option value="">Pilih Kategori</option>
-                                        @foreach($kategoriTugas as $kategori)
-                                            <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
-                                        @endforeach
-                                    </select>
-                                </td>
+<td class="px-4 py-4 align-top">
+    <label class="sm:hidden block text-xs text-gray-500 mb-1">Kategori</label>
+    <select name="category[]" 
+    class="category-select w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
+    {{ in_array($statusDefault, ['izin', 'sakit']) ? 'disabled' : '' }}>
+    <option value="">Pilih Kategori</option>
+    @foreach($kategoriTugas as $kategori)
+        <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
+    @endforeach
+</select>
+</td>
+
                             </tr>
                         </tbody>
                     </table>
@@ -159,90 +165,6 @@
 <!-- Include jQuery first -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<script>
-    $(document).ready(function() {
-        // Sidebar toggle functionality
-        const sidebarToggle = document.getElementById('sidebar-toggle');
-        const sidebar = document.getElementById('sidebar');
-        
-        if (sidebarToggle && sidebar) {
-            sidebarToggle.addEventListener('click', function() {
-                sidebar.classList.toggle('-translate-x-full');
-                sidebar.classList.toggle('transform-none');
-            });
-        }
-
-        // Pagination functionality with jQuery
-        $(document).on('click', '#history-container .pagination a', function(e) {
-            e.preventDefault();
-            let url = $(this).attr('href');
-            
-            // Show loading state
-            $('#history-container').html(`
-                <div class="flex justify-center items-center p-8">
-                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-                </div>
-            `);
-            
-            // Fetch the paginated data
-            $.ajax({
-                url: url,
-                type: 'get',
-                success: function(data) {
-                    $('#history-container').html(data);
-                },
-                error: function(xhr) {
-                    $('#history-container').html(`
-                        <div class="p-4 text-red-500">
-                            Gagal memuat data. Silakan coba lagi.
-                        </div>
-                    `);
-                }
-            });
-        });
-
-        // Auto-category detection based on activity description
-        $(document).on('keyup', 'textarea[name="description[]"]', function() {
-            const description = $(this).val().toLowerCase();
-            const categorySelect = $(this).closest('tr').find('select[name="category[]"]');
-            
-            if (description.includes('meeting') || description.includes('rapat')) {
-                categorySelect.val('1').trigger('change');
-            } else if (description.includes('coding') || description.includes('programming')) {
-                categorySelect.val('2').trigger('change');
-            }
-            // Add more conditions as needed for your categories
-        });
-    });
-
-    $(document).on('change', '.status-select', function() {
-    const status = $(this).val();
-    const row = $(this).closest('tr');
-
-    const startInput = row.find('input[name="start_time[]"]');
-    const endInput = row.find('input[name="end_time[]"]');
-    const descInput = row.find('textarea[name="description[]"]');
-    const categorySelect = row.find('select[name="category[]"]');
-
-    if (status === 'masuk') {
-        // Normal
-        startInput.prop('disabled', false).val('');
-        endInput.prop('disabled', false).val('');
-        categorySelect.prop('disabled', false).val('');
-        descInput.prop('placeholder', 'Deskripsikan kegiatan Anda...');
-    } else if (status === 'izin') {
-        startInput.prop('disabled', false).val('');
-        endInput.prop('disabled', false).val('');
-        categorySelect.prop('disabled', true).val(''); // kosong & disable
-        descInput.prop('placeholder', 'Tulis alasan izin hari ini...');
-    } else if (status === 'sakit') {
-        startInput.prop('disabled', true).val('-');
-        endInput.prop('disabled', true).val('-');
-        categorySelect.prop('disabled', true).val('');
-        descInput.prop('placeholder', 'Tulis keterangan sakit jika perlu...');
-    }
-});
 
 
-</script>
 @endsection

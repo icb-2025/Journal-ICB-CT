@@ -177,6 +177,15 @@
             height: 100%;
         }
 
+        input:disabled,
+select:disabled,
+textarea:disabled {
+    background-color: #f3f4f6 !important;
+    cursor: not-allowed;
+    color: #9ca3af;
+    pointer-events: none;
+}
+
     </style>
 </head>
 <body class="bg-gray-50 font-sans antialiased">
@@ -281,6 +290,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         // Enhanced Sidebar Toggle
         document.addEventListener('DOMContentLoaded', function() {
@@ -375,6 +385,126 @@
             window.addEventListener('resize', handleResize);
             handleResize();
         });
+
+
+
+
+
+
+
+
+
+
+
+
+           function updateStatusRow(row) {
+        const status = row.find('.status-select').val();
+        const startInput = row.find('.start-time-input');
+        const endInput = row.find('.end-time-input');
+        const descInput = row.find('.desc-input');
+        const categorySelect = row.find('.category-select');
+
+        if (status === 'masuk') {
+            startInput.prop('disabled', false).val('');
+            endInput.prop('disabled', false).val('');
+            categorySelect.prop('disabled', false).val('');
+            descInput.prop('disabled', false).prop('readonly', false)
+                .attr('placeholder', 'Deskripsikan kegiatan Anda...');
+        } else if (status === 'izin') {
+            startInput.prop('disabled', false).val('');
+            endInput.prop('disabled', false).val('');
+            categorySelect.prop('disabled', true).val('-');
+            descInput.prop('disabled', false).prop('readonly', false)
+                .attr('placeholder', 'Tulis alasan izin hari ini...');
+        } else if (status === 'sakit') {
+startInput.prop('disabled', true).val('');
+endInput.prop('disabled', true).val('');
+
+            categorySelect.prop('disabled', true).val('-');
+            descInput.prop('disabled', false).prop('readonly', false)
+                .attr('placeholder', 'Tulis keterangan sakit jika perlu...');
+        }
+
+    }
+
+    // 🚨 Tambahkan event handler ini:
+    $(document).on('change', '.status-select', function () {
+        const row = $(this).closest('tr');
+        updateStatusRow(row);
+    });
+
+    // 🚀 Opsional: Jalankan untuk semua baris saat halaman pertama kali dimuat
+    $(document).ready(function () {
+        $('tr').each(function () {
+            updateStatusRow($(this));
+        });
+    });
+
+
+
+
+    
+
+    $(document).ready(function() {
+        // Inisialisasi awal setiap baris (status default)
+        $('.status-select').each(function() {
+            const row = $(this).closest('tr');
+            updateStatusRow(row);
+        });
+
+        // Trigger ketika user mengganti status
+        $('#history-container').on('change', '.status-select', function() {
+            const row = $(this).closest('tr');
+            updateStatusRow(row);
+        });
+
+        // Auto-category detection
+        $(document).on('keyup', 'textarea[name="description[]"]', function() {
+            const description = $(this).val().toLowerCase();
+            const categorySelect = $(this).closest('tr').find('select[name="category[]"]');
+
+            if (description.includes('meeting') || description.includes('rapat')) {
+                categorySelect.val('1').trigger('change');
+            } else if (description.includes('coding') || description.includes('programming')) {
+                categorySelect.val('2').trigger('change');
+            }
+        });
+
+        // Sidebar toggle
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebar = document.getElementById('sidebar');
+        if (sidebarToggle && sidebar) {
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('-translate-x-full');
+                sidebar.classList.toggle('transform-none');
+            });
+        }
+
+        // Pagination AJAX
+        $(document).on('click', '#history-container .pagination a', function(e) {
+            e.preventDefault();
+            let url = $(this).attr('href');
+            $('#history-container').html(`
+                <div class="flex justify-center items-center p-8">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                </div>
+            `);
+            $.ajax({
+                url: url,
+                type: 'get',
+                success: function(data) {
+                    $('#history-container').html(data);
+                },
+                error: function(xhr) {
+                    $('#history-container').html(`
+                        <div class="p-4 text-red-500">
+                            Gagal memuat data. Silakan coba lagi.
+                        </div>
+                    `);
+                }
+            });
+        });
+    });
     </script>
 </body>
 </html>
