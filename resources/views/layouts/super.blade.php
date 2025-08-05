@@ -230,7 +230,7 @@
                         </div>
                     </div>
                     <div class="space-y-1">
-                        <a href="#" class="flex items-center px-3 py-2 text-sm rounded-lg hover:bg-indigo-700 transition-colors">
+                        <a href="{{ route('profile.edit') }}" class="flex items-center px-3 py-2 text-sm rounded-lg hover:bg-indigo-700 transition-colors">
                             <i class="fas fa-user-circle w-5 mr-2 text-center"></i>
                             <span>Profil Saya</span>
                         </a>
@@ -369,7 +369,7 @@
                         </div>
                     </div>
                     <div class="space-y-1">
-                        <a href="#" class="flex items-center px-3 py-2 text-sm rounded-lg hover:bg-indigo-700 transition-colors">
+                        <a href="{{ route('profile.edit') }}" class="flex items-center px-3 py-2 text-sm rounded-lg hover:bg-indigo-700 transition-colors">
                             <i class="fas fa-user-circle w-5 mr-2 text-center"></i>
                             <span>Profil Saya</span>
                         </a>
