@@ -200,7 +200,7 @@ textarea:disabled {
             <div class="flex items-center justify-between p-4 border-b">
                 <a href="/" class="flex items-center space-x-2">
                     <x-application-logo class="h-8 w-auto fill-current text-indigo-600" />
-                    <span class="text-xl font-bold whitespace-nowrap">Journal-ICB-CT</span>
+                    <span class="text-xl font-bold whitespace-nowrap">Journal ICB CT</span>
                 </a>
                 <button id="close-sidebar" class="md:hidden mobile-tap-target">
                     <i class="fas fa-times text-gray-500 text-lg"></i>
@@ -270,14 +270,14 @@ textarea:disabled {
                     <h1 class="text-lg sm:text-xl font-semibold text-gray-900 ml-2">@yield('title')</h1>
                 </div>
                 
-                @auth
+                <!-- @auth
                 <div class="flex items-center space-x-3">
                     <button class="p-2 rounded-full hover:bg-gray-100">
                         <i class="fas fa-bell text-gray-600 text-lg"></i>
                         <span class="sr-only">Notifications</span>
                     </button>
                 </div>
-                @endauth
+                @endauth -->
             </div>
         </header>
 
@@ -397,35 +397,42 @@ textarea:disabled {
 
 
 
-           function updateStatusRow(row) {
-        const status = row.find('.status-select').val();
-        const startInput = row.find('.start-time-input');
-        const endInput = row.find('.end-time-input');
-        const descInput = row.find('.desc-input');
-        const categorySelect = row.find('.category-select');
+function updateStatusRow(row) {
+    const status = row.find('.status-select').val();
+    const startInput = row.find('.start-time-input');
+    const endInput = row.find('.end-time-input');
+    const descInput = row.find('.desc-input');
+    const categorySelect = row.find('.category-select');
 
-        if (status === 'masuk') {
-            startInput.prop('disabled', false).val('');
-            endInput.prop('disabled', false).val('');
-            categorySelect.prop('disabled', false).val('');
-            descInput.prop('disabled', false).prop('readonly', false)
-                .attr('placeholder', 'Deskripsikan kegiatan Anda...');
-        } else if (status === 'izin') {
-            startInput.prop('disabled', false).val('');
-            endInput.prop('disabled', false).val('');
-            categorySelect.prop('disabled', true).val('-');
-            descInput.prop('disabled', false).prop('readonly', false)
-                .attr('placeholder', 'Tulis alasan izin hari ini...');
-        } else if (status === 'sakit') {
-startInput.prop('disabled', true).val('');
-endInput.prop('disabled', true).val('');
+    // Reset value dan disabled semua
+    startInput.prop('disabled', false).val('');
+    endInput.prop('disabled', false).val('');
+    categorySelect.prop('disabled', false).val('');
+    descInput.prop('disabled', false).val('').prop('readonly', false);
 
-            categorySelect.prop('disabled', true).val('-');
-            descInput.prop('disabled', false).prop('readonly', false)
-                .attr('placeholder', 'Tulis keterangan sakit jika perlu...');
-        }
+    // Semua status wajib deskripsi
+    descInput.prop('required', true);
 
+    if (status === 'masuk') {
+        startInput.prop('required', true);
+        endInput.prop('required', true);
+        categorySelect.prop('required', true);
+        descInput.attr('placeholder', 'Deskripsikan kegiatan Anda...');
+    } else if (status === 'izin') {
+        startInput.prop('required', true);
+        endInput.prop('required', true);
+        categorySelect.prop('required', false).prop('disabled', true).val(null);
+        descInput.attr('placeholder', 'Tulis alasan izin hari ini...');
+    } else if (status === 'sakit') {
+        startInput.prop('required', false).prop('disabled', true).val(null);
+        endInput.prop('required', false).prop('disabled', true).val(null);
+        categorySelect.prop('required', false).prop('disabled', true).val(null);
+        descInput.attr('placeholder', 'Tulis keterangan sakit jika perlu...');
     }
+}
+
+    
+
 
     // 🚨 Tambahkan event handler ini:
     $(document).on('change', '.status-select', function () {
@@ -505,6 +512,37 @@ endInput.prop('disabled', true).val('');
             });
         });
     });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const simpanButton = document.querySelector('#simpanDataBtn');
+
+    if (simpanButton) {
+        simpanButton.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const form = simpanButton.closest('form');
+            if (form.checkValidity()) {
+                // Tampilkan notifikasi sukses dulu
+                Swal.fire({
+                    title: 'Berhasil!',
+                    text: 'Data berhasil disimpan.',
+                    icon: 'success',
+                    confirmButtonColor: '#00e504',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+
+                // Setelah delay sedikit baru submit form (agar alert sempat tampil)
+                setTimeout(() => {
+                    form.submit();
+                }, 2000); // 2 detik
+            } else {
+                form.reportValidity(); // Tampilkan pesan error validasi
+            }
+        });
+    }
+});
+
     </script>
 </body>
 </html>

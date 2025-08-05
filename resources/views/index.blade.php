@@ -95,8 +95,9 @@
                                 <!-- Jam Selesai -->
                                 <td class="px-4 py-4 whitespace-nowrap align-top">
                                     <label class="sm:hidden block text-xs text-gray-500 mb-1">Selesai Pukul</label>
-                                    <input type="time" name="end_time[]" class="end-time-input w-full ..." {{ $statusDefault == 'sakit' ? 'disabled' : '' }}
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                    <input type="time" name="end_time[]" 
+    class="end-time-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm" 
+    {{ $statusDefault == 'sakit' ? 'disabled' : '' }}>
                                 </td>
 
                                 <!-- Deskripsi Kegiatan -->
@@ -133,13 +134,14 @@
                             Sudah Mengisi Hari Ini
                         </button>
                     @else
-                        <button type="submit"
-                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                            </svg>
-                            Simpan Data
-                        </button>
+                        <button type="submit" id="simpanDataBtn"
+    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+    </svg>
+    Simpan Data
+</button>
+
                     @endif
                 </div>
             </form>
@@ -164,7 +166,5 @@
 @section('scripts')
 <!-- Include jQuery first -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-
 
 @endsection
