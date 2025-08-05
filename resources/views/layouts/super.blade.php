@@ -12,6 +12,25 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+
+                /* Add fixed header styles */
+        header.bg-white {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 10;
+        }
+
+        /* Add padding to main content to account for fixed header */
+        main.bg-gray-50 {
+            padding-top: 70px; /* Adjust this value based on your header height */
+        }
+
+        /* Ensure sidebar scroll works properly with fixed header */
+        .flex.h-screen.overflow-hidden {
+            padding-top: 0;
+        }
         .sidebar-transition {
             transition: transform 0.3s ease-in-out;
         }
