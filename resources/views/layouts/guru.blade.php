@@ -11,6 +11,20 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+
+        /* Add this new style for fixed header */
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 10;
+        }
+        
+        /* Adjust the main content padding to account for fixed header */
+        .content-with-fixed-header {
+            padding-top: 68px; /* Height of the header */
+        }
         .sidebar-transition {
             transition: transform 0.3s ease-in-out;
         }
