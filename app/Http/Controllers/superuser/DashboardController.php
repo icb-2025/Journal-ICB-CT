@@ -5,10 +5,25 @@ namespace App\Http\Controllers\Superuser;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Models\Jurusan;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
+    {
+        $timeRange = $request->input('time_range', 'week');
+        
+        if ($timeRange === 'week') {
+            return $this->weeklyReport();
+        } elseif ($timeRange === 'month') {
+            return $this->monthlyReport();
+        } else {
+            return $this->yearlyReport();
+        }
+    }
+
+    private function weeklyReport()
     {
         // Hari kerja Senin - Jumat
         $hariUrut = [
@@ -30,50 +45,161 @@ class DashboardController extends Controller
         $datasets = [];
 
         $warnaJurusan = [
-    'Rekayasa Perangkat Lunak' => '#FF6384',
-    'Teknik Komputer Jaringan' => '#36A2EB',
-    'Otomotif' => '#FFCE56',
-    'Farmasi' => '#4BC0C0',
-    'Keperawatan' => '#9966FF',
-    // tambahkan sesuai nama jurusan lain yang ada di DB
-];
+            'Rekayasa Perangkat Lunak' => '#FF6384',
+            'Teknik Komputer Jaringan' => '#36A2EB',
+            'Otomotif' => '#FFCE56',
+            'Farmasi' => '#4BC0C0',
+            'Keperawatan' => '#9966FF',
+        ];
 
+        foreach ($jurusans as $jurusan) {
+            $dataPerHari = [];
 
-foreach ($jurusans as $jurusan) {
-    $dataPerHari = [];
+            foreach ($dayMap as $en => $weekdayNumber) {
+                $jumlahHadir = DB::table('aktivitas_siswas')
+                    ->where('aktivitas_siswas.id_jurusan', $jurusan->id)
+                    ->whereRaw("LOWER(aktivitas_siswas.status) = 'masuk'")
+                    ->whereRaw("WEEKDAY(aktivitas_siswas.tanggal) = ?", [$weekdayNumber])
+                    ->whereBetween('aktivitas_siswas.tanggal', [
+                        Carbon::now()->startOfWeek(),
+                        Carbon::now()->endOfWeek()
+                    ])
+                    ->count();
 
-    foreach ($dayMap as $en => $weekdayNumber) {
-        $jumlahHadir = DB::table('aktivitas_siswas')
-            ->where('aktivitas_siswas.id_jurusan', $jurusan->id)
-            ->whereRaw("LOWER(aktivitas_siswas.status) = 'masuk'")
-            ->whereRaw("WEEKDAY(aktivitas_siswas.tanggal) = ?", [$weekdayNumber])
-            ->count();
+                $dataPerHari[] = $jumlahHadir;
+            }
 
-        $dataPerHari[] = $jumlahHadir;
-    }
+            $color = $warnaJurusan[$jurusan->nama_jurusan] ?? $this->generateRandomColor();
 
-    $color = $warnaJurusan[$jurusan->nama_jurusan] ?? '#0e0e0eff';
-
-    $datasets[] = [
-    'label' => $jurusan->nama_jurusan,
-    'data' => $dataPerHari,
-    'fill' => false,
-    'borderColor' => $color,
-    'backgroundColor' => $color,
-    'pointBackgroundColor' => $color,
-    'pointBorderColor' => $color,
-    'tension' => 0.3,
-    'borderWidth' => 2, // Tambahkan ini!
-];
-
-
-}
-
-        
+            $datasets[] = [
+                'label' => $jurusan->nama_jurusan,
+                'data' => $dataPerHari,
+                'fill' => false,
+                'borderColor' => $color,
+                'backgroundColor' => $color,
+                'pointBackgroundColor' => $color,
+                'pointBorderColor' => $color,
+                'tension' => 0.3,
+                'borderWidth' => 2,
+            ];
+        }
 
         return view('superuser.dashboard', [
             'labels' => $labels,
             'datasets' => $datasets,
+            'time_range' => 'week'
+        ]);
+    }
+
+    private function monthlyReport()
+    {
+        // Buat label untuk minggu dalam bulan
+        $labels = ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'];
+
+        // Ambil semua jurusan
+        $jurusans = Jurusan::all();
+
+        $datasets = [];
+
+        $warnaJurusan = [
+            'Rekayasa Perangkat Lunak' => '#FF6384',
+            'Teknik Komputer Jaringan' => '#36A2EB',
+            'Otomotif' => '#FFCE56',
+            'Farmasi' => '#4BC0C0',
+            'Keperawatan' => '#9966FF',
+        ];
+
+        foreach ($jurusans as $jurusan) {
+            $dataPerMinggu = [];
+
+            for ($week = 1; $week <= 4; $week++) {
+                $startDate = Carbon::now()->startOfMonth()->addWeeks($week - 1);
+                $endDate = $startDate->copy()->endOfWeek();
+
+                $jumlahHadir = DB::table('aktivitas_siswas')
+                    ->where('aktivitas_siswas.id_jurusan', $jurusan->id)
+                    ->whereRaw("LOWER(aktivitas_siswas.status) = 'masuk'")
+                    ->whereBetween('aktivitas_siswas.tanggal', [$startDate, $endDate])
+                    ->count();
+
+                $dataPerMinggu[] = $jumlahHadir;
+            }
+
+            $color = $warnaJurusan[$jurusan->nama_jurusan] ?? $this->generateRandomColor();
+
+            $datasets[] = [
+                'label' => $jurusan->nama_jurusan,
+                'data' => $dataPerMinggu,
+                'fill' => false,
+                'borderColor' => $color,
+                'backgroundColor' => $color,
+                'pointBackgroundColor' => $color,
+                'pointBorderColor' => $color,
+                'tension' => 0.3,
+                'borderWidth' => 2,
+            ];
+        }
+
+        return view('superuser.dashboard', [
+            'labels' => $labels,
+            'datasets' => $datasets,
+            'time_range' => 'month'
+        ]);
+    }
+
+    private function yearlyReport()
+    {
+        // Label bulan
+        $labels = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
+
+        // Ambil semua jurusan
+        $jurusans = Jurusan::all();
+
+        $datasets = [];
+
+        $warnaJurusan = [
+            'Rekayasa Perangkat Lunak' => '#FF6384',
+            'Teknik Komputer Jaringan' => '#36A2EB',
+            'Otomotif' => '#FFCE56',
+            'Farmasi' => '#4BC0C0',
+            'Keperawatan' => '#9966FF',
+        ];
+
+        foreach ($jurusans as $jurusan) {
+            $dataPerBulan = [];
+
+            for ($month = 1; $month <= 12; $month++) {
+                $startDate = Carbon::now()->startOfYear()->month($month)->startOfMonth();
+                $endDate = $startDate->copy()->endOfMonth();
+
+                $jumlahHadir = DB::table('aktivitas_siswas')
+                    ->where('aktivitas_siswas.id_jurusan', $jurusan->id)
+                    ->whereRaw("LOWER(aktivitas_siswas.status) = 'masuk'")
+                    ->whereBetween('aktivitas_siswas.tanggal', [$startDate, $endDate])
+                    ->count();
+
+                $dataPerBulan[] = $jumlahHadir;
+            }
+
+            $color = $warnaJurusan[$jurusan->nama_jurusan] ?? $this->generateRandomColor();
+
+            $datasets[] = [
+                'label' => $jurusan->nama_jurusan,
+                'data' => $dataPerBulan,
+                'fill' => false,
+                'borderColor' => $color,
+                'backgroundColor' => $color,
+                'pointBackgroundColor' => $color,
+                'pointBorderColor' => $color,
+                'tension' => 0.3,
+                'borderWidth' => 2,
+            ];
+        }
+
+        return view('superuser.dashboard', [
+            'labels' => $labels,
+            'datasets' => $datasets,
+            'time_range' => 'year'
         ]);
     }
 
