@@ -7,6 +7,9 @@ use App\Models\Perusahaan;
 use App\Models\AktivitasSiswa;
 use App\Models\KategoriTugas;
 use Illuminate\Support\Str;
+use App\Events\AktivitasSiswaUpdated;
+use App\Http\Controllers\Superuser\DashboardController;
+
 class AktivitasSiswaController extends Controller
 {
 
@@ -89,6 +92,10 @@ class AktivitasSiswaController extends Controller
         'id_jurusan' => $dataSiswa?->id_jurusan, // ✅ Ambil dari relasi siswa
     ]);
 }
+// Ambil data terbaru dan kirim event realtime
+$data = (new DashboardController())->getReportData('week');
+event(new AktivitasSiswaUpdated($data));
+
 
     return redirect()->back()->with('success', 'Aktivitas berhasil disimpan.');
 }
