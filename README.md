@@ -100,7 +100,7 @@ Activity Logging (input kegiatan)
 Clone the repository
 
 bash
-git clone https://github.com/[your-repo]/journal-icb-ct.git
+git clone https://github.com/icb-2025/Journal-ICB-CT.git
 cd journal-icb-ct
 Install dependencies
 
@@ -123,14 +123,14 @@ bash
 php artisan serve
 npm run dev
 🔗 Live Demo
-🌐 Website: https://journal-icb-ct.example.com (Coming Soon)
+🌐 Website: https://journal-icb-ct-production.up.railway.app
 
 📧 Contact
-📧 Email: support@journal-icb-ct.example.com
+📧 Email: arifiputrafaqih@gmail.com
 🔗 Issue Tracker: GitHub Issues
 
 📜 License
-MIT Licensed. © 2024 Journal-ICB-CT
+MIT Licensed. © 2025 Journal-ICB-CT
 
 🎯 Future Improvements
 AI-based plagiarism checker
