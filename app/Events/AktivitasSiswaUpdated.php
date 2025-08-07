@@ -3,22 +3,22 @@
 namespace App\Events;
 
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Queue\SerializesModels;
-use App\Http\Controllers\Superuser\DashboardController;
-class AktivitasSiswaUpdated implements ShouldBroadcast
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+
+class AktivitasSiswaUpdated implements ShouldBroadcastNow
 {
     use SerializesModels;
 
     public $chartData;
+    public $timeRange; // <-- Tambahkan properti ini
 
-    public function __construct(array $chartData)
+    public function __construct(array $chartData, string $timeRange = 'week')
     {
         $this->chartData = $chartData;
+        $this->timeRange = $timeRange;
     }
 
     public function broadcastOn()
@@ -28,6 +28,13 @@ class AktivitasSiswaUpdated implements ShouldBroadcast
 
     public function broadcastWith()
     {
-        return $this->chartData;
+        return $this->chartData; // langsung kirim data yang sudah siap
     }
+
+    public function broadcastAs()
+{
+    return 'AktivitasSiswaUpdated';
 }
+
+}
+

@@ -11,12 +11,9 @@ window.Echo = new Echo({
     broadcaster: 'pusher',
     key: import.meta.env.VITE_PUSHER_APP_KEY,
     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-    forceTLS: import.meta.env.VITE_PUSHER_SCHEME === 'https',
-    wsHost: import.meta.env.VITE_PUSHER_HOST ?? `ws-${import.meta.env.VITE_PUSHER_APP_CLUSTER}.pusher.com`,
-    wsPort: import.meta.env.VITE_PUSHER_PORT ?? 80,
-    wssPort: import.meta.env.VITE_PUSHER_PORT ?? 443,
-    enabledTransports: ['ws', 'wss'],
+    forceTLS: true,
 });
+
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

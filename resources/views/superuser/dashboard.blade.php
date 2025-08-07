@@ -1,6 +1,7 @@
 @extends('layouts.super')
 
 @section('title', 'Dashboard Super Admin')
+@vite(['resources/js/app.js'])
 
 @section('content')
 <div class="mt-10 bg-white p-6 rounded-lg shadow">
@@ -76,6 +77,12 @@
         @json($datasets),
         "{{ request('time_range', 'week') }}"
     );
+      window.addEventListener('dashboardUpdated', function (e) {
+        const data = e.detail;
+
+        // Update chart secara real-time
+        initChart(data.labels, data.datasets, data.time_range);
+    });
 
     // Handle filter change
     document.getElementById('timeRange').addEventListener('change', function() {
@@ -94,11 +101,6 @@
             history.pushState(null, '', `?time_range=${timeRange}`);
         })
         .catch(error => console.error('Error:', error));
-    });
-
-    window.addEventListener('dashboardUpdated', function(e) {
-        const data = e.detail;
-        initChart(data.labels, data.datasets, data.time_range);
     });
 </script>
 @endsection

@@ -191,16 +191,13 @@ class DashboardController extends Controller
 
     public function updateAktivitas(Request $request)
 {
-    // Validasi dan simpan data baru...
-    // DB::table(...)->update(...); atau model->save();
+    $timeRange = $request->input('time_range', 'week');
+    $data = $this->getReportData($timeRange);
 
-    // Ambil data chart terbaru
-    $data = $this->getReportData('week');
-
-    // Kirim ke Pusher
-    event(new AktivitasSiswaUpdated($data));
+    event(new AktivitasSiswaUpdated($data, $timeRange));
 
     return response()->json(['message' => 'Data updated and broadcast sent']);
 }
+
 
 }
