@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Jurusan;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-
+use App\Events\AktivitasSiswaUpdated;
 class DashboardController extends Controller
 {
     public function index(Request $request)
@@ -21,7 +21,7 @@ class DashboardController extends Controller
         return view('superuser.dashboard', $this->getReportData($timeRange));
     }
 
-    private function getReportData($timeRange)
+    public function getReportData($timeRange)
     {
         switch($timeRange) {
             case 'month':
@@ -188,4 +188,19 @@ class DashboardController extends Controller
     {
         return sprintf('#%06X', mt_rand(0, 0xFFFFFF));
     }
+
+    public function updateAktivitas(Request $request)
+{
+    // Validasi dan simpan data baru...
+    // DB::table(...)->update(...); atau model->save();
+
+    // Ambil data chart terbaru
+    $data = $this->getReportData('week');
+
+    // Kirim ke Pusher
+    event(new AktivitasSiswaUpdated($data));
+
+    return response()->json(['message' => 'Data updated and broadcast sent']);
+}
+
 }

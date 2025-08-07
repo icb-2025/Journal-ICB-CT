@@ -95,5 +95,10 @@
         })
         .catch(error => console.error('Error:', error));
     });
+
+    window.addEventListener('dashboardUpdated', function(e) {
+        const data = e.detail;
+        initChart(data.labels, data.datasets, data.time_range);
+    });
 </script>
 @endsection
