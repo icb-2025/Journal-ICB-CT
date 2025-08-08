@@ -68,8 +68,8 @@
                     <i class="fas fa-search-minus mr-1"></i> 
                     Tidak ditemukan data untuk "{{ request('search') }}"
                 @else
-                    <i class="fas fa-database mr-1"></i> 
-                    Tidak ada data aktivitas
+                        <i class="fas fa-database mr-1"></i> 
+                        Tidak ada data aktivitas
                 @endif
             </td>
         </tr>

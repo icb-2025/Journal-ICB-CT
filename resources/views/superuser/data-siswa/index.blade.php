@@ -7,6 +7,13 @@
     <!-- Header with Export Buttons -->
     <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
         <h2 class="text-2xl font-semibold text-gray-800">Data Siswa</h2>
+
+@if (session('success'))
+        <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">
+            {{ session('success') }}
+        </div>
+    @endif
+
         <div class="flex space-x-2 mt-4 md:mt-0">
             <a href="{{ route('superuser.data-siswa.create') }}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center transition-colors duration-200">
                 <i class="fas fa-plus mr-2"></i> Tambah Data
