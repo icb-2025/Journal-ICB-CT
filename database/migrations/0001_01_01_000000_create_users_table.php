@@ -19,10 +19,10 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();
             $table->string('role')->default('siswa'); // hanya gunakan role
-            // $table->string('nik', 20)->nullable()->after('role'); ini dari migration untuk menambahkan nik ke users
-            // $table->string('nisn', 20)->nullable()->after('nik'); ini dari migration untuk menambahkan nik ke users
-            // $table->string('nama_jurusan')->nullable()->after('role'); ini dari migration untuk menambahkan nik ke users
-            // $table->string('kode_perusahaan')->nullable()->after('role'); ini dari migration untuk menambahkan nik ke users
+            $table->string('nik', 20)->nullable();
+            $table->string('nisn', 20)->unique()->nullable();
+            $table->string('nama_jurusan')->nullable();
+            $table->string('kode_perusahaan')->nullable();
             $table->unsignedBigInteger('input_by')->nullable(); // user id yang menginput
             $table->timestamp('input_date')->nullable(); // tanggal input
         });

@@ -38,34 +38,40 @@ class UserController extends Controller
     /**
      * Store a newly created user in storage.
      */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-    'name' => 'required|string|max:255',
-    'email' => 'required|email|unique:users,email',
-    'password' => 'required|string|min:6',
-    'role' => 'required|in:superuser,guru,siswa',
-    'kode_perusahaan' => 'nullable|string',
-    'jurusan_id' => 'required|exists:jurusans,id'
-]);
+   public function store(Request $request)
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|string|min:6',
+        'role' => 'required|in:superuser,guru',
+        'kode_perusahaan' => 'nullable|string',
+        'jurusan_id' => 'nullable|exists:jurusans,id',
+    ]);
 
-// Ambil nama jurusan berdasarkan ID
-$jurusan = Jurusan::findOrFail($request->jurusan_id);
+    $kodePerusahaan = null;
+    $namaJurusan = null;
 
-User::create([
-    'name' => $validated['name'],
-    'email' => $validated['email'],
-    'password' => Hash::make($validated['password']),
-    'role' => $validated['role'],
-    'kode_perusahaan' => $validated['kode_perusahaan'],
-    'nama_jurusan' => $jurusan->nama_jurusan, // simpan nama jurusan di field users.nama_jurusan
-    'input_by' => auth()->id(),
-    'input_date' => now(),
-]);
-
-
-        return redirect()->route('superuser.data-user.index')->with('success', 'User berhasil ditambahkan.');
+    if ($validated['role'] === 'guru') {
+        $kodePerusahaan = $request->kode_perusahaan ?: null;
+        $jurusan = Jurusan::find($request->jurusan_id);
+        $namaJurusan = $jurusan ? $jurusan->nama_jurusan : null;
     }
+
+    User::create([
+        'name' => $validated['name'],
+        'email' => $validated['email'],
+        'password' => Hash::make($validated['password']),
+        'role' => $validated['role'],
+        'kode_perusahaan' => $kodePerusahaan,
+        'nama_jurusan' => $namaJurusan,
+        'input_by' => auth()->id(),
+        'input_date' => now(),
+    ]);
+
+    return redirect()->route('superuser.data-user.index')->with('success', 'User berhasil ditambahkan.');
+}
+
 
     /**
      * Show the form for editing the specified user.

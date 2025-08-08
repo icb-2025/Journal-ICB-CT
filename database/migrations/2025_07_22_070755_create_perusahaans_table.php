@@ -1,3 +1,5 @@
+<!-- 2025_07_22_070755_create_perusahaans_table.php -->
+
 <?php
 
 use Illuminate\Database\Migrations\Migration;

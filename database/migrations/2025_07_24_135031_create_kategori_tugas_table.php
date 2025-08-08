@@ -1,3 +1,5 @@
+<!-- 2025_07_24_135031_create_kategori_tugas_table.php -->
+
 <?php
 
 use Illuminate\Database\Migrations\Migration;

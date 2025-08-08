@@ -41,26 +41,30 @@ class RegisteredUserController extends Controller
         'nisn' => ['required', 'string'],
     ]);
 
+    // Cek apakah NISN sudah digunakan di tabel users
+    if (User::where('nisn', $request->nisn)->exists()) {
+        return back()->withErrors(['nisn' => 'NISN sudah digunakan untuk pendaftaran.'])->withInput();
+    }
+
     // Cek apakah NISN ada di tabel siswa
     $siswa = Siswa::where('nis', $request->nisn)->first();
 
     if (!$siswa) {
-        return back()->withErrors(['nisn' => 'NISN tidak ditemukan dalam data siswa.']);
+        return back()->withErrors(['nisn' => 'NISN tidak ditemukan dalam data siswa.'])->withInput();
     }
 
     // Buat user baru
-   $user = User::create([
-    'name' => $request->name,
-    'email' => $request->email,
-    'password' => Hash::make($request->password),
-    'kode_perusahaan' => $siswa->kode_perusahaan,
-    'role' => 'siswa',
-    'nisn' => $request->nisn, // ⬅ Tambahkan ini
-    'nama_jurusan' => optional($siswa->jurusan)->nama_jurusan,
-    'input_by' => null,
-    'input_date' => now(),
-]);
-
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'kode_perusahaan' => $siswa->kode_perusahaan,
+        'role' => 'siswa',
+        'nisn' => $request->nisn,
+        'nama_jurusan' => optional($siswa->jurusan)->nama_jurusan,
+        'input_by' => null,
+        'input_date' => now(),
+    ]);
 
     event(new Registered($user));
 
@@ -68,4 +72,5 @@ class RegisteredUserController extends Controller
 
     return redirect(route('index', absolute: false));
 }
+
 }

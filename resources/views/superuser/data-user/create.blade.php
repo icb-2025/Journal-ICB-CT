@@ -28,7 +28,6 @@
         <option value="">Pilih Role</option>
         <option value="superuser">Super User</option>
         <option value="guru">Guru</option>
-        <option value="siswa">Siswa</option>
     </select>
 </div>
 
@@ -45,7 +44,7 @@
     </select>
 </div>
 
-<select name="jurusan_id" required>
+<select name="jurusan_id">
     <option value="">Pilih Jurusan</option>
     @foreach($jurusans as $jurusan)
         <option value="{{ $jurusan->id }}">{{ $jurusan->nama_jurusan }}</option>
@@ -61,27 +60,30 @@
     document.addEventListener('DOMContentLoaded', function () {
         const roleSelect = document.getElementById('role');
         const kodePerusahaanSelect = document.getElementById('kode_perusahaan');
+        const jurusanSelect = document.querySelector('select[name="jurusan_id"]');
 
-        roleSelect.addEventListener('change', function () {
-            const selectedRole = this.value;
+        function toggleFieldsByRole() {
+            const role = roleSelect.value;
 
-            if (selectedRole === 'superuser' || selectedRole === 'guru') {
-                kodePerusahaanSelect.innerHTML = '<option value="-">-</option>';
-                kodePerusahaanSelect.value = '-';
-                kodePerusahaanSelect.setAttribute('disabled', true);
+            if (role === 'superuser') {
+                kodePerusahaanSelect.value = '';
+                kodePerusahaanSelect.disabled = true;
+                jurusanSelect.value = '';
+                jurusanSelect.disabled = true;
+            } else if (role === 'guru') {
+                kodePerusahaanSelect.disabled = false;
+                jurusanSelect.disabled = false;
             } else {
-                // Aktifkan kembali dan tampilkan data asli jika role siswa
-                kodePerusahaanSelect.removeAttribute('disabled');
-                kodePerusahaanSelect.innerHTML = `<option value="">Pilih Kode Perusahaan</option>
-                @foreach ($perusahaans as $perusahaan)
-                    <option value="{{ $perusahaan->kode_perusahaan }}">
-                        {{ $perusahaan->kode_perusahaan }} - {{ $perusahaan->nama_industri }}
-                    </option>
-                @endforeach`;
+                kodePerusahaanSelect.disabled = true;
+                jurusanSelect.disabled = true;
             }
-        });
+        }
+
+        roleSelect.addEventListener('change', toggleFieldsByRole);
+        toggleFieldsByRole();
     });
 </script>
+
 
 </div>
 @endsection

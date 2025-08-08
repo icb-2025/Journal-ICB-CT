@@ -87,5 +87,15 @@ document.addEventListener('DOMContentLoaded', function() {
     roleSelect.addEventListener('change', toggleKodeInput);
     toggleKodeInput();
 });
+
+if ($validated['role'] === 'superuser') {
+    $validated['kode_perusahaan'] = null;
+    $validated['nama_jurusan'] = null;
+} elseif ($validated['role'] === 'guru') {
+    $validated['kode_perusahaan'] = $request->kode_perusahaan ?: null;
+    $jurusan = Jurusan::find($request->jurusan_id);
+    $validated['nama_jurusan'] = $jurusan ? $jurusan->nama_jurusan : null;
+}
+
 </script>
 @endsection

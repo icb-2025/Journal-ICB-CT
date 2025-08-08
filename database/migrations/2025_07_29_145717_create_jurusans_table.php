@@ -1,3 +1,5 @@
+<!-- 2025_07_29_145717_create_jurusans_table.php -->
+
 <?php
 
 use Illuminate\Database\Migrations\Migration;

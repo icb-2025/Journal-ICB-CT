@@ -1,3 +1,5 @@
+<!-- 2025_07_31_112037_add_kode_perusahaan_to_siswa_table.php -->
+
 <?php
 
 use Illuminate\Database\Migrations\Migration;

@@ -1,3 +1,5 @@
+<!-- 2025_08_04_144756_add_id_jurusan_to_siswa_table.php -->
+
 <?php
 
 use Illuminate\Database\Migrations\Migration;
