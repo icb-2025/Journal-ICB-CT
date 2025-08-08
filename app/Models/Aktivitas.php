@@ -13,14 +13,16 @@ class Aktivitas extends Model
     protected $table = 'aktivitas_siswas';
 
     protected $fillable = [
-        'siswa_id',
-        'perusahaan_id', 
-        'kategori_tugas_id',
-        'tanggal',
-        'mulai',
-        'selesai',
-        'deskripsi'
+    'siswa_id',
+    'perusahaan_id', 
+    'kategori_tugas_id',
+    'id_jurusan', // tambahkan ini
+    'tanggal',
+    'mulai',
+    'selesai',
+    'deskripsi'
     ];
+
 
     public function siswa() {
     return $this->belongsTo(User::class, 'siswa_id'); // pastikan relasi ini benar

@@ -73,7 +73,18 @@
 
 <!-- Modal View -->
 <div id="viewModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
-    <!-- Modal content remains the same -->
+    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+        </div>
+        
+        <!-- This element is to trick the browser into centering the modal contents. -->
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+            <!-- Modal content will be loaded here via AJAX -->
+        </div>
+    </div>
 </div>
 
 @push('scripts')
@@ -138,6 +149,39 @@ $(document).ready(function() {
             }
         });
     }
+
+    // Modal functions
+    function showStudentDetail(id) {
+        $.ajax({
+            url: `/guru/data-siswa/${id}`,
+            type: "GET",
+            success: function(response) {
+                $('#viewModal').html(response).removeClass('hidden');
+                // Add modal backdrop
+                $('body').append('<div class="fixed inset-0 z-40 bg-black opacity-50" id="modal-backdrop"></div>');
+                // Close modal when clicking backdrop
+                $('#modal-backdrop').on('click', closeModal);
+            },
+            error: function(xhr) {
+                console.error("Error:", xhr.responseText);
+            }
+        });
+    }
+
+    function closeModal() {
+        $('#viewModal').addClass('hidden');
+        $('#modal-backdrop').remove();
+    }
+
+    // Close modal when clicking the close button
+    $(document).on('click', '[data-modal-close]', closeModal);
+
+    // Close modal when pressing ESC key
+    $(document).keyup(function(e) {
+        if (e.key === "Escape") {
+            closeModal();
+        }
+    });
 
     // Initialize with 300ms debounce for better UX
     const debouncedSearch = debounce(loadData, 300);

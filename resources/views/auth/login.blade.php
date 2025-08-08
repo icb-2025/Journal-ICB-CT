@@ -26,6 +26,7 @@
             animation: fadeInUp 0.6s ease-out forwards;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 
                         0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            margin: auto; /* Ensures centering */
         }
         
         @keyframes fadeInUp {
@@ -75,9 +76,9 @@
 </head>
 <body class="font-sans antialiased">
 
-    <div class="min-h-screen gradient-bg flex flex-col sm:justify-center items-center p-4">
+    <div class="min-h-screen gradient-bg flex items-center justify-center p-4">
         <!-- Main Login Card -->
-        <div class="login-card w-full max-w-md p-8 space-y-6 bg-white rounded-xl mx-4 sm:mx-0">
+        <div class="login-card w-full max-w-md p-8 space-y-6 bg-white rounded-xl">
             <div class="text-center">
                 <a href="/" class="flex justify-center">
                     <x-application-logo class="w-16 h-16 fill-current text-indigo-600" />
@@ -96,7 +97,7 @@
             <!-- Session Status -->
             <x-auth-session-status class="mb-4 p-3 bg-green-100 text-green-700 rounded-lg text-sm" :status="session('status')" />
 
-            <form method="POST" action="{{ route('login') }}" class="mt-6 space-y-4">
+            <form method="POST" action="{{ route('login') }}" class="mt-6 space-y-4" id="login-form">
                 @csrf
 
                 <div class="space-y-4">

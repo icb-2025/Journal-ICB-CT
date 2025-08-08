@@ -28,6 +28,8 @@
                 <th>Jam Selesai</th>
                 <th>Kegiatan</th>
                 <th>Kategori Tugas</th>
+                <th>Nama Jurusan</th>
+                <th>status</th>
             </tr>
         </thead>
         <tbody>
@@ -41,6 +43,8 @@
                 <td>{{ $item->selesai }}</td>
                 <td>{{ $item->deskripsi }}</td>
                 <td>{{ $item->kategoriTugas->nama_kategori ?? '-' }}</td>
+                <td>{{ $item->jurusan->nama_jurusan ?? '-' }}</td>
+                <td>{{ $item->status}}</td>
             </tr>
             @endforeach
         </tbody>

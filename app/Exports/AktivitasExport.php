@@ -24,7 +24,9 @@ class AktivitasExport implements FromCollection, WithHeadings, WithMapping
             'Jam Mulai',
             'Jam Selesai',
             'Kegiatan',
-            'Kategori Tugas'
+            'Kategori Tugas',
+            'id_jurusan',
+            'status',
         ];
     }
     
@@ -38,7 +40,9 @@ class AktivitasExport implements FromCollection, WithHeadings, WithMapping
             $aktivitas->mulai,
             $aktivitas->selesai,
             $aktivitas->deskripsi,
-            $aktivitas->kategoriTugas->nama_kategori ?? '-'
+            $aktivitas->kategoriTugas->nama_kategori ?? '-',
+            $aktivitas->id_jurusan,
+            $aktivitas->status
         ];
     }
 }

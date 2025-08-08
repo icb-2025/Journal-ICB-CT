@@ -1,6 +1,6 @@
 @extends('layouts.user')
 
-@section('title','Dashboard')
+@section('title', 'Dashboard')
 
 @section('content')
 <div class="container mx-auto px-4 py-4 sm:px-6 lg:px-8">
@@ -31,8 +31,8 @@
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mulai Pukul</th>
                                 <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Selesai Pukul</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kegiatan</th>
-                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[320px]">Kegiatan</th>
+                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-[240px]">Kategori</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -42,9 +42,9 @@
                                 @php
                                     $kodeBelakang = $perusahaanUser ? \Illuminate\Support\Str::afterLast($perusahaanUser->kode_perusahaan, '-') : '';
                                     $user = Auth::user();
-                                    $role = $user->role;
-                                    $isSiswa = $role === 'siswa';
+                                    $isSiswa = $user->role === 'siswa';
                                     $akunAktif = $user->status === 'aktif';
+                                    $statusDefault = 'masuk';
                                 @endphp
 
                                 <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500 align-top">
@@ -58,7 +58,7 @@
                                             @if (!$isSiswa)
                                                 Anda Bukan Siswa
                                             @elseif (!$akunAktif)
-                                                Akun Anda Telah expired silahkan hubungi guru
+                                                Akun Anda telah expired, silakan hubungi guru.
                                             @else
                                                 Perusahaan tidak ditemukan atau belum dikaitkan dengan user ini.
                                             @endif
@@ -66,67 +66,62 @@
                                     @endif
                                 </td>
 
-                                <!-- Tanggal -->
                                 <td class="px-4 py-4 whitespace-nowrap align-top">
                                     <label class="sm:hidden block text-xs text-gray-500 mb-1">Tanggal Input</label>
-                                    <input type="date" name="input_date[]" value="{{ date('Y-m-d') }}" required oninvalid="this.setCustomValidity('Data tidak boleh kosong')" oninput="setCustomValidity('')"
+                                    <input type="date" name="input_date[]" value="{{ date('Y-m-d') }}" required
                                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm">
                                 </td>
-                                 <!-- Status -->
-                                  @php
-    $statusDefault = 'masuk'; // bisa disesuaikan
-@endphp
-                                <td class="px-4 py-4 whitespace-nowrap align-top">
+
+                                <td class="px-4 py-4 whitespace-nowrap align-top min-w-[115px]">
                                     <label class="sm:hidden block text-xs text-gray-500 mb-1">Status</label>
-                                    <select name="status[]" class="status-select ...">
-    <option value="masuk" {{ $statusDefault == 'masuk' ? 'selected' : '' }}>Masuk</option>
-    <option value="izin" {{ $statusDefault == 'izin' ? 'selected' : '' }}>Izin</option>
-    <option value="sakit" {{ $statusDefault == 'sakit' ? 'selected' : '' }}>Sakit</option>
-</select>
-                                </td>
-                                <!-- Jam Mulai -->
-                                <td class="px-4 py-4 whitespace-nowrap align-top">
-                                    <label class="sm:hidden block text-xs text-gray-500 mb-1">Mulai Pukul</label>
-                                   <input type="time" name="start_time[]" 
-    class="start-time-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm" 
-    {{ $statusDefault == 'sakit' ? 'disabled' : '' }}>
+                                    <select name="status[]" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                        <option value="masuk" {{ $statusDefault == 'masuk' ? 'selected' : '' }}>Masuk</option>
+                                        <option value="izin" {{ $statusDefault == 'izin' ? 'selected' : '' }}>Izin</option>
+                                        <option value="sakit" {{ $statusDefault == 'sakit' ? 'selected' : '' }}>Sakit</option>
+                                    </select>
                                 </td>
 
-                                <!-- Jam Selesai -->
+                                <td class="px-4 py-4 whitespace-nowrap align-top">
+                                    <label class="sm:hidden block text-xs text-gray-500 mb-1">Mulai Pukul</label>
+                                    <input type="time" name="start_time[]"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
+                                        {{ $statusDefault == 'sakit' ? 'disabled' : '' }}>
+                                </td>
+
                                 <td class="px-4 py-4 whitespace-nowrap align-top">
                                     <label class="sm:hidden block text-xs text-gray-500 mb-1">Selesai Pukul</label>
-                                    <input type="time" name="end_time[]" 
-    class="end-time-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm" 
-    {{ $statusDefault == 'sakit' ? 'disabled' : '' }}>
+                                    <input type="time" name="end_time[]"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
+                                        {{ $statusDefault == 'sakit' ? 'disabled' : '' }}>
                                 </td>
 
                                 <!-- Deskripsi Kegiatan -->
-                                <td class="px-4 py-4 align-top">
+                                <td class="px-4 py-4 align-top min-w-[220px]">
                                     <label class="sm:hidden block text-xs text-gray-500 mb-1">Kegiatan</label>
-                                    <textarea name="description[]" rows="3" maxlength="300" required oninvalid="this.setCustomValidity('Data tidak boleh kosong')" oninput="setCustomValidity('')"
-                                        class="desc-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm resize-none max-h-[6.5rem] focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
+                                    <textarea name="description[]" rows="3" maxlength="300" required
+                                        oninvalid="this.setCustomValidity('Data tidak boleh kosong')" oninput="setCustomValidity('')"
+                                        class="desc-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm resize-none focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
                                         placeholder="Deskripsikan kegiatan Anda..."></textarea>
                                 </td>
 
-                                <!-- Kategori Tugas -->
-<td class="px-4 py-4 align-top">
-    <label class="sm:hidden block text-xs text-gray-500 mb-1">Kategori</label>
-    <select name="category[]" 
-    class="category-select w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
-    {{ in_array($statusDefault, ['izin', 'sakit']) ? 'disabled' : '' }}>
-    <option value="">Pilih Kategori</option>
-    @foreach($kategoriTugas as $kategori)
-        <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
-    @endforeach
-</select>
-</td>
 
+                                <!-- Kategori Tugas -->
+                                <td class="px-4 py-4 align-top min-w-[165px]">
+                                    <label class="sm:hidden block text-xs text-gray-500 mb-1">Kategori</label>
+                                    <select name="category[]"
+                                        class="category-select w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
+                                        {{ in_array($statusDefault, ['izin', 'sakit']) ? 'disabled' : '' }}>
+                                        <option value="">Pilih Kategori</option>
+                                        @foreach($kategoriTugas as $kategori)
+                                            <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <!-- Tombol Submit -->
                 <div class="mt-6 flex justify-end space-x-3">
                     @if ($sudahInputHariIni)
                         <button type="button" disabled
@@ -135,13 +130,12 @@
                         </button>
                     @else
                         <button type="submit" id="simpanDataBtn"
-    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-    </svg>
-    Simpan Data
-</button>
-
+                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            Simpan Data
+                        </button>
                     @endif
                 </div>
             </form>
@@ -149,22 +143,19 @@
     </div>
 
     @if($aktivitasSiswa->count())
-    <div class="mt-8 bg-white rounded-lg shadow-md overflow-hidden">
-        <div class="p-4 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-800">Riwayat Kegiatan</h2>
-            <p class="text-sm text-gray-600 mt-1">Daftar kegiatan yang telah Anda input sebelumnya</p>
+        <div class="mt-8 bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="p-4 border-b border-gray-200">
+                <h2 class="text-lg font-semibold text-gray-800">Riwayat Kegiatan</h2>
+                <p class="text-sm text-gray-600 mt-1">Daftar kegiatan yang telah Anda input sebelumnya</p>
+            </div>
+            <div id="history-container">
+                @include('partials.activity-history', ['aktivitasSiswa' => $aktivitasSiswa])
+            </div>
         </div>
-        
-        <div id="history-container">
-            @include('partials.activity-history', ['aktivitasSiswa' => $aktivitasSiswa])
-        </div>
-    </div>
     @endif
 </div>
 @endsection
 
 @section('scripts')
-<!-- Include jQuery first -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 @endsection
