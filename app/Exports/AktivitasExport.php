@@ -36,7 +36,7 @@ class AktivitasExport implements FromCollection, WithHeadings, WithMapping
     {
         return [
             $aktivitas_siswas->id,
-            $aktivitas_siswas->siswa->nama_lengkap ?? '-',
+            $aktivitas_siswas->siswa->name ?? '-',
             $aktivitas_siswas->perusahaan->nama_industri ?? '-',
             Carbon::parse($aktivitas_siswas->tanggal)->format('d/m/Y'),
             Carbon::parse($aktivitas_siswas->mulai)->format('H:i'),
