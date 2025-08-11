@@ -3,12 +3,47 @@
 <head>
     <title>Laporan Aktivitas Siswa</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        .text-center { text-align: center; }
-        .title { text-align: center; margin-bottom: 20px; }
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            color: #333;
+        }
+        .title {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .title h2 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .title p {
+            margin: 3px 0 0;
+            font-size: 12px;
+            color: #666;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 13px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 6px 8px;
+        }
+        th {
+            background-color: #f4f6f9;
+            font-weight: bold;
+            text-align: center;
+        }
+        td {
+            vertical-align: middle;
+        }
+        .text-center {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
