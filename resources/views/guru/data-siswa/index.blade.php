@@ -78,10 +78,9 @@
             <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
         
-        <!-- This element is to trick the browser into centering the modal contents. -->
         <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
         
-        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+        <div id="modalContent" class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
             <!-- Modal content will be loaded here via AJAX -->
         </div>
     </div>
@@ -90,117 +89,88 @@
 @push('scripts')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-$(document).ready(function() {
-    // Enhanced debounce function
-    function debounce(func, wait) {
-        let timeout;
-        return function() {
-            const context = this, args = arguments;
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(context, args), wait);
-        };
-    }
+function debounce(func, wait) {
+    let timeout;
+    return function() {
+        const context = this, args = arguments;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(context, args), wait);
+    };
+}
 
-    // Main data loading function
-    function loadData() {
-        const searchTerm = $('#search').val()?.trim() || '';
-        const bloodType = $('#gol_darah').val() || '';
-        const school = $('#sekolah').val() || '';
-
-        // Show loading state
-        $('#table-container').html(`
-            <div class="text-center py-8 animate-pulse">
-                <div class="mx-auto w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center">
-                    <i class="fas fa-spinner fa-spin fa-lg text-indigo-600"></i>
-                </div>
-                <p class="mt-3 text-gray-600">Mencari data siswa...</p>
-            </div>
-        `);
-
-        $.ajax({
-            url: "{{ route('guru.data-siswa.index') }}",
-            type: "GET",
-            data: { 
-                search: searchTerm,
-                gol_darah: bloodType,
-                sekolah: school 
-            },
-            success: function(response) {
-                if (response.html) {
-                    $('#table-container').hide().html(response.html).fadeIn(300);
-                }
-                if (response.pagination) {
-                    $('#pagination-container').html(response.pagination);
-                }
-            },
-            error: function(xhr) {
-                $('#table-container').html(`
-                    <div class="text-center py-8">
-                        <div class="mx-auto w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
-                            <i class="fas fa-exclamation-circle fa-lg text-red-600"></i>
-                        </div>
-                        <p class="mt-3 text-red-600">Gagal memuat data. Silakan coba lagi.</p>
-                        <button onclick="loadData()" class="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 text-sm">
-                            <i class="fas fa-sync-alt mr-1"></i> Coba Lagi
-                        </button>
-                    </div>
-                `);
-                console.error("Error:", xhr.responseText);
-            }
-        });
-    }
-
-    // Modal functions
-    function showStudentDetail(id) {
-        $.ajax({
-            url: `/guru/data-siswa/${id}`,
-            type: "GET",
-            success: function(response) {
-                $('#viewModal').html(response).removeClass('hidden');
-                // Add modal backdrop
-                $('body').append('<div class="fixed inset-0 z-40 bg-black opacity-50" id="modal-backdrop"></div>');
-                // Close modal when clicking backdrop
-                $('#modal-backdrop').on('click', closeModal);
-            },
-            error: function(xhr) {
-                console.error("Error:", xhr.responseText);
-            }
-        });
-    }
-
-    function closeModal() {
-        $('#viewModal').addClass('hidden');
-        $('#modal-backdrop').remove();
-    }
-
-    // Close modal when clicking the close button
-    $(document).on('click', '[data-modal-close]', closeModal);
-
-    // Close modal when pressing ESC key
-    $(document).keyup(function(e) {
-        if (e.key === "Escape") {
-            closeModal();
+// buat global supaya bisa dipanggil dari onclick di table
+window.showStudentDetail = function(id) {
+    $.ajax({
+        url: `/guru/data-siswa/${id}`,
+        type: "GET",
+        success: function(response) {
+            $('#modalContent').html(response);
+            $('#viewModal').removeClass('hidden');
+        },
+        error: function(xhr) {
+            console.error("Error:", xhr.responseText);
         }
     });
+};
 
-    // Initialize with 300ms debounce for better UX
+function closeModal() {
+    $('#viewModal').addClass('hidden');
+}
+
+// Event close modal
+$(document).on('click', '[data-modal-close]', closeModal);
+$(document).keyup(function(e) {
+    if (e.key === "Escape") closeModal();
+});
+
+function loadData() {
+    const searchTerm = $('#search').val()?.trim() || '';
+    const bloodType = $('#gol_darah').val() || '';
+    const school = $('#sekolah').val() || '';
+
+    $('#table-container').html(`
+        <div class="text-center py-8 animate-pulse">
+            <div class="mx-auto w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center">
+                <i class="fas fa-spinner fa-spin fa-lg text-indigo-600"></i>
+            </div>
+            <p class="mt-3 text-gray-600">Mencari data siswa...</p>
+        </div>
+    `);
+
+    $.ajax({
+        url: "{{ route('guru.data-siswa.index') }}",
+        type: "GET",
+        data: { search: searchTerm, gol_darah: bloodType, sekolah: school },
+        success: function(response) {
+            if (response.html) {
+                $('#table-container').hide().html(response.html).fadeIn(300);
+            }
+            if (response.pagination) {
+                $('#pagination-container').html(response.pagination);
+            }
+        },
+        error: function(xhr) {
+            $('#table-container').html(`
+                <div class="text-center py-8">
+                    <div class="mx-auto w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+                        <i class="fas fa-exclamation-circle fa-lg text-red-600"></i>
+                    </div>
+                    <p class="mt-3 text-red-600">Gagal memuat data. Silakan coba lagi.</p>
+                    <button onclick="loadData()" class="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 text-sm">
+                        <i class="fas fa-sync-alt mr-1"></i> Coba Lagi
+                    </button>
+                </div>
+            `);
+        }
+    });
+}
+
+$(document).ready(function() {
     const debouncedSearch = debounce(loadData, 300);
-    
-    // Event listeners with existence checks
-    if ($('#search').length) {
-        $('#search').on('input', debouncedSearch);
-    }
-    if ($('#gol_darah').length) {
-        $('#gol_darah').on('change', loadData);
-    }
-    if ($('#sekolah').length) {
-        $('#sekolah').on('change', loadData);
-    }
-
-    // Initial load if table container exists
-    if ($('#table-container').length) {
-        loadData();
-    }
+    $('#search').on('input', debouncedSearch);
+    $('#gol_darah').on('change', loadData);
+    $('#sekolah').on('change', loadData);
+    loadData();
 });
 </script>
 @endpush

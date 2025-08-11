@@ -2,16 +2,18 @@
 
 namespace App\Exports;
 
-use App\Models\Aktivitas; // Pastikan model Aktivitas ada
+use App\Models\Aktivitas;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Carbon\Carbon;
 
 class AktivitasExport implements FromCollection, WithHeadings, WithMapping
 {
     public function collection()
     {
-        return Aktivitas::with(['siswa', 'perusahaan', 'kategoriTugas'])->get();
+        // Eager load relasi siswa->jurusan agar bisa akses nama jurusan
+        return Aktivitas::with(['siswa.jurusan', 'perusahaan', 'kategoriTugas'])->get();
     }
     
     public function headings(): array
@@ -25,24 +27,25 @@ class AktivitasExport implements FromCollection, WithHeadings, WithMapping
             'Jam Selesai',
             'Kegiatan',
             'Kategori Tugas',
-            'id_jurusan',
-            'status',
+            'Jurusan',
+            'Status',
         ];
     }
     
-    public function map($aktivitas): array
+    public function map($aktivitas_siswas): array
     {
         return [
-            $aktivitas->id,
-            $aktivitas->siswa->name ?? '-',
-            $aktivitas->perusahaan->nama_industri ?? '-',
-            $aktivitas->tanggal,
-            $aktivitas->mulai,
-            $aktivitas->selesai,
-            $aktivitas->deskripsi,
-            $aktivitas->kategoriTugas->nama_kategori ?? '-',
-            $aktivitas->id_jurusan,
-            $aktivitas->status
+            $aktivitas_siswas->id,
+            $aktivitas_siswas->siswa->nama_lengkap ?? '-',
+            $aktivitas_siswas->perusahaan->nama_industri ?? '-',
+            Carbon::parse($aktivitas_siswas->tanggal)->format('d/m/Y'),
+            Carbon::parse($aktivitas_siswas->mulai)->format('H:i'),
+            Carbon::parse($aktivitas_siswas->selesai)->format('H:i'),
+            $aktivitas_siswas->deskripsi ?? '-',
+            $aktivitas_siswas->kategoriTugas->nama_kategori ?? '-',
+            $aktivitas_siswas->siswa->jurusan->nama_jurusan ?? '-',
+            $aktivitas_siswas->status ?? '-',
         ];
     }
+
 }

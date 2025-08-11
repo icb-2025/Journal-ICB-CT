@@ -2,6 +2,8 @@
 
 @extends('layouts.super')
 
+@section('title', 'Data User')
+
 @section('page-id', 'data-user')
 
 
