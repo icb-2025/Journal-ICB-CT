@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Siswa;
 use App\Exports\SiswaExport;
 use Maatwebsite\Excel\Facades\Excel;
-use Barryvdh\DomPDF\Facade\Pdf; // Update this line
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Str;
 
 class DataSiswaController extends Controller
@@ -19,7 +19,7 @@ class DataSiswaController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'html' => view('guru.data-siswa.partials.table', compact('siswas'))->render(),
+                'html'       => view('guru.data-siswa.partials.table', compact('siswas'))->render(),
                 'pagination' => $siswas->links()->toHtml()
             ]);
         }
@@ -34,19 +34,7 @@ class DataSiswaController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nama_lengkap'     => 'required|string|max:255',
-            'nis'              => 'required|string|max:50|unique:siswa,nis',
-            'tempat_lahir'     => 'required|string|max:255',
-            'tanggal_lahir'    => 'required|date',
-            'gol_darah'        => 'nullable|string|max:3',
-            'sekolah'          => 'required|string|max:255',
-            'alamat_sekolah'   => 'required|string',
-            'telepon_sekolah'  => 'nullable|string|max:20',
-            'nama_wali'        => 'required|string|max:255',
-            'alamat_wali'      => 'required|string',
-            'telepon_wali'     => 'nullable|string|max:20',
-        ]);
+        $validated = $this->validateRequest($request);
 
         $validated['input_by'] = auth()->id();
         Siswa::create($validated);
@@ -70,21 +58,9 @@ class DataSiswaController extends Controller
     {
         $siswa = Siswa::findOrFail($id);
 
-        $validated = $request->validate([
-            'nama_lengkap'     => 'required|string|max:255',
-            'nis'              => 'required|string|max:50|unique:siswa,nis,' . $siswa->id,
-            'tempat_lahir'     => 'required|string|max:255',
-            'tanggal_lahir'    => 'required|date',
-            'gol_darah'        => 'nullable|string|max:3',
-            'sekolah'          => 'required|string|max:255',
-            'alamat_sekolah'   => 'required|string',
-            'telepon_sekolah'  => 'nullable|string|max:20',
-            'nama_wali'        => 'required|string|max:255',
-            'alamat_wali'      => 'required|string',
-            'telepon_wali'     => 'nullable|string|max:20',
-        ]);
-
+        $validated = $this->validateRequest($request, $siswa->id);
         $validated['input_by'] = auth()->id();
+
         $siswa->update($validated);
 
         return redirect()->route('guru.data-siswa.index')->with('success', 'Data siswa berhasil diperbarui.');
@@ -101,51 +77,73 @@ class DataSiswaController extends Controller
     public function exportExcel(Request $request)
     {
         $query = $this->getFilteredQuery($request);
-        $filename = 'data-siswa-'.now()->format('Y-m-d');
-        
-        // Tambahkan filter ke nama file jika ada
-        if ($request->filled('search')) {
-            $filename .= '-search-'.$request->search;
-        }
-        if ($request->filled('gol_darah')) {
-            $filename .= '-gol-'.$request->gol_darah;
-        }
-        if ($request->filled('sekolah')) {
-            $filename .= '-sekolah-'.Str::slug($request->sekolah);
-        }
-        
-        return Excel::download(new SiswaExport($query), $filename.'.xlsx');
+        $filename = $this->generateFilename($request);
+
+        return Excel::download(new SiswaExport($query), $filename . '.xlsx');
     }
 
     public function exportPdf(Request $request)
     {
         $query = $this->getFilteredQuery($request);
         $siswas = $query->get();
-        
-        $filename = 'data-siswa-'.now()->format('Y-m-d');
-        // Logika penamaan file yang sama seperti di Excel bisa diterapkan
-        
+
+        $filename = $this->generateFilename($request);
+
         $pdf = PDF::loadView('guru.data-siswa.export.pdf', [
-            'siswas' => $siswas,
-            'filters' => $request->only(['search', 'gol_darah', 'sekolah']) // Kirim filter ke view
+            'siswas'  => $siswas,
+            'filters' => $request->only(['search', 'gol_darah', 'sekolah'])
         ])->setPaper('a4', 'landscape');
-        
-        return $pdf->download($filename.'.pdf');
+
+        return $pdf->download($filename . '.pdf');
     }
 
     private function getFilteredQuery(Request $request)
     {
-        return Siswa::when($request->filled('search'), function($query) use ($request) {
-                $query->where(function($q) use ($request) {
-                    $q->where('nama_lengkap', 'like', '%'.$request->search.'%')
-                    ->orWhere('nis', 'like', '%'.$request->search.'%');
+        return Siswa::when($request->filled('search'), function ($query) use ($request) {
+                $query->where(function ($q) use ($request) {
+                    $q->where('nama_lengkap', 'like', '%' . $request->search . '%')
+                      ->orWhere('nis', 'like', '%' . $request->search . '%');
                 });
             })
-            ->when($request->filled('gol_darah'), function($query) use ($request) {
+            ->when($request->filled('gol_darah'), function ($query) use ($request) {
                 $query->where('gol_darah', $request->gol_darah);
             })
-            ->when($request->filled('sekolah'), function($query) use ($request) {
-                $query->where('sekolah', 'like', '%'.$request->sekolah.'%');
+            ->when($request->filled('sekolah'), function ($query) use ($request) {
+                $query->where('sekolah', 'like', '%' . $request->sekolah . '%');
             });
+    }
+
+    private function validateRequest(Request $request, $id = null)
+    {
+        return $request->validate([
+            'nama_lengkap'     => 'required|string|max:255',
+            'nis'              => 'required|string|max:50|unique:siswa,nis,' . $id,
+            'tempat_lahir'     => 'required|string|max:255',
+            'tanggal_lahir'    => 'required|date',
+            'gol_darah'        => 'nullable|string|max:3',
+            'sekolah'          => 'required|string|max:255',
+            'alamat_sekolah'   => 'required|string',
+            'telepon_sekolah'  => 'nullable|string|max:20',
+            'nama_wali'        => 'required|string|max:255',
+            'alamat_wali'      => 'required|string',
+            'telepon_wali'     => 'nullable|string|max:20',
+        ]);
+    }
+
+    private function generateFilename(Request $request)
+    {
+        $filename = 'data-siswa-' . now()->format('Y-m-d');
+
+        if ($request->filled('search')) {
+            $filename .= '-search-' . Str::slug($request->search);
+        }
+        if ($request->filled('gol_darah')) {
+            $filename .= '-gol-' . Str::slug($request->gol_darah);
+        }
+        if ($request->filled('sekolah')) {
+            $filename .= '-sekolah-' . Str::slug($request->sekolah);
+        }
+
+        return $filename;
     }
 }

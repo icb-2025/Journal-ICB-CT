@@ -1,5 +1,7 @@
 @extends('layouts.super')
 
+@section('title', 'Laporan')
+
 @section('page-id', 'laporan')
 
 @section('content')

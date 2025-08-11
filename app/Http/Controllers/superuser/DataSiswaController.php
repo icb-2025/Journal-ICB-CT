@@ -7,10 +7,10 @@ use Illuminate\Http\Request;
 use App\Models\Siswa;
 use App\Exports\SiswaExport;
 use Maatwebsite\Excel\Facades\Excel;
-use Barryvdh\DomPDF\Facade\Pdf; // Update this line
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Str;
-use App\Models\Perusahaan; // Pastikan sudah di-import di atas
-use App\Models\Jurusan; 
+use App\Models\Perusahaan;
+use App\Models\Jurusan;
 
 class DataSiswaController extends Controller
 {
@@ -18,7 +18,7 @@ class DataSiswaController extends Controller
     {
         $query = $this->getFilteredQuery($request);
         $siswas = $query->paginate(10);
-        $perusahaans = Perusahaan::all(); // tambahkan ini
+        $perusahaans = Perusahaan::all();
 
         if ($request->ajax()) {
             return response()->json([
@@ -53,8 +53,7 @@ class DataSiswaController extends Controller
             'alamat_wali'      => 'required|string',
             'telepon_wali'     => 'nullable|string|max:20',
             'kode_perusahaan'  => 'required|exists:perusahaans,kode_perusahaan',
-            'id_jurusan' => 'required|exists:jurusans,id',
-
+            'id_jurusan'       => 'required|exists:jurusans,id',
         ]);
 
         $validated['input_by'] = auth()->id();
@@ -95,8 +94,7 @@ class DataSiswaController extends Controller
             'alamat_wali'      => 'required|string',
             'telepon_wali'     => 'nullable|string|max:20',
             'kode_perusahaan'  => 'required|exists:perusahaans,kode_perusahaan',
-            'id_jurusan' => 'required|exists:jurusans,id',
-
+            'id_jurusan'       => 'required|exists:jurusans,id',
         ]);
 
         $validated['input_by'] = auth()->id();
@@ -118,8 +116,7 @@ class DataSiswaController extends Controller
     {
         $query = $this->getFilteredQuery($request);
         $filename = 'data-siswa-'.now()->format('Y-m-d');
-        
-        // Tambahkan filter ke nama file jika ada
+
         if ($request->filled('search')) {
             $filename .= '-search-'.$request->search;
         }
@@ -129,7 +126,7 @@ class DataSiswaController extends Controller
         if ($request->filled('sekolah')) {
             $filename .= '-sekolah-'.Str::slug($request->sekolah);
         }
-        
+
         return Excel::download(new SiswaExport($query), $filename.'.xlsx');
     }
 
@@ -137,24 +134,24 @@ class DataSiswaController extends Controller
     {
         $query = $this->getFilteredQuery($request);
         $siswas = $query->get();
-        
+
         $filename = 'data-siswa-'.now()->format('Y-m-d');
-        // Logika penamaan file yang sama seperti di Excel bisa diterapkan
-        
+
         $pdf = PDF::loadView('superuser.data-siswa.export.pdf', [
             'siswas' => $siswas,
-            'filters' => $request->only(['search', 'gol_darah', 'sekolah']) // Kirim filter ke view
+            'filters' => $request->only(['search', 'gol_darah', 'sekolah'])
         ])->setPaper('a4', 'landscape');
-        
+
         return $pdf->download($filename.'.pdf');
     }
 
     private function getFilteredQuery(Request $request)
     {
-        return Siswa::when($request->filled('search'), function($query) use ($request) {
+        return Siswa::with('jurusan') // <- penting ini supaya jurusan ikut eager load
+            ->when($request->filled('search'), function($query) use ($request) {
                 $query->where(function($q) use ($request) {
                     $q->where('nama_lengkap', 'like', '%'.$request->search.'%')
-                    ->orWhere('nis', 'like', '%'.$request->search.'%');
+                      ->orWhere('nis', 'like', '%'.$request->search.'%');
                 });
             })
             ->when($request->filled('gol_darah'), function($query) use ($request) {

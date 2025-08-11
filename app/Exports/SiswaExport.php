@@ -21,7 +21,7 @@ class SiswaExport implements FromQuery, WithHeadings, WithMapping
 
     public function query()
     {
-        return $this->query->with('inputBy'); 
+        return $this->query->with('jurusan');
     }
 
     public function headings(): array
@@ -29,43 +29,43 @@ class SiswaExport implements FromQuery, WithHeadings, WithMapping
         return [
             'No',
             'Nama Lengkap',
-            'NIS', 
+            'NIS',
             'Tempat, Tanggal Lahir',
             'Golongan Darah',
             'Sekolah',
+            'Jurusan',
             'Alamat Sekolah',
             'Nomor Telepon/Faximile',
             'Nama Orang Tua/Wali',
             'Alamat Orang Tua/Wali',
             'No Telepon Orang Tua/Wali',
-            // 'Input By'
         ];
     }
 
     public function map($siswa): array
     {
         return [
-            $siswa->id, // or use $this->row++ if you want sequential numbers
-            $siswa->nama_lengkap,
-            $siswa->nis,
-            $siswa->tempat_lahir . ', ' . $this->formatTanggal($siswa->tanggal_lahir),
-            $siswa->gol_darah,
-            $siswa->sekolah,
-            $siswa->alamat_sekolah,
-            $siswa->telepon_sekolah,
-            $siswa->nama_wali,
-            $siswa->alamat_wali,
-            $siswa->telepon_wali,
-            // $siswa->inputBy->name ?? 'System' // Display the name instead of ID
+            $siswa->id,
+            $siswa->nama_lengkap ?? '-',
+            $siswa->nis ?? '-',
+            ($siswa->tempat_lahir ?? '-') . ', ' . $this->formatTanggal($siswa->tanggal_lahir),
+            $siswa->gol_darah ?? '-',
+            $siswa->sekolah ?? '-',
+            $siswa->jurusan->nama_jurusan ?? '-',
+            $siswa->alamat_sekolah ?? '-',
+            $siswa->telepon_sekolah ?? '-',
+            $siswa->nama_wali ?? '-',
+            $siswa->alamat_wali ?? '-',
+            $siswa->telepon_wali ?? '-',
         ];
     }
 
     protected function formatTanggal($date)
     {
         try {
-            return Carbon::parse($date)->format('d/m/Y');
+            return $date ? Carbon::parse($date)->format('d/m/Y') : '-';
         } catch (\Exception $e) {
-            return $date; // Fallback ke nilai asli jika parsing gagal
+            return $date ?? '-';
         }
     }
 }

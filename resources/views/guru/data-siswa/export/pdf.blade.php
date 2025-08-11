@@ -64,6 +64,7 @@
                 <th>Tempat, Tanggal Lahir</th>
                 <th>Gol. Darah</th>
                 <th>Sekolah</th>
+                <th>Jurusan</th>
                 <th>Alamat Sekolah</th>
                 <th>No. Telp/Fax</th>
                 <th>Nama Ortu/Wali</th>
@@ -78,15 +79,17 @@
                 <td class="nowrap">{{ $siswa->nama_lengkap ?? '-' }}</td>
                 <td class="nowrap">{{ $siswa->nis ?? '-' }}</td>
                 <td class="nowrap">
-                    {{ $siswa->tempat_lahir ?? '-' }}, {{ isset($siswa->tanggal_lahir) ? \Carbon\Carbon::parse($siswa->tanggal_lahir)->format('d/m/Y') : '-' }}
+                    {{ $siswa->tempat_lahir ?? '-' }}, 
+                    {{ isset($siswa->tanggal_lahir) ? \Carbon\Carbon::parse($siswa->tanggal_lahir)->format('d/m/Y') : '-' }}
                 </td>
                 <td class="text-center">{{ $siswa->gol_darah ?? '-' }}</td>
                 <td>{{ $siswa->sekolah ?? '-' }}</td>
+                <td>{{ $siswa->jurusan->nama_jurusan ?? '-' }}</td>
                 <td>{{ $siswa->alamat_sekolah ?? '-' }}</td>
-                <td class="nowrap">{{ $siswa->no_telepon ?? $siswa->telepon_sekolah ?? '-' }}</td>
-                <td class="nowrap">{{ $siswa->nama_orang_tua ?? $siswa->nama_wali ?? '-' }}</td>
-                <td>{{ $siswa->alamat_orang_tua ?? $siswa->alamat_wali ?? '-' }}</td>
-                <td class="nowrap">{{ $siswa->no_telepon_orang_tua ?? $siswa->telepon_wali ?? '-' }}</td>
+                <td class="nowrap">{{ $siswa->telepon_sekolah ?? '-' }}</td>
+                <td class="nowrap">{{ $siswa->nama_wali ?? '-' }}</td>
+                <td>{{ $siswa->alamat_wali ?? '-' }}</td>
+                <td class="nowrap">{{ $siswa->telepon_wali ?? '-' }}</td>
             </tr>
             @endforeach
         </tbody>

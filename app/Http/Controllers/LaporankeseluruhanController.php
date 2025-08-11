@@ -3,46 +3,57 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Aktivitas; // Pastikan model Aktivitas ada
+use App\Models\Aktivitas;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\AktivitasExport;
-use Barryvdh\DomPDF\Facade\Pdf; // Perbaikan import PDF
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class LaporankeseluruhanController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Aktivitas::with(['siswa', 'perusahaan', 'kategoriTugas']);
-        
-        if ($request->has('search') && !empty($request->search)) {
+        $query = Aktivitas::with(['siswa.jurusan', 'perusahaan', 'kategoriTugas']);
+
+        if ($request->filled('search')) {
             $search = $request->search;
-            $query->whereHas('siswa', function($q) use ($search) {
-                $q->where('name', 'like', "%$search%");
+            $query->whereHas('siswa', function ($q) use ($search) {
+                $q->where('nama_lengkap', 'like', "%$search%");
             });
         }
-        
+
         $aktivitas = $query->orderBy('tanggal', 'desc')
-                        ->orderBy('mulai', 'desc')
-                        ->paginate(10);
-        
+                          ->orderBy('mulai', 'desc')
+                          ->paginate(10);
+
         if ($request->ajax()) {
             return response()->json([
                 'success' => true,
                 'html' => view('guru.laporan.partials.table', compact('aktivitas'))->render()
             ]);
         }
-        
+
         return view('guru.laporan.index', compact('aktivitas'));
     }
-    
-    public function exportExcel()
+
+    public function exportExcel(Request $request)
     {
-        return Excel::download(new AktivitasExport, 'aktivitas-siswa.xlsx');
+        $search = $request->search ?? null;
+        return Excel::download(new AktivitasExport($search), 'aktivitas-siswa.xlsx');
     }
-    
-    public function exportPdf()
+
+    public function exportPdf(Request $request)
     {
-        $aktivitas = Aktivitas::with(['siswa', 'perusahaan', 'kategoriTugas'])->get();
+        $query = Aktivitas::with(['siswa.jurusan', 'perusahaan', 'kategoriTugas']);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('siswa', function ($q) use ($search) {
+                $q->where('nama_lengkap', 'like', "%$search%");
+            });
+        }
+
+        $aktivitas = $query->orderBy('tanggal', 'desc')->get();
+
         $pdf = Pdf::loadView('guru.laporan.export.export', compact('aktivitas'));
         return $pdf->download('aktivitas-siswa.pdf');
     }

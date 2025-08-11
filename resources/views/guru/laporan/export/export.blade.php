@@ -28,23 +28,23 @@
                 <th>Jam Selesai</th>
                 <th>Kegiatan</th>
                 <th>Kategori Tugas</th>
-                <th>Nama Jurusan</th>
-                <th>status</th>
+                <th>Jurusan</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody>
             @foreach($aktivitas as $item)
             <tr>
-                <td>{{ $loop->iteration }}</td>
+                <td class="text-center">{{ $loop->iteration }}</td>
                 <td>{{ $item->siswa->name ?? '-' }}</td>
                 <td>{{ $item->perusahaan->nama_industri ?? '-' }}</td>
-                <td>{{ $item->tanggal }}</td>
-                <td>{{ $item->mulai }}</td>
-                <td>{{ $item->selesai }}</td>
-                <td>{{ $item->deskripsi }}</td>
+                <td>{{ \Carbon\Carbon::parse($item->tanggal)->format('d/m/Y') }}</td>
+                <td>{{ \Carbon\Carbon::parse($item->mulai)->format('H:i') }}</td>
+                <td>{{ \Carbon\Carbon::parse($item->selesai)->format('H:i') }}</td>
+                <td>{{ $item->deskripsi ?? '-' }}</td>
                 <td>{{ $item->kategoriTugas->nama_kategori ?? '-' }}</td>
-                <td>{{ $item->jurusan->nama_jurusan ?? '-' }}</td>
-                <td>{{ $item->status}}</td>
+                <td>{{ $item->siswa->jurusan->nama_jurusan ?? '-' }}</td>
+                <td>{{ $item->status ?? '-' }}</td>
             </tr>
             @endforeach
         </tbody>

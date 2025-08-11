@@ -15,11 +15,20 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <style>
-        /* SIMPLIFIED GRADIENT BACKGROUND */
-        .gradient-bg {
+        /* Apply gradient to the root elements so there's no white gap when scrolling */
+        html, body {
+            height: 100%;
+            margin: 0;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
+
+        /* SIMPLIFIED GRADIENT BACKGROUND - fallback color */
+        body { background-color: #667eea; }
 
         /* CLEANER LOGIN CARD ANIMATION */
         .login-card {
@@ -60,7 +69,7 @@
         }
         
         .input-field:focus {
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.18);
         }
 
         /* SIMPLE LOADING SPINNER */
@@ -72,11 +81,18 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* Ensure no white background appears on iOS overscroll bounce */
+        @supports (-webkit-overflow-scrolling: touch) {
+            html, body {
+                background-attachment: scroll;
+            }
+        }
     </style>
 </head>
-<body class="font-sans antialiased">
+<body class="font-sans antialiased min-h-screen">
 
-    <div class="min-h-screen gradient-bg flex items-center justify-center p-4">
+    <div class="min-h-screen flex items-center justify-center p-4">
         <!-- Main Login Card -->
         <div class="login-card w-full max-w-md p-8 space-y-6 bg-white rounded-xl">
             <div class="text-center">

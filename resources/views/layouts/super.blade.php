@@ -13,7 +13,28 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        
 
+        /* Tambahkan ini di bagian style Anda */
+        .sidebar-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .sidebar-footer {
+            position: sticky;
+            bottom: 0;
+            background-color: #3730a3; /* Warna sesuai tema indigo-900 */
+            border-top: 1px solid #4f46e5; /* Warna sesuai tema indigo-700 */
+            padding: 1rem;
+            margin-top: auto;
+        }
         
         .sidebar-transition {
             transition: transform 0.3s ease-in-out;
