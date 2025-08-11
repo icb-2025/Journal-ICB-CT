@@ -38,7 +38,6 @@
                 <button onclick="showModal(
                         '{{ $siswa->nis }}',
                         '{{ $siswa->nama_lengkap }}',
-                        '{{ $siswa->jenis_kelamin }}',
                         '{{ $siswa->gol_darah }}',
                         '{{ $siswa->tempat_lahir }}, {{ \Carbon\Carbon::parse($siswa->tanggal_lahir)->format('d M Y') }}',
                         '{{ $siswa->alamat_wali }}',
@@ -95,7 +94,6 @@ function showModal(nis, nama, jk, golDarah, ttl, alamatWali, sekolah, namaWali, 
     const content = `
         <p><strong>NIS:</strong> ${nis}</p>
         <p><strong>Nama:</strong> ${nama}</p>
-        <p><strong>Jenis Kelamin:</strong> ${jk}</p>
         <p><strong>Gol. Darah:</strong> ${golDarah}</p>
         <p><strong>TTL:</strong> ${ttl}</p>
         <p><strong>Alamat Wali:</strong> ${alamatWali}</p>
