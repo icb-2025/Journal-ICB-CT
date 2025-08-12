@@ -1,5 +1,3 @@
-
-
 <table class="table table-bordered min-w-full divide-y divide-gray-200">
     <thead class="bg-gray-50">
         <tr>
@@ -69,7 +67,7 @@
         <tr>
             <td colspan="8" class="px-6 py-4 text-center text-sm text-gray-500">
                 @if(request()->has('search') && !empty(request('search')))
-                    <i class="fas fa-users mr-1"></i> 
+                    <i class="fas fa-search-minus mr-1"></i> 
                     Tidak ditemukan data untuk "{{ request('search') }}"
                 @else
                         <i class="fas fa-database mr-1"></i> 
@@ -77,5 +75,5 @@
                 @endif
             </td>
         </tr>
-    @endif
+    @endif
 </tbody>

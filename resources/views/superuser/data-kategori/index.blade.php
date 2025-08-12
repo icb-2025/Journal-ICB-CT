@@ -1,5 +1,3 @@
-
-
 @extends('layouts.super')
 
 @section('title', 'Data Kategori')

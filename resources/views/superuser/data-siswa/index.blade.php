@@ -1,3 +1,5 @@
+index
+
 @extends('layouts.super')
 
 @section('title', 'Data Siswa')
