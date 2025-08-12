@@ -8,11 +8,47 @@
         <div class="flex items-center justify-between mb-6">
             <h2 class="text-2xl font-semibold text-gray-800">Data Perusahaan</h2>
 
-            @if (session('success'))
-        <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">
-            {{ session('success') }}
-        </div>
-    @endif
+        @if (session('success'))
+            <div 
+                id="success-alert" 
+                class="mb-4 flex items-center p-4 rounded-lg bg-green-100 border border-green-300 shadow-md animate-fade-in"
+            >
+                <svg class="w-5 h-5 text-green-600 mr-2" fill="none" stroke="currentColor" stroke-width="2" 
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" 
+                        d="M5 13l4 4L19 7" />
+                </svg>
+                <span class="text-green-800 font-medium">{{ session('success') }}</span>
+            </div>
+
+            <script>
+                setTimeout(() => {
+                    const alert = document.getElementById('success-alert');
+                    if (alert) {
+                        alert.classList.add('animate-fade-out');
+                        setTimeout(() => alert.remove(), 500); // hapus setelah fade-out
+                    }
+                }, 2000); // hilang setelah 2 detik
+            </script>
+
+            <style>
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(-5px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                @keyframes fadeOut {
+                    from { opacity: 1; transform: translateY(0); }
+                    to { opacity: 0; transform: translateY(-5px); }
+                }
+                .animate-fade-in {
+                    animation: fadeIn 0.3s ease-out;
+                }
+                .animate-fade-out {
+                    animation: fadeOut 0.3s ease-in;
+                }
+            </style>
+        @endif
+
     
             <div class="flex space-x-3">
                 <a href="{{ route('superuser.data-perusahaan.create') }}" class="flex items-center px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700">
