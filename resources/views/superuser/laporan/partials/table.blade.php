@@ -42,22 +42,24 @@
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                {{ $item->siswa->nama_jurusan ?? '-' }}
             </td>
-            @php
+           @php
     $status = strtolower(trim($item->status));
+    $badgeColor = 'bg-gray-300 text-gray-800'; // default
+
+    if ($status == 'masuk') {
+        $badgeColor = 'bg-green-300 text-green-800';
+    } elseif ($status == 'sakit') {
+        $badgeColor = 'bg-red-300 text-red-800';
+    } elseif ($status == 'izin') {
+        $badgeColor = 'bg-yellow-300 text-yellow-800';
+    }
 @endphp
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-white 
-    @if ($status == 'masuk')
-        bg-green-500
-    @elseif ($status == 'sakit')
-        bg-red-400
-    @elseif ($status == 'izin')
-        bg-yellow-500
-    @else
-        bg-gray-300
-    @endif
-">
-    {{ $item->status }}
+<td class="px-6 py-4 whitespace-nowrap text-sm">
+    <span class="inline-block px-3 py-1 rounded-full font-semibold {{ $badgeColor }}">
+        {{ $item->status }}
+    </span>
 </td>
+
 
         </tr>
         @endforeach
