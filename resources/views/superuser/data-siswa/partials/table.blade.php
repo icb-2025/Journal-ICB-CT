@@ -98,5 +98,5 @@
 </table>
 
 <div class="mt-4">
-    {{ $siswas->links() }}
+    {{ $siswas->links() }}
 </div>
