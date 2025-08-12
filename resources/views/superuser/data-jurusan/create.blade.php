@@ -1,3 +1,5 @@
+
+
 @extends('layouts.super')
 
 @section('title', 'Tambah Jurusan')
