@@ -13,6 +13,7 @@ return new class extends Migration
         Schema::create('aktivitas_siswas', function (Blueprint $table) {
             $table->id();
             $table->foreignId('siswa_id')->constrained('users');
+            $table->unique(['siswa_id', 'tanggal']);
             $table->unsignedBigInteger('id_jurusan')->nullable(); // ditambahkan di migrasi ini juga
             $table->foreign('id_jurusan')->references('id')->on('jurusans')->onDelete('set null');
             $table->foreignId('perusahaan_id')->constrained('perusahaans');

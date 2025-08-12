@@ -73,25 +73,28 @@
                                 </td>
 
                                 <td class="px-4 py-4 whitespace-nowrap align-top min-w-[115px]">
-                                    <label class="sm:hidden block text-xs text-gray-500 mb-1">Status</label>
-                                    <select name="status[]" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm">
-                                        <option value="masuk" {{ $statusDefault == 'masuk' ? 'selected' : '' }}>Masuk</option>
-                                        <option value="izin" {{ $statusDefault == 'izin' ? 'selected' : '' }}>Izin</option>
-                                        <option value="sakit" {{ $statusDefault == 'sakit' ? 'selected' : '' }}>Sakit</option>
-                                    </select>
-                                </td>
+    <label class="sm:hidden block text-xs text-gray-500 mb-1">Status</label>
+    <select name="status[]" 
+        class="status-select w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm 
+               focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm">
+        <option value="masuk" selected>Masuk</option>
+        <option value="izin">Izin</option>
+        <option value="sakit">Sakit</option>
+    </select>
+</td>
+
 
                                 <td class="px-4 py-4 whitespace-nowrap align-top">
                                     <label class="sm:hidden block text-xs text-gray-500 mb-1">Mulai Pukul</label>
                                     <input type="time" name="start_time[]"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
+                                        class="start-time-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
                                         {{ $statusDefault == 'sakit' ? 'disabled' : '' }}>
                                 </td>
 
                                 <td class="px-4 py-4 whitespace-nowrap align-top">
                                     <label class="sm:hidden block text-xs text-gray-500 mb-1">Selesai Pukul</label>
                                     <input type="time" name="end_time[]"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
+                                        class="end-time-input w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
                                         {{ $statusDefault == 'sakit' ? 'disabled' : '' }}>
                                 </td>
 

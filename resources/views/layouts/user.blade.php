@@ -417,17 +417,17 @@ function updateStatusRow(row) {
         startInput.prop('required', true);
         endInput.prop('required', true);
         categorySelect.prop('required', true);
-        descInput.attr('placeholder', 'Deskripsikan kegiatan Anda...');
+        descInput.attr('placeholder', 'Masukan kegiatan hari ini...');
     } else if (status === 'izin') {
         startInput.prop('required', true);
         endInput.prop('required', true);
         categorySelect.prop('required', false).prop('disabled', true).val(null);
-        descInput.attr('placeholder', 'Tulis alasan izin hari ini...');
+        descInput.attr('placeholder', 'Masukan alasan izin...');
     } else if (status === 'sakit') {
         startInput.prop('required', false).prop('disabled', true).val(null);
         endInput.prop('required', false).prop('disabled', true).val(null);
         categorySelect.prop('required', false).prop('disabled', true).val(null);
-        descInput.attr('placeholder', 'Tulis keterangan sakit jika perlu...');
+        descInput.attr('placeholder', 'Masukan keterangan sakit...');
     }
 }
 

@@ -8,6 +8,7 @@ use App\Models\AktivitasSiswa;
 use App\Models\KategoriTugas;
 use Illuminate\Support\Str;
 use App\Events\AktivitasSiswaUpdated;
+use Illuminate\Database\QueryException;
 use App\Http\Controllers\Superuser\DashboardController;
 
 class AktivitasSiswaController extends Controller
@@ -47,57 +48,58 @@ class AktivitasSiswaController extends Controller
 
  public function store(Request $request)
 {
-
     $user = auth()->user();
-    $dataSiswa = $user->siswa; // Ambil relasi siswa
-
+    $dataSiswa = $user->siswa;
 
     $request->validate([
-    'company_code' => 'required|array',
-    'input_date' => 'required|array',
-    'description' => 'required|array',
-    'status' => 'required|array',
-    // Jangan validasi time & category dulu, validasi manual di loop
-]);
-
-    // $siswaId = auth()->id();
-
-    foreach ($request->company_code as $i => $perusahaanId) {
-    $status = $request->status[$i] ?? 'masuk';
-
-    if ($status === 'sakit') {
-    $start = '-';
-    $end = '-';
-    $kategori_id = null;
-} elseif ($status === 'izin') {
-    $start = $request->start_time[$i];
-    $end = $request->end_time[$i];
-    $kategori_id = null;
-} else {
-    $start = $request->start_time[$i];
-    $end = $request->end_time[$i];
-    $kategori_id = $request->category[$i] ?? $this->deteksiKategori($request->description[$i]);
-}
-
-
-    AktivitasSiswa::create([
-        'perusahaan_id' => $perusahaanId,
-        'tanggal' => $request->input_date[$i],
-        'mulai' => $start,
-        'selesai' => $end,
-        'deskripsi' => $request->description[$i],
-        'kategori_tugas_id' => $kategori_id,
-        'siswa_id' => auth()->id(),
-        'status' => $status, // ✅ Tambahkan ini!
-        'id_jurusan' => $dataSiswa?->id_jurusan, // ✅ Ambil dari relasi siswa
+        'company_code' => 'required|array',
+        'input_date'   => 'required|array',
+        'description'  => 'required|array',
+        'status'       => 'required|array',
     ]);
-}
-// Ambil data terbaru dan kirim event realtime
-$data = (new DashboardController())->getReportData('week');
-event(new AktivitasSiswaUpdated($data));
 
+    try {
+        foreach ($request->company_code as $i => $perusahaanId) {
+            $status = $request->status[$i] ?? 'masuk';
 
-    return redirect()->back()->with('success', 'Aktivitas berhasil disimpan.');
+            if ($status === 'sakit') {
+                $start = '-';
+                $end = '-';
+                $kategori_id = null;
+            } elseif ($status === 'izin') {
+                $start = $request->start_time[$i];
+                $end = $request->end_time[$i];
+                $kategori_id = null;
+            } else {
+                $start = $request->start_time[$i];
+                $end = $request->end_time[$i];
+                $kategori_id = $request->category[$i] ?? $this->deteksiKategori($request->description[$i]);
+            }
+
+            AktivitasSiswa::create([
+                'perusahaan_id' => $perusahaanId,
+                'tanggal'       => $request->input_date[$i],
+                'mulai'         => $start,
+                'selesai'       => $end,
+                'deskripsi'     => $request->description[$i],
+                'kategori_tugas_id' => $kategori_id,
+                'siswa_id'      => auth()->id(),
+                'status'        => $status,
+                'id_jurusan'    => $dataSiswa?->id_jurusan,
+            ]);
+        }
+
+        $data = (new DashboardController())->getReportData('week');
+        event(new AktivitasSiswaUpdated($data));
+
+        return redirect()->back()->with('success', 'Aktivitas berhasil disimpan.');
+    }
+    catch (QueryException $e) {
+        if ($e->getCode() === '23000') {
+            return redirect()->back()->with('error', 'Aktivitas untuk tanggal tersebut sudah pernah diinput.');
+        }
+        throw $e;
+    }
 }
 
     private function deteksiKategori($kalimat)
