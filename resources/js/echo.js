@@ -12,7 +12,6 @@ window.Echo = new Echo({
 
 window.Echo.channel('dashboard')
     .listen('.AktivitasSiswaUpdated', (data) => {
-        console.log('[Realtime Update]', data);
         const event = new CustomEvent('dashboardUpdated', { detail: data });
         window.dispatchEvent(event);
     });
