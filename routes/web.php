@@ -11,6 +11,7 @@ use App\Http\Controllers\AktivitasSiswaController;
 use App\Http\Controllers\LaporankeseluruhanController; 
 use App\Http\Controllers\Superuser\DashboardController; 
 use App\Http\Controllers\Superuser\SuperuserDataJurusanController;
+use App\Http\Controllers\Superuser\HariLiburController as SuperuserHariLiburController;
 use App\Http\Controllers\Superuser\LaporankeseluruhanController as SuperuserLaporankeseluruhanController; 
 use App\Http\Controllers\superuser\DataPerusahaanController as SuperuserDataPerusahaanController;
 use App\Http\Controllers\superuser\UserController as SuperuserUserController;
@@ -72,6 +73,7 @@ Route::get('/users', fn() => view('users'))->name('users');
         Route::get('/superuser/data-user', [SuperuserUserController::class, 'index'])->name('superuser.data-user.index');
         Route::get('/superuser/data-siswa', [SuperuserDataSiswaController::class, 'index'])->name('superuser.data-siswa.index');
         Route::get('/superuser/data-kategori', [SuperuserKategoriTugasController::class, 'index'])->name('superuser.data-kategori.index');
+        Route::get('/superuser/jadwal-hari-libur', [SuperuserHariLiburController::class, 'index'])->name('superuser.jadwal-hari-libur.index');
         
         Route::prefix('superuser')->name('superuser.')->group(function () {
             Route::resource('data-perusahaan', SuperuserDataPerusahaanController::class)->names('data-perusahaan');
@@ -79,6 +81,7 @@ Route::get('/users', fn() => view('users'))->name('users');
             Route::resource('data-siswa', SuperuserDataSiswaController::class)->names('data-siswa');
             Route::resource('data-kategori', SuperuserKategoriTugasController::class)->names('data-kategori');
     Route::resource('data-jurusan', SuperuserDataJurusanController::class)->names('data-jurusan');
+    Route::resource('jadwal-hari-libur', SuperuserHariLiburController::class)->names('jadwal-hari-libur');
 });
 
           Route::get('/data-siswa/export/excel', [DataSiswaController::class, 'exportExcel'])
