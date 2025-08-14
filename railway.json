@@ -1,9 +1,9 @@
 {
   "build": {
     "builder": "NIXPACKS",
-    "buildCommand": "npm install && npm run build && composer install --no-dev --optimize-autoloader && php artisan migrate --force && php artisan optimize:clear"
+    "buildCommand": "npm install && npm run build && composer install --no-dev --optimize-autoloader && php artisan optimize:clear"
   },
   "deploy": {
-    "startCommand": "php -S 0.0.0.0:8080 -t public"
+    "startCommand": "php artisan migrate --force && php -S 0.0.0.0:8080 -t public"
   }
 }
