@@ -23,6 +23,10 @@
 </div>
 
         <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Update</button>
+        <a href="{{ route('superuser.data-kategori.index') }}" 
+                        class="ml-2 px-4 py-2 border border-blue-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
+                            <i class="fas fa-times mr-1"></i> Batal
+                    </a>
     </form>
 </div>
 @endsection

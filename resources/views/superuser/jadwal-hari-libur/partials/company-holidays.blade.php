@@ -87,10 +87,10 @@
                         <a href="{{ route('superuser.jadwal-hari-libur.edit', $item->id) }}" class="p-1 text-indigo-600 hover:text-indigo-900">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <form action="{{ route('superuser.jadwal-hari-libur.destroy', $item->id) }}" method="POST" class="inline">
+                        <form id="delete-form-{{ $item->id }}" action="{{ route('superuser.jadwal-hari-libur.destroy', $item->id) }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="p-1 ml-2 text-red-600 hover:text-red-900" onclick="return confirm('Yakin ingin menghapus?')">
+                            <button type="button" class="p-1 ml-2 text-red-600 hover:text-red-900" onclick="confirmDelete({{ $item->id }})">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </form>
@@ -104,3 +104,24 @@
         </tbody>
     </table>
 </div>
+
+<!-- Include SweetAlert JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Data yang dihapus tidak dapat dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form-' + id).submit();
+            }
+        });
+    }
+</script>
