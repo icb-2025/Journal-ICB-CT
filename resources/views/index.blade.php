@@ -3,6 +3,27 @@
 @section('title', 'Dashboard')
 
 @section('content')
+@php
+    $currentHour = now()->format('H');
+    $isAccessTime = ($currentHour >= 6 && $currentHour < 19); // 6 AM to 7 PM
+    $sudahInputHariIni = \App\Models\AktivitasSiswa::where('siswa_id', Auth::id())
+        ->where('tanggal', now()->toDateString())
+        ->exists();
+@endphp
+
+@if(!$isAccessTime)
+    <div class="container mx-auto px-4 py-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
+            <div class="bg-gradient-to-r from-red-500 to-red-600 p-6">
+                <h1 class="text-xl sm:text-2xl font-bold text-white">Akses Ditutup</h1>
+                <p class="text-red-100 mt-1 text-sm sm:text-base">Halaman ini hanya dapat diakses antara pukul 06:00 - 19:00</p>
+            </div>
+            <div class="p-6 text-center">
+                <p class="text-gray-700">Silakan kembali pada jam 6 pagi sampai 7 malam untuk mengisi kegiatan harian.</p>
+            </div>
+        </div>
+    </div>
+@else
 <div class="container mx-auto px-4 py-4 sm:px-6 lg:px-8">
     <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
         <div class="bg-gradient-to-r from-blue-500 to-blue-600 p-6">
@@ -11,13 +32,6 @@
         </div>
 
         <div class="p-4 sm:p-6">
-            @php
-                use App\Models\AktivitasSiswa;
-                $sudahInputHariIni = AktivitasSiswa::where('siswa_id', Auth::id())
-                    ->where('tanggal', now()->toDateString())
-                    ->exists();
-            @endphp
-
             <form method="POST" action="{{ route('siswa.input-kategori.store') }}">
                 @csrf
 
@@ -73,16 +87,15 @@
                                 </td>
 
                                 <td class="px-4 py-4 whitespace-nowrap align-top min-w-[115px]">
-    <label class="sm:hidden block text-xs text-gray-500 mb-1">Status</label>
-    <select name="status[]" 
-        class="status-select w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm 
-               focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm">
-        <option value="masuk" selected>Masuk</option>
-        <option value="izin">Izin</option>
-        <option value="sakit">Sakit</option>
-    </select>
-</td>
-
+                                    <label class="sm:hidden block text-xs text-gray-500 mb-1">Status</label>
+                                    <select name="status[]" 
+                                        class="status-select w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm 
+                                               focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                        <option value="masuk" selected>Masuk</option>
+                                        <option value="izin">Izin</option>
+                                        <option value="sakit">Sakit</option>
+                                    </select>
+                                </td>
 
                                 <td class="px-4 py-4 whitespace-nowrap align-top">
                                     <label class="sm:hidden block text-xs text-gray-500 mb-1">Mulai Pukul</label>
@@ -98,7 +111,6 @@
                                         {{ $statusDefault == 'sakit' ? 'disabled' : '' }}>
                                 </td>
 
-                                <!-- Deskripsi Kegiatan -->
                                 <td class="px-4 py-4 align-top min-w-[220px]">
                                     <label class="sm:hidden block text-xs text-gray-500 mb-1">Kegiatan</label>
                                     <textarea name="description[]" rows="3" maxlength="300" required
@@ -107,8 +119,6 @@
                                         placeholder="Deskripsikan kegiatan Anda..."></textarea>
                                 </td>
 
-
-                                <!-- Kategori Tugas -->
                                 <td class="px-4 py-4 align-top min-w-[165px]">
                                     <label class="sm:hidden block text-xs text-gray-500 mb-1">Kategori</label>
                                     <select name="category[]"
@@ -157,6 +167,7 @@
         </div>
     @endif
 </div>
+@endif
 @endsection
 
 @section('scripts')
