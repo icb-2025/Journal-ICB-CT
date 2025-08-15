@@ -8,6 +8,7 @@ use App\Http\Controllers\Guru\UserController;
 use App\Http\Controllers\KegiatanController;
 use App\Http\Controllers\Guru\KategoriTugasController;
 use App\Http\Controllers\AktivitasSiswaController;
+use App\Http\Controllers\UsersController;
 use App\Http\Controllers\LaporankeseluruhanController; 
 use App\Http\Controllers\Superuser\DashboardController; 
 use App\Http\Controllers\Superuser\SuperuserDataJurusanController;
@@ -45,7 +46,9 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/', [AktivitasSiswaController::class, 'create'])->name('index');
 
-Route::get('/users', fn() => view('users'))->name('users');
+Route::get('/users', [UsersController::class, 'index'])
+    ->name('users');
+
 
 //     Route::middleware(['auth', 'role:superuser'])->group(function () {
 //     Route::get('/dashboard', function () {

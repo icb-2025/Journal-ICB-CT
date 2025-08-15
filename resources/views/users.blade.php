@@ -1,43 +1,58 @@
 @extends('layouts.user')
 
-@section('title','Users')
+@section('title','Data Siswa')
 
 @section('content')
 <div class="flex items-center justify-center min-h-[calc(100vh-200px)]">
-    <div class="w-full max-w-md p-6 bg-white rounded-lg shadow-md">
-        <div class="text-center">
-            <span class="inline-block px-4 py-2 text-lg font-semibold rounded-full bg-blue-100 text-blue-800 mb-4">
-                Dalam Perbaikan
-            </span>
-            <p class="text-gray-600 mt-4">
-                Halaman ini sedang dalam proses perbaikan. Silakan kembali nanti.
-            </p>
-            <svg class="w-16 h-16 mx-auto mt-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
+    <div class="w-full max-w-5xl p-6 bg-white rounded-lg shadow-md">
+        <h2 class="text-2xl font-bold mb-4">Data Siswa</h2>
+
+        <table class="w-full border-collapse border border-gray-300">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="border border-gray-300 px-4 py-2">Nama Lengkap</th>
+                    <th class="border border-gray-300 px-4 py-2">NIS</th>
+                    <th class="border border-gray-300 px-4 py-2">Tempat Lahir</th>
+                    <th class="border border-gray-300 px-4 py-2">Tanggal Lahir</th>
+                    <th class="border border-gray-300 px-4 py-2">Golongan Darah</th>
+                    <th class="border border-gray-300 px-4 py-2">Sekolah</th>
+                    <th class="border border-gray-300 px-4 py-2">Alamat Sekolah</th>
+                    <th class="border border-gray-300 px-4 py-2">Telepon Sekolah</th>
+                    <th class="border border-gray-300 px-4 py-2">Nama Wali</th>
+                    <th class="border border-gray-300 px-4 py-2">Alamat Wali</th>
+                    <th class="border border-gray-300 px-4 py-2">Telepon Wali</th>
+                    <th class="border border-gray-300 px-4 py-2">Kode Perusahaan</th>
+                    <th class="border border-gray-300 px-4 py-2">Jurusan</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($siswas as $index => $siswa)
+                    <tr>
+                        <td class="border border-gray-300 px-4 py-2">{{ $siswa->nama_lengkap }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ $siswa->nis }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ $siswa->tempat_lahir }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ $siswa->tanggal_lahir }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ $siswa->gol_darah }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ $siswa->sekolah }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ $siswa->alamat_sekolah }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ $siswa->telepon_sekolah }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ $siswa->nama_wali }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ $siswa->alamat_wali }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ $siswa->telepon_wali }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ $siswa->perusahaan->nama_industri }}</td>
+                        <td class="border border-gray-300 px-4 py-2">{{ $siswa->jurusan->nama_jurusan ?? '-' }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" class="text-center border border-gray-300 px-4 py-2">Tidak ada data siswa</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+
+        <div class="mt-4">
+            {{ $siswas->links() }}
         </div>
     </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        Swal.fire({
-            icon: 'info',
-            title: 'Halaman Sedang Dalam Perbaikan',
-            text: 'Silakan kembali lagi nanti',
-            confirmButtonText: 'Oke',
-            timer: 4000,
-            timerProgressBar: true,
-            willClose: () => {
-                const previous = document.referrer;
-                if (previous && new URL(previous).origin === window.location.origin) {
-                    window.location.href = previous;
-                } else {
-                    window.location.href = @json(route('index'));
-                }
-            }
-        });
-    });
-</script>
 @endsection
