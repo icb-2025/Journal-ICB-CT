@@ -13,7 +13,7 @@ return new class extends Migration
 {
     Schema::create('jadwal_libur', function (Blueprint $table) {
         $table->id();
-        $table->foreignId('perusahaan_id')->constrained('perusahaans')->onDelete('cascade');
+        $table->string('perusahaan_id');
         $table->string('hari_libur'); // Senin - Minggu
         $table->string('status'); // Libur, Masuk, Libur Nasional
         $table->timestamps();

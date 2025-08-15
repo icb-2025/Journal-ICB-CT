@@ -10,9 +10,10 @@
             <label class="block text-sm font-medium">Perusahaan</label>
             <select name="perusahaan_id" class="w-full border rounded">
     @foreach($perusahaan as $p)
-        <option value="{{ $p->id }}">{{ $p->nama_industri }}</option>
+        <option value="{{ $p->kode_perusahaan }}">{{ $p->nama_industri }}</option>
     @endforeach
 </select>
+
 
         </div>
       <div>

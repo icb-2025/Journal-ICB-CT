@@ -73,8 +73,9 @@
             @forelse($jadwal as $item)
                 <tr>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="font-medium">{{ $item->perusahaan->nama_perusahaan }}</div>
-                        <div class="text-sm text-gray-500">{{ $item->perusahaan->nama_industri }}</div>
+                        <div class="font-medium">{{ $item->perusahaan->nama_perusahaan}}</div>
+<div class="text-sm text-gray-500">{{ $item->perusahaan->nama_industri}}</div>
+
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">{{ $item->hari_libur }}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
