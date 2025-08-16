@@ -9,6 +9,60 @@
     $sudahInputHariIni = \App\Models\AktivitasSiswa::where('siswa_id', Auth::id())
         ->where('tanggal', now()->toDateString())
         ->exists();
+    
+    // Get company status
+    $hariList = ['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'];
+    $hariIni = $hariList[date('N') - 1];
+    $today = date('Y-m-d');
+    
+    // Check national holidays
+    $isNationalHoliday = false;
+    try {
+        $response = file_get_contents('https://api-harilibur.vercel.app/api');
+        $holidays = json_decode($response, true);
+        foreach ($holidays as $holiday) {
+            $holidayDateRaw = trim($holiday['holiday_date'] ?? $holiday['date'] ?? '');
+            if ($holidayDateRaw) {
+                $holidayDate = date('Y-m-d', strtotime($holidayDateRaw));
+                if ($today == $holidayDate) {
+                    $isNationalHoliday = true;
+                    break;
+                }
+            }
+        }
+    } catch (\Exception $e) {
+        $isNationalHoliday = false;
+    }
+    
+    // Check company holiday
+    $isCompanyHoliday = false;
+    if ($perusahaanUser) {
+        $companyHoliday = \App\Models\JadwalLibur::where('perusahaan_id', $perusahaanUser->id)->first();
+        if ($companyHoliday) {
+            $parts = explode('-', $companyHoliday->hari_libur);
+            $mulai = $parts[0];
+            $selesai = $parts[1] ?? $parts[0];
+            
+            $startIndex = array_search($mulai, $hariList);
+            $endIndex = array_search($selesai, $hariList);
+            
+            $range = [];
+            if ($startIndex !== false && $endIndex !== false) {
+                if ($startIndex <= $endIndex) {
+                    $range = array_slice($hariList, $startIndex, $endIndex - $startIndex + 1);
+                } else {
+                    $range = array_merge(
+                        array_slice($hariList, $startIndex),
+                        array_slice($hariList, 0, $endIndex + 1)
+                    );
+                }
+            }
+            
+            $isCompanyHoliday = in_array($hariIni, $range);
+        }
+    }
+    
+    $isHoliday = $isNationalHoliday || $isCompanyHoliday;
 @endphp
 
 @if(!$isAccessTime)
@@ -20,6 +74,30 @@
             </div>
             <div class="p-6 text-center">
                 <p class="text-gray-700">Silakan kembali pada jam 6 pagi sampai 7 malam untuk mengisi kegiatan harian.</p>
+            </div>
+        </div>
+    </div>
+@elseif($isHoliday)
+    <div class="container mx-auto px-4 py-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden mb-6">
+            <div class="bg-gradient-to-r from-purple-500 to-purple-600 p-6">
+                <h1 class="text-xl sm:text-2xl font-bold text-white">Hari Libur</h1>
+                <p class="text-purple-100 mt-1 text-sm sm:text-base">
+                    @if($isNationalHoliday)
+                        Hari ini adalah hari libur nasional
+                    @else
+                        Hari ini adalah hari libur perusahaan
+                    @endif
+                </p>
+            </div>
+            <div class="p-6 text-center">
+                <p class="text-gray-700">
+                    @if($isNationalHoliday)
+                        Anda tidak perlu mengisi kegiatan harian karena hari ini libur nasional.
+                    @else
+                        Perusahaan Anda menetapkan hari ini sebagai hari libur. Anda tidak perlu mengisi kegiatan harian.
+                    @endif
+                </p>
             </div>
         </div>
     </div>
