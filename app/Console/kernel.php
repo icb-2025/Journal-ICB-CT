@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
 
 protected function schedule(Schedule $schedule)
 {
-    $schedule->command('absen:generate-alpa')->dailyAt('21:05');
+    $schedule->command('absen:generate-alpa')->dailyAt('19.00');
 }
 
 
