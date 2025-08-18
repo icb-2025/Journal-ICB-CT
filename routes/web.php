@@ -60,7 +60,17 @@ Route::get('/users', fn() => view('users'))->name('users');
         Route::post('input-kategori', [AktivitasSiswaController::class, 'store'])->name('input-kategori.store');
     });
 
-    // Superuser
+    Route::prefix('superuser')->group(function () {
+    // ... other superuser routes ...
+    
+    Route::get('data-perusahaan/export/excel', [DataPerusahaanController::class, 'exportExcel'])
+        ->name('superuser.data-perusahaan.export.excel');
+        
+    Route::get('data-perusahaan/export/pdf', [DataPerusahaanController::class, 'exportPdf'])
+        ->name('superuser.data-perusahaan.export.pdf');
+    });
+
+
     Route::middleware('role:superuser')->group(function () {
         Route::get('/superuser', [DashboardController::class, 'index'])->name('superuser.dashboard');
         Route::get('/superuser/data-perusahaan', [DataPerusahaanController::class, 'index'])->name('superuser.data-perusahaan.index');
@@ -90,6 +100,8 @@ Route::get('/users', fn() => view('users'))->name('users');
     Route::get('/data-siswa/export/pdf', [DataSiswaController::class, 'exportPdf'])
         ->name('data-siswa.export.pdf');
     });
+
+   
 
     // Guru
     Route::middleware('role:superuser,guru')->group(function () {

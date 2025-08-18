@@ -52,8 +52,11 @@
 </select>
 
         <div class="flex justify-end">
-            <a href="{{ route('superuser.data-user.index') }}" class="mr-3 text-sm text-gray-600 hover:underline">Kembali</a>
             <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">Simpan</button>
+            <a href="{{ route('superuser.data-user.index') }}" 
+                        class="ml-2 px-4 py-2 border border-blue-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
+                            <i class="fas fa-times mr-1"></i> Batal
+                    </a>
         </div>
     </form>
     <script>

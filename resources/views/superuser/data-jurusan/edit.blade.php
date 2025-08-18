@@ -24,15 +24,17 @@
 
         <!-- Tombol -->
         <div class="flex items-center justify-end gap-3">
-            <a href="{{ route('superuser.data-jurusan.index') }}" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition">
-                Batal
-            </a>
             <button 
                 type="submit" 
                 class="px-4 py-2 bg-indigo-600 text-white rounded-lg shadow hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1"
             >
                 Update
             </button>
+
+            <a href="{{ route('superuser.data-jurusan.index') }}" 
+                        class="ml-2 px-4 py-2 border border-blue-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
+                            <i class="fas fa-times mr-1"></i> Batal
+                    </a>
         </div>
     </form>
 </div>

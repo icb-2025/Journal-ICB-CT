@@ -56,12 +56,13 @@
 
             <!-- Action Buttons -->
             <div class="flex justify-end space-x-3">
-                <a href="{{ route('superuser.data-user.index') }}" class="px-4 py-2 border rounded-lg text-gray-700 hover:bg-gray-100">
-                    Kembali
-                </a>
                 <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
                     Update User
                 </button>
+                <a href="{{ route('superuser.data-user.index') }}" 
+                        class="ml-2 px-4 py-2 border border-blue-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out">
+                            <i class="fas fa-times mr-1"></i> Batal
+                </a>
             </div>
         </form>
     </div>

@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
-    <h1 class="text-2xl font-bold text-gray-800 mb-6">Data Jurusan Tugas</h1>
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">Data Jurusan</h1>
 
     @if(session('success'))
         <div id="success-message" class="fixed top-4 right-4 z-50 flex items-center p-4 mb-4 text-green-800 bg-green-100 border-l-4 border-green-500 rounded-lg shadow-lg animate-fade-in">

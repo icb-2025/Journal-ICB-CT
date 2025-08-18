@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Perusahaan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\Guru\PerusahaanExport;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class DataPerusahaanController extends Controller
 {
@@ -101,6 +104,24 @@ $bulanTahun = \Carbon\Carbon::create(2025, 10, 1)->format('Ym'); // hasil: 20250
     $data_perusahaan->delete();
     return redirect()->route('guru.data-perusahaan.index')->with('success', 'Data perusahaan berhasil dihapus.');
 }
+
+
+public function exportExcel()
+    {
+        return Excel::download(new PerusahaanExport, 'data-perusahaan-'.now()->format('Y-m-d').'.xlsx');
+    }
+
+    public function exportPdf()
+    {
+        $perusahaans = Perusahaan::with('user')->get();
+        
+        $pdf = Pdf::loadView('superuser.data-perusahaan.export.pdf', [
+            'perusahaans' => $perusahaans,
+            'tanggal' => now()->format('d F Y')
+        ]);
+        
+        return $pdf->download('data-perusahaan-'.now()->format('Y-m-d').'.pdf');
+    }
 
 
 
