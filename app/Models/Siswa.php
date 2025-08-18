@@ -43,4 +43,15 @@ public function jurusan()
 }
 
 
+public function perusahaan()
+{
+    return $this->belongsTo(Perusahaan::class, 'kode_perusahaan', 'kode_perusahaan');
+}
+
+public function user()
+{
+    return $this->belongsTo(User::class, 'nis', 'nisn');
+}
+
+
 }

@@ -18,9 +18,11 @@ class AktivitasSiswa extends Model
         'id_jurusan'
     ];
 
-    public function perusahaan() {
-    return $this->belongsTo(Perusahaan::class, 'perusahaan_id');
+    public function perusahaan()
+{
+    return $this->belongsTo(Perusahaan::class, 'perusahaan_id', 'kode_perusahaan');
 }
+
 
 public function kategoriTugas() {
     return $this->belongsTo(KategoriTugas::class, 'kategori_tugas_id');
@@ -28,7 +30,8 @@ public function kategoriTugas() {
 
 
 public function siswa() {
-    return $this->belongsTo(User::class, 'siswa_id'); // pastikan relasi ini benar
+    return $this->belongsTo(Siswa::class, 'siswa_id');
 }
+
 
 }

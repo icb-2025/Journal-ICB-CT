@@ -35,26 +35,27 @@ public function index()
 
     // Tentukan status hari ini
     $statusHariIni = 'Masuk';
-    foreach ($jadwalLibur as $jadwal) {
-        $parts = explode('-', $jadwal->hari_libur);
-        $mulai = $parts[0];
-        $selesai = $parts[1] ?? $parts[0];
+foreach ($jadwalLibur as $jadwal) {
+    $parts = explode('-', $jadwal->hari_libur);
+    $mulai = $parts[0];
+    $selesai = $parts[1] ?? $parts[0];
 
-        $startIndex = array_search($mulai, $hariList);
-        $endIndex   = array_search($selesai, $hariList);
+    $startIndex = array_search($mulai, $hariList);
+    $endIndex   = array_search($selesai, $hariList);
 
-        $range = ($startIndex <= $endIndex)
-            ? array_slice($hariList, $startIndex, $endIndex - $startIndex + 1)
-            : array_merge(
-                array_slice($hariList, $startIndex),
-                array_slice($hariList, 0, $endIndex + 1)
-              );
+    $range = ($startIndex <= $endIndex)
+        ? array_slice($hariList, $startIndex, $endIndex - $startIndex + 1)
+        : array_merge(
+            array_slice($hariList, $startIndex),
+            array_slice($hariList, 0, $endIndex + 1)
+        );
 
-        if (in_array($hariIni, $range)) {
-            $statusHariIni = 'Libur';
-            break;
-        }
+    if (in_array($hariIni, $range)) {
+        $statusHariIni = 'Libur';
+        break;
     }
+}
+
 
     // Ambil semua siswa + aktivitas mereka hari ini
     $siswaList = Siswa::with(['aktivitas' => function($q) use ($tanggalHariIni) {
@@ -63,17 +64,39 @@ public function index()
     ->where('kode_perusahaan', $kodePerusahaan)
     ->get();
 
-    foreach ($siswaList as $siswa) {
-        if ($statusHariIni === 'Masuk') {
-            if ($siswa->aktivitas->isEmpty()) {
-                $siswa->status_otomatis = ($jamSekarang >= '21:00') ? 'Alpa' : '-';
+  foreach ($siswaList as $siswa) {
+    if ($statusHariIni === 'Masuk') {
+        if ($siswa->aktivitas->isEmpty()) {
+            if ($jamSekarang >= '21:00') {
+                $perusahaan = null;
+                if ($siswa->kode_perusahaan) {
+                    $perusahaan = Perusahaan::where('kode_perusahaan', $siswa->kode_perusahaan)->first();
+                }
+
+                AktivitasSiswa::create([
+                    'perusahaan_id'    => $perusahaan?->kode_perusahaan, // dari kode_perusahaan
+                    'tanggal'          => $tanggalHariIni,
+                    'mulai'            => '06:00:00',
+                    'selesai'          => '21:00:00',
+                    'deskripsi'        => 'Tidak hadir',
+                    'kategori_tugas_id'=> null,
+                    'siswa_id'         => $siswa->id,
+                    'status'           => 'Alpa',
+                    'id_jurusan'       => $siswa->id_jurusan,
+                ]);
             } else {
-                $siswa->status_otomatis = $siswa->aktivitas->first()->status;
+                $siswa->status_otomatis = '-';
             }
         } else {
-            $siswa->status_otomatis = '-';
+            $siswa->status_otomatis = $siswa->aktivitas->first()->status;
         }
+    } else {
+        $siswa->status_otomatis = '-';
     }
+}
+
+
+
 
     return view('guru.laporan.index', [
         'siswaList' => $siswaList,
@@ -109,6 +132,7 @@ public function index()
 
  public function store(Request $request)
 {
+
     $user = auth()->user();
     $dataSiswa = $user->siswa;
 

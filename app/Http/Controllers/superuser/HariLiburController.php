@@ -9,16 +9,52 @@ use App\Models\Perusahaan;
 
 class HariLiburController extends Controller
 {
-    public function index()
-{
-    $jadwal = JadwalLibur::with('perusahaan')->latest()->get();
+    
+    public function index(Request $request)
+    {
+        // =========================
+        // 1️⃣ Ambil tanggal yang dicek
+        // =========================
+        $today = $request->input('tanggal', date('Y-m-d')); 
+        $today = date('Y-m-d', strtotime($today)); 
+        $hariList = ['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'];
+        $hariIni = $hariList[date('N', strtotime($today)) - 1];
 
-    $hariList = ['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'];
+        // =========================
+        // 2️⃣ Ambil data jadwal perusahaan
+        // =========================
+        $jadwal = JadwalLibur::with('perusahaan')->latest()->get();
 
-    $jadwal->transform(function ($item) use ($hariList) {
+        // =========================
+        // 3️⃣ Ambil data libur nasional
+        // =========================
+        $nationalHolidays = [];
+        try {
+            $response = file_get_contents('https://api-harilibur.vercel.app/api');
+            $holidays = json_decode($response, true);
+            foreach ($holidays as $holiday) {
+                $holidayDateRaw = trim($holiday['holiday_date'] ?? $holiday['date'] ?? '');
+                if ($holidayDateRaw) {
+                    $holidayDate = date('Y-m-d', strtotime($holidayDateRaw));
+                    $nationalHolidays[] = $holidayDate;
+                }
+            }
+        } catch (\Exception $e) {
+            $nationalHolidays = [];
+        }
+
+        // =========================
+        // 4️⃣ Transform status jadwal
+        // =========================
+        $jadwal->transform(function ($item) use ($hariList, $hariIni, $today, $nationalHolidays) {
+    // Libur nasional prioritas
+    if (in_array($today, $nationalHolidays)) {
+        $item->status = 'Libur (Libur Nasional)';
+        return $item;
+    }
+
+    // Cek range hari libur perusahaan
     $parts = explode('-', $item->hari_libur);
-
-    // Jika hanya 1 hari, mulai & selesai sama
     $mulai = $parts[0];
     $selesai = $parts[1] ?? $parts[0];
 
@@ -37,18 +73,16 @@ class HariLiburController extends Controller
         }
     }
 
-    $hariIni = $hariList[date('N') - 1];
-    $item->status = in_array($hariIni, $range) ? 'Libur' : 'Masuk';
-
+    $item->status = in_array($hariIni, $range) ? 'Libur (Perusahaan)' : 'Masuk';
     return $item;
 });
 
 
-    $perusahaan = Perusahaan::all();
-    return view('superuser.jadwal-hari-libur.index', compact('jadwal', 'perusahaan'));
-}
+        $perusahaan = Perusahaan::all();
 
-
+        return view('superuser.jadwal-hari-libur.index', compact('jadwal', 'perusahaan', 'today'));
+    }
+    
     public function create()
     {
         $perusahaan = Perusahaan::all();
@@ -56,62 +90,61 @@ class HariLiburController extends Controller
     }
 
     public function store(Request $request)
-{
-    $request->validate([
-        'perusahaan_id' => 'required|exists:perusahaans,id',
-        'mulai_libur'   => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu',
-        'selesai_libur' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu',
-    ]);
+    {
+        $request->validate([
+            'perusahaan_id' => 'required|exists:perusahaans,kode_perusahaan',
+            'mulai_libur'   => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu',
+            'selesai_libur' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu',
+        ]);
 
-    $hariLibur = $request->mulai_libur . '-' . $request->selesai_libur;
+        $hariLibur = $request->mulai_libur . '-' . $request->selesai_libur;
 
-    // Kalau mulai atau selesai libur itu Sabtu atau Minggu → status Libur, selain itu Masuk
-    $status = (in_array($request->mulai_libur, ['Sabtu','Minggu']) || in_array($request->selesai_libur, ['Sabtu','Minggu']))
-                ? 'Libur'
-                : 'Masuk';
+        // Status default: Sabtu/Minggu libur, selain itu masuk
+        $status = (in_array($request->mulai_libur, ['Sabtu','Minggu']) || in_array($request->selesai_libur, ['Sabtu','Minggu']))
+                    ? 'Libur'
+                    : 'Masuk';
 
-    JadwalLibur::create([
-        'perusahaan_id' => $request->perusahaan_id,
-        'hari_libur'    => $hariLibur,
-        'status'        => $status
-    ]);
+        JadwalLibur::create([
+            'perusahaan_id' => $request->perusahaan_id,
+            'hari_libur'    => $hariLibur,
+            'status'        => $status
+        ]);
 
-    return redirect()->route('superuser.jadwal-hari-libur.index')
-                     ->with('success', 'Jadwal libur berhasil ditambahkan.');
-}
+        return redirect()->route('superuser.jadwal-hari-libur.index')
+                         ->with('success', 'Jadwal libur berhasil ditambahkan.');
+    }
 
     public function edit($id)
     {
         $jadwal = JadwalLibur::findOrFail($id);
         $perusahaans = Perusahaan::all();
-
         return view('superuser.jadwal-hari-libur.edit', compact('jadwal', 'perusahaans'));
     }
 
     public function update(Request $request, $id)
-{
-    $request->validate([
-        'perusahaan_id' => 'required|exists:perusahaans,id',
-        'mulai_libur'   => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu',
-        'selesai_libur' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu',
-    ]);
+    {
+        $request->validate([
+            'perusahaan_id' => 'required|exists:perusahaans,kode_perusahaan',
+            'mulai_libur'   => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu',
+            'selesai_libur' => 'required|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu',
+        ]);
 
-    $hariLibur = $request->mulai_libur . '-' . $request->selesai_libur;
+        $hariLibur = $request->mulai_libur . '-' . $request->selesai_libur;
 
-    $status = (in_array($request->mulai_libur, ['Sabtu','Minggu']) || in_array($request->selesai_libur, ['Sabtu','Minggu']))
-                ? 'Libur'
-                : 'Masuk';
+        $status = (in_array($request->mulai_libur, ['Sabtu','Minggu']) || in_array($request->selesai_libur, ['Sabtu','Minggu']))
+                    ? 'Libur'
+                    : 'Masuk';
 
-    $jadwal = JadwalLibur::findOrFail($id);
-    $jadwal->update([
-        'perusahaan_id' => $request->perusahaan_id,
-        'hari_libur'    => $hariLibur,
-        'status'        => $status
-    ]);
+        $jadwal = JadwalLibur::findOrFail($id);
+        $jadwal->update([
+            'perusahaan_id' => $request->perusahaan_id,
+            'hari_libur'    => $hariLibur,
+            'status'        => $status
+        ]);
 
-    return redirect()->route('superuser.jadwal-hari-libur.index')
-                     ->with('success', 'Jadwal libur berhasil diperbarui.');
-}
+        return redirect()->route('superuser.jadwal-hari-libur.index')
+                         ->with('success', 'Jadwal libur berhasil diperbarui.');
+    }
 
     public function destroy($id)
     {
