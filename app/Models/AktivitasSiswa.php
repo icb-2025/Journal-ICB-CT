@@ -20,7 +20,7 @@ class AktivitasSiswa extends Model
 
     public function perusahaan()
 {
-    return $this->belongsTo(Perusahaan::class, 'perusahaan_id', 'kode_perusahaan');
+    return $this->belongsTo(Perusahaan::class, 'perusahaan_id', 'kode_perusahaan', 'perusahaan_kode_perusahaan');
 }
 
 

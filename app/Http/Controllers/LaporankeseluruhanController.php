@@ -166,5 +166,5 @@ class LaporankeseluruhanController extends Controller
 
         $pdf = Pdf::loadView('guru.laporan.export.export', compact('aktivitas'));
         return $pdf->download('aktivitas-siswa.pdf');
-    }
+}
 }

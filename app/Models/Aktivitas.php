@@ -29,12 +29,18 @@ class Aktivitas extends Model
 }
 
     public function perusahaan()
-    {
-        return $this->belongsTo(Perusahaan::class);
-    }
+{
+    // Jika kolom di aktivitas_siswas bernama 'perusahaan_id' dan PK perusahaan 'id'
+    return $this->belongsTo(Perusahaan::class, 'perusahaan_id', 'id');
+
+    // Jika kolom di aktivitas_siswas bernama 'kode_perusahaan' dan PK perusahaan 'kode_perusahaan'
+    // return $this->belongsTo(Perusahaan::class, 'kode_perusahaan', 'kode_perusahaan');
+}
+
 
     public function kategoriTugas()
     {
         return $this->belongsTo(KategoriTugas::class, 'kategori_tugas_id');
     }
+    
 }
