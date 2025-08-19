@@ -20,7 +20,7 @@
                     
                     <td class="px-4 py-3 border-r border-gray-100 hidden sm:table-cell">
                         @if ($perusahaanUser)
-                            <span class="font-medium text-gray-800">{{ $kodeBelakang }}</span>
+                                                                        <span class="font-semibold">{{ $kodeBelakang }}</span> - {{ $perusahaanUser->nama_industri }}
                         @else
                             <span class="text-red-500">-</span>
                         @endif
