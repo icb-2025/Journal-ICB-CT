@@ -2,6 +2,7 @@
 
 @section('title', 'Laporan Aktivitas Siswa')
 
+
 @section('content')
 <div class="container mx-auto px-4 py-6">
     <!-- Header Section -->
@@ -39,7 +40,17 @@
                         @endif
                     </select>
                 </div>
-                
+                <!-- filter perusahaan-->
+                <div>
+                    <label for="company" class="block text-sm font-medium text-gray-700 mb-1">Perusahaan</label>
+                    <select id="company" class="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                        <option value="">Semua Perusahaan</option>
+                        @foreach($perusahaans as $perusahaan)
+                            <option value="{{ $perusahaan->id }}">{{ $perusahaan->nama_industri }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                                                
                 <!-- Date Range Filter -->
                 <div>
                     <label for="start_date" class="block text-sm font-medium text-gray-700 mb-1">Tanggal Mulai</label>
@@ -94,6 +105,7 @@
 @endsection
 
 @push('styles')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
     .filter-transition {
         transition: all 0.3s ease-in-out;
@@ -114,6 +126,8 @@
 @endpush
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <script>
 $(document).ready(function() {
     // Toggle filter card
@@ -150,6 +164,7 @@ $(document).ready(function() {
     function fetchData() {
         const searchTerm = $('#search').val().trim();
         const department = $('#department').val();
+        const company = $('#company').val();
         const startDate = $('#start_date').val();
         const endDate = $('#end_date').val();
         
@@ -166,12 +181,19 @@ $(document).ready(function() {
             data: { 
                 search: searchTerm,
                 department_id: department,
+                perusahaan_id: company,
                 start_date: startDate,
                 end_date: endDate
             },
             success: function(response) {
                 if (response.success) {
                     $('#table-container').html(response.html);
+                    
+                    // Update company dropdown to maintain selection
+                    if (company) {
+                        $('#company').val(company);
+                    }
+                    
                     if(response.html.includes('pagination')) {
                         pagination.show();
                     } else {
@@ -189,6 +211,11 @@ $(document).ready(function() {
             }
         });
     }
+
+    // Company dropdown change (TIDAK menutup filter card lagi)
+    $('#company').change(function() {
+        fetchData();
+    });
 
     // Debounce function to limit API calls
     function debounce(func, wait) {
@@ -210,6 +237,7 @@ $(document).ready(function() {
     // Reset filters button
     $('#reset-filters').click(function() {
         $('#department').val('');
+        $('#company').val('').trigger('change'); // reset perusahaan juga
         $('#start_date').val('');
         $('#end_date').val('');
         fetchData();

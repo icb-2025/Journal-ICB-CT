@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Aktivitas;
 use App\Models\Jurusan;
+use App\Models\Perusahaan;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\AktivitasExport;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -36,6 +37,24 @@ class LaporankeseluruhanController extends Controller
             });
         }
 
+        // Company filter with live search
+        if ($request->filled('perusahaan_id')) {
+            if ($request->perusahaan_id === 'search') {
+                // Handle live search for companies
+                if ($request->filled('company_search')) {
+                    $companySearch = $request->company_search;
+                    $query->whereHas('perusahaan', function ($q) use ($companySearch) {
+                        $q->where('nama_industri', 'like', "%$companySearch%");
+                    });
+                }
+            } else {
+                // Normal company filter
+                $query->whereHas('perusahaan', function ($q) use ($request) {
+                    $q->where('id', $request->perusahaan_id);
+                });
+            }
+        }
+
         // Date range filter
         if ($request->filled('start_date')) {
             $query->where('tanggal', '>=', $request->start_date);
@@ -45,19 +64,23 @@ class LaporankeseluruhanController extends Controller
         }
 
         $aktivitas = $query->orderBy('tanggal', 'desc')
-                          ->orderBy('mulai', 'desc')
-                          ->paginate(10);
+                        ->orderBy('mulai', 'desc')
+                        ->paginate(10);
 
         $jurusans = Jurusan::orderBy('nama_jurusan')->get();
+        $perusahaans = $request->filled('company_search') 
+            ? Perusahaan::where('nama_industri', 'like', '%'.$request->company_search.'%')->get()
+            : Perusahaan::orderBy('nama_industri')->get();
 
         if ($request->ajax()) {
             return response()->json([
                 'success' => true,
-                'html' => view('guru.laporan.partials.table', compact('aktivitas'))->render()
+                'html' => view('guru.laporan.partials.table', compact('aktivitas'))->render(),
+                'companies' => $perusahaans
             ]);
         }
 
-        return view('guru.laporan.index', compact('aktivitas', 'jurusans'));
+        return view('guru.laporan.index', compact('aktivitas', 'jurusans', 'perusahaans'));
     }
 
     public function exportExcel(Request $request)
@@ -81,6 +104,12 @@ class LaporankeseluruhanController extends Controller
         if ($request->filled('department_id')) {
             $query->whereHas('siswa.jurusan', function ($q) use ($request) {
                 $q->where('id', $request->department_id);
+            });
+        }
+
+        if ($request->filled('perusahaan_id')) {
+            $query->whereHas('perusahaan', function ($q) use ($request) {
+                $q->where('id', $request->perusahaan_id);
             });
         }
 
@@ -117,6 +146,12 @@ class LaporankeseluruhanController extends Controller
         if ($request->filled('department_id')) {
             $query->whereHas('siswa.jurusan', function ($q) use ($request) {
                 $q->where('id', $request->department_id);
+            });
+        }
+
+        if ($request->filled('perusahaan_id')) {
+            $query->whereHas('perusahaan', function ($q) use ($request) {
+                $q->where('id', $request->perusahaan_id);
             });
         }
 
