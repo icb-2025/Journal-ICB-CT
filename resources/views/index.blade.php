@@ -1,6 +1,6 @@
 @extends('layouts.user')
 
-@section('title', 'Input Kegiatan')
+@section('title', 'Dashboard')
 
 @section('content')
 @php

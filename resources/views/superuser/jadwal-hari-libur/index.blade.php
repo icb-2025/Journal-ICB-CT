@@ -1,6 +1,6 @@
 @extends('layouts.super')
 
-@section('title', 'Data-Liburan')
+@section('title', 'Data Liburan')
 
 @section('content')
 <div class="space-y-6">
