@@ -8,7 +8,10 @@ use Illuminate\Support\Str;
 class Perusahaan extends Model
 {
     use HasFactory;
-     protected $table = 'perusahaans';
+    protected $table = 'perusahaans';
+    protected $primaryKey = 'kode_perusahaan'; // ✅ kasih tau Laravel
+    public $incrementing = false;              // ✅ karena bukan integer auto increment
+    protected $keyType = 'string';
 
     protected $fillable = [
         'kode_perusahaan',

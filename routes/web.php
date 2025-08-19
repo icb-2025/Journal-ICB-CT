@@ -44,7 +44,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-Route::get('/', [AktivitasSiswaController::class, 'create'])->name('index');
+Route::get('/', [AktivitasSiswaController::class, 'index'])->name('index');
 
 Route::get('/users', [UsersController::class, 'index'])
     ->name('users');

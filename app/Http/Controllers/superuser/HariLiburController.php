@@ -53,10 +53,10 @@ class HariLiburController extends Controller
         return $item;
     }
 
-    // Cek range hari libur perusahaan
-    $parts = explode('-', $item->hari_libur);
-    $mulai = $parts[0];
-    $selesai = $parts[1] ?? $parts[0];
+    // ✅ Pecah string hari libur dari DB
+    $parts   = explode('-', $item->hari_libur);
+    $mulai   = ucfirst(strtolower(trim($parts[0])));
+    $selesai = ucfirst(strtolower(trim($parts[1] ?? $parts[0])));
 
     $startIndex = array_search($mulai, $hariList);
     $endIndex   = array_search($selesai, $hariList);
@@ -73,9 +73,12 @@ class HariLiburController extends Controller
         }
     }
 
-    $item->status = in_array($hariIni, $range) ? 'Libur (Perusahaan)' : 'Masuk';
+    \Log::info("Hari ini: {$hariIni}, Jadwal DB: {$item->hari_libur}, Range: " . implode(',', $range));
+
+    $item->status = in_array($hariIni, $range) ? 'Libur (Perusahaan)' : 'Libur';
     return $item;
 });
+
 
 
         $perusahaan = Perusahaan::all();
@@ -99,15 +102,9 @@ class HariLiburController extends Controller
 
         $hariLibur = $request->mulai_libur . '-' . $request->selesai_libur;
 
-        // Status default: Sabtu/Minggu libur, selain itu masuk
-        $status = (in_array($request->mulai_libur, ['Sabtu','Minggu']) || in_array($request->selesai_libur, ['Sabtu','Minggu']))
-                    ? 'Libur'
-                    : 'Masuk';
-
         JadwalLibur::create([
             'perusahaan_id' => $request->perusahaan_id,
             'hari_libur'    => $hariLibur,
-            'status'        => $status
         ]);
 
         return redirect()->route('superuser.jadwal-hari-libur.index')
@@ -131,15 +128,11 @@ class HariLiburController extends Controller
 
         $hariLibur = $request->mulai_libur . '-' . $request->selesai_libur;
 
-        $status = (in_array($request->mulai_libur, ['Sabtu','Minggu']) || in_array($request->selesai_libur, ['Sabtu','Minggu']))
-                    ? 'Libur'
-                    : 'Masuk';
 
         $jadwal = JadwalLibur::findOrFail($id);
         $jadwal->update([
             'perusahaan_id' => $request->perusahaan_id,
             'hari_libur'    => $hariLibur,
-            'status'        => $status
         ]);
 
         return redirect()->route('superuser.jadwal-hari-libur.index')
