@@ -11,6 +11,23 @@ use App\Http\Controllers\AktivitasSiswaController;
 use App\Http\Controllers\LaporankeseluruhanController; 
 use App\Http\Controllers\superuser\DataPerusahaanController as SuperuserDataPerusahaanController;
 
+
+
+// routes/web.php
+Route::prefix('guru')->middleware(['auth', 'role:guru'])->group(function() {
+    // ... route lainnya
+    
+    // Tambahkan route untuk export
+    Route::get('/data-siswa/export/excel', [DataSiswaController::class, 'exportExcel'])
+        ->name('guru.data-siswa.export.excel');
+    
+    Route::get('/data-siswa/export/pdf', [DataSiswaController::class, 'exportPdf'])
+        ->name('guru.data-siswa.export.pdf');
+});
+
+Route::prefix('laporan')->group(function() {
+    Route::get('/', [LaporankeseluruhanController::class, 'index'])->name('laporan.index');
+});
 Route::middleware(['auth'])->group(function () {
     Route::prefix('laporan')->group(function() {
     Route::get('/', [LaporankeseluruhanController::class, 'index'])->name('laporan.index');

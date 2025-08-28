@@ -14,24 +14,22 @@ class LaporankeseluruhanController extends Controller
     {
         $query = Aktivitas::with(['siswa', 'perusahaan', 'kategoriTugas']);
         
-        if ($request->has('search')) {
+        if ($request->has('search') && !empty($request->search)) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
-                $q->whereHas('siswa', function($q) use ($search) {
-                    $q->where('name', 'like', "%$search%");
-                })
-                ->orWhereHas('perusahaan', function($q) use ($search) {
-                    $q->where('nama_industri', 'like', "%$search%");
-                })
-                ->orWhere('deskripsi', 'like', "%$search%")
-                ->orWhere('tanggal', 'like', "%$search%");
+            $query->whereHas('siswa', function($q) use ($search) {
+                $q->where('name', 'like', "%$search%");
             });
         }
         
-        $aktivitas = $query->latest()->paginate(10);
+        $aktivitas = $query->orderBy('tanggal', 'desc')
+                        ->orderBy('mulai', 'desc')
+                        ->paginate(10);
         
         if ($request->ajax()) {
-            return view('guru.laporan.partials.table', compact('aktivitas'))->render();
+            return response()->json([
+                'success' => true,
+                'html' => view('guru.laporan.partials.table', compact('aktivitas'))->render()
+            ]);
         }
         
         return view('guru.laporan.index', compact('aktivitas'));
