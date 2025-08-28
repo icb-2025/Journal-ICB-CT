@@ -9,6 +9,7 @@ use App\Http\Controllers\KegiatanController;
 use App\Http\Controllers\Guru\KategoriTugasController;
 use App\Http\Controllers\AktivitasSiswaController;
 use App\Http\Controllers\LaporankeseluruhanController; 
+use App\Http\Controllers\superuser\DataPerusahaanController as SuperuserDataPerusahaanController;
 
 Route::middleware(['auth'])->group(function () {
     Route::prefix('laporan')->group(function() {
@@ -43,7 +44,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/superuser/data-user', fn() => view('superuser.data-user.index'))->name('superuser.data-user.index');
         Route::get('/superuser/laporan', [LaporankeseluruhanController::class, 'index'])->name('superuser.laporan.index');
         Route::resource('data-siswa', DataSiswaController::class);
-        Route::resource('data-perusahaan', DataPerusahaanController::class);
+        Route::get('/superuser/data-perusahaan', [SuperuserDataPerusahaanController::class, 'index'])->name('superuser.data-perusahaan.index');
+        Route::resource('data-perusahaan', SuperuserDataPerusahaanController::class)->names('data-perusahaan');
         Route::resource('data-user', UserController::class)->names('data-user');
         Route::resource('data-kategori', KategoriTugasController::class)->names('data-kategori');
     });
