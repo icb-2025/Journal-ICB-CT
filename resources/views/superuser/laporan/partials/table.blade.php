@@ -53,7 +53,10 @@
                             $badgeColor = 'bg-red-300 text-red-800';
                         } elseif ($status == 'izin') {
                             $badgeColor = 'bg-yellow-300 text-yellow-800';
+                        } elseif ($status == 'alpa') {
+                            $badgeColor = 'bg-gray-300 text-gray-800';
                         }
+
                     @endphp
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                         <span class="inline-block px-3 py-1 rounded-full font-semibold {{ $badgeColor }}">

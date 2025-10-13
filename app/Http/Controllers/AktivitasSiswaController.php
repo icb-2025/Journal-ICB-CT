@@ -10,15 +10,76 @@ use Illuminate\Support\Str;
 use App\Events\AktivitasSiswaUpdated;
 use Illuminate\Database\QueryException;
 use App\Http\Controllers\Superuser\DashboardController;
-
+use App\Models\Siswa;
+use App\Models\JadwalLibur;
+use Carbon\Carbon;
 class AktivitasSiswaController extends Controller
 {
 
-    public function index()
+    
+public function index()
 {
-    $aktivitas = AktivitasSiswa::with(['perusahaan', 'kategoriTugas', 'siswa'])->get();
+    $tanggalHariIni = Carbon::now()->toDateString();
+    $jamSekarang    = Carbon::now()->format('H:i');
 
-    return view('guru.laporan.index', compact('aktivitas'));
+    $user = auth()->user();
+    $kodePerusahaan = $user->kode_perusahaan;
+
+    // Ambil jadwal libur untuk perusahaan ini
+    $jadwalLibur = JadwalLibur::whereHas('perusahaan', function($q) use ($kodePerusahaan) {
+        $q->where('kode_perusahaan', $kodePerusahaan);
+    })->get();
+
+    $hariList = ['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'];
+    $hariIni  = $hariList[date('N') - 1];
+
+    // Tentukan status hari ini
+    $statusHariIni = 'Masuk';
+    foreach ($jadwalLibur as $jadwal) {
+        $parts = explode('-', $jadwal->hari_libur);
+        $mulai = $parts[0];
+        $selesai = $parts[1] ?? $parts[0];
+
+        $startIndex = array_search($mulai, $hariList);
+        $endIndex   = array_search($selesai, $hariList);
+
+        $range = ($startIndex <= $endIndex)
+            ? array_slice($hariList, $startIndex, $endIndex - $startIndex + 1)
+            : array_merge(
+                array_slice($hariList, $startIndex),
+                array_slice($hariList, 0, $endIndex + 1)
+              );
+
+        if (in_array($hariIni, $range)) {
+            $statusHariIni = 'Libur';
+            break;
+        }
+    }
+
+    // Ambil semua siswa + aktivitas mereka hari ini
+    $siswaList = Siswa::with(['aktivitas' => function($q) use ($tanggalHariIni) {
+        $q->where('tanggal', $tanggalHariIni);
+    }])
+    ->where('kode_perusahaan', $kodePerusahaan)
+    ->get();
+
+    foreach ($siswaList as $siswa) {
+        if ($statusHariIni === 'Masuk') {
+            if ($siswa->aktivitas->isEmpty()) {
+                $siswa->status_otomatis = ($jamSekarang >= '21:00') ? 'Alpa' : '-';
+            } else {
+                $siswa->status_otomatis = $siswa->aktivitas->first()->status;
+            }
+        } else {
+            $siswa->status_otomatis = '-';
+        }
+    }
+
+    return view('guru.laporan.index', [
+        'siswaList' => $siswaList,
+        'statusHariIni' => $statusHariIni,
+        'tanggalHariIni' => $tanggalHariIni
+    ]);
 }
 
    public function create()
