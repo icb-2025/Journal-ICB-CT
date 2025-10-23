@@ -1,142 +1,115 @@
 Journal-ICB-CT
-A Laravel-based Journal Management System for Computational Biology & Technology
+Sistem Manajemen Jurnal berbasis Laravel untuk Biologi Komputasional & Teknologi
 
-📌 Overview
-Journal-ICB-CT is a web-based journal management system designed for publishing and managing research articles in Computational Biology and Technology (CT). Built with Laravel and MySQL, this platform provides an efficient workflow for article submission, peer review, and publication.
+📌 Ikhtisar
+Journal-ICB-CT adalah sistem manajemen jurnal berbasis web yang dirancang untuk menerbitkan dan mengelola artikel penelitian dalam bidang Biologi Komputasional dan Teknologi (CT). Dibangun dengan Laravel dan MySQL, platform ini menyediakan alur kerja yang efisien untuk pengiriman artikel, penelaahan sejawat, dan publikasi.
 
-The system supports three user roles:
+Sistem ini mendukung tiga peran pengguna:
 
-Super Admin (Full access to all features)
+Super Admin (Akses penuh ke semua fitur)
+Guru/Penelaah (Akses ke pengiriman, ulasan, dan laporan)
+Siswa/Penulis (Mengirim artikel, melacak kemajuan, dan mengelola profil)
+✨ Fitur Utama
+✅ Kontrol Akses Multi-Peran
 
-Teacher/Reviewer (Access to submissions, reviews, and reports)
+Super Admin: Kontrol sistem penuh (pengguna, pengaturan, log).
+Guru/Penelaah: Akses ke Dashboard, Data Perusahaan, Data Siswa, Kategori, Laporan, dan Profil.
+Siswa/Penulis: Akses ke Dashboard, Profil, Manajemen Pengguna, dan Pencatatan Aktivitas.
+✅ Manajemen Artikel
 
-Student/Author (Submit articles, track progress, and manage profile)
+Mengirim, meninjau, dan menerbitkan artikel.
+Melacak status pengiriman (Tertunda, Dalam Tinjauan, Diterima, Ditolak).
+✅ Dashboard Interaktif
 
-✨ Key Features
-✅ Multi-Role Access Control
+Visualisasi data dengan Chart.js.
+Notifikasi real-time melalui Pusher & Laravel Echo.
+✅ UI Responsif
 
-Super Admin: Full system control (users, settings, logs).
+Dibangun dengan Tailwind CSS, Alpine.js, dan Font Awesome.
+Pengiriman CDN yang dioptimalkan melalui Bunny Fonts, jsDelivr, Cloudflare, dan jQuery CDN.
+✅ Keamanan & Kinerja
 
-Teacher/Reviewer: Access to Dashboard, Company Data, Student Data, Categories, Reports, and Profile.
+Autentikasi aman & izin berbasis peran.
+Dihosting di Railway untuk skalabilitas.
 
-Student/Author: Access to Dashboard, Profile, User Management, and Activity Logging.
 
-✅ Article Management
+🛠️ Teknologi yang Digunakan
 
-Submit, review, and publish articles.
+| Kategori | Teknologi yang Digunakan |
+|----------|--------------------------|
+| Backend  | Laravel, PHP, MySQL |
+| Frontend | Alpine.js, Tailwind CSS, jQuery |
+| UI/UX    | Font Awesome, Bunny Fonts |
+| Grafik   | Chart.js |
+| Real-Time| Pusher, Laravel Echo |
+| Notifikasi | SweetAlert |
+| API      | Axios |
+| Hosting  | Railway |
+| CDN      | Cloudflare, Bunny, jsDelivr, jQuery CDN |
 
-Track submission status (Pending, Under Review, Accepted, Rejected).
 
-✅ Interactive Dashboard
+👥 Peran Pengguna & Izin
 
-Data visualization with Chart.js.
+Super Admin
+1.🔐 Akses sistem penuh
+👥 Kelola pengguna (Guru & Siswa)
 
-Real-time notifications via Pusher & Laravel Echo.
+⚙️ Konfigurasi pengaturan sistem
 
-✅ Responsive UI
+📊 Lihat semua laporan & log
 
-Built with Tailwind CSS, Alpine.js, and Font Awesome.
-
-Optimized CDN delivery via Bunny Fonts, jsDelivr, Cloudflare, and jQuery CDN.
-
-✅ Security & Performance
-
-Secure authentication & role-based permissions.
-
-Hosted on Railway for scalability.
-
-🛠️ Tech Stack
-Category	Technologies Used
-Backend	Laravel, PHP, MySQL
-Frontend	Alpine.js, Tailwind CSS, jQuery
-UI/UX	Font Awesome, Bunny Fonts
-Charts	Chart.js
-Real-Time	Pusher, Laravel Echo
-Alerts	SweetAlert
-APIs	Axios
-Hosting	Railway
-CDN	Cloudflare, Bunny, jsDelivr, jQuery CDN
-👥 User Roles & Permissions
-1. Super Admin
-🔐 Full system access
-
-👥 Manage users (Teachers & Students)
-
-⚙️ Configure system settings
-
-📊 View all reports & logs
-
-2. Teacher/Reviewer
-📂 Access:
-
+2.Guru/Penelaah
+📂 Akses:
 Dashboard
+Data Perusahaan
+Data Siswa
+Kategori
+Laporan
+Profil
+✏️ Meninjau & menyetujui/menolak pengiriman
 
-Company Data
-
-Student Data
-
-Categories
-
-Reports
-
-Profile
-
-✏️ Review & approve/reject submissions
-
-3. Student/Author
-📂 Access:
-
+3.Siswa/Penulis
+📂 Akses:
 Dashboard
+Profil
+Manajemen Pengguna (terbatas)
+Pencatatan Aktivitas (input kegiatan)
+📄 Mengirim & melacak artikel
 
-Profile
+🚀 Instalasi
 
-User Management (limited)
-
-Activity Logging (input kegiatan)
-
-📄 Submit & track articles
-
-🚀 Installation
-Clone the repository
-
-bash
+1.Klon repositori
 git clone https://github.com/icb-2025/Journal-ICB-CT.git
 cd journal-icb-ct
-Install dependencies
 
-bash
+2.Instal dependensi
 composer install
 npm install
-Configure environment
 
-Copy .env.example to .env
+3.Konfigurasi lingkungan
+Salin .env.example ke .env
+Atur kunci MySQL, Pusher, dan Cloudflare CDN.
 
-Set up MySQL, Pusher, and Cloudflare CDN keys.
-
-Run migrations & seed dummy data
-
-bash
+4.Jalankan migrasi & seeding data dummy
 php artisan migrate --seed
-Start the development server
 
-bash
+5.Mulai server pengembangan
 php artisan serve
 npm run dev
-🔗 Live Demo
-🌐 Website: https://journal-icb-ct-production.up.railway.app
 
-📧 Contact
+🔗 Demo Langsung
+🌐 Situs Web: https://journal-icb-ct-production.up.railway.app
+
+📧 Kontak
 📧 Email: arifiputrafaqih@gmail.com
-🔗 Issue Tracker: GitHub Issues
+🔗 Pelacak Masalah: GitHub Issues
 
-📜 License
-MIT Licensed. © 2025 Journal-ICB-CT
+📜 Lisensi
+-Berlisensi MIT. © 2025 Journal-ICB-CT
 
-🎯 Future Improvements
-AI-based plagiarism checker
+🎯 Peningkatan Masa Depan
 
-Mobile app integration
-
-Crossref DOI integration
-
-🚀 Happy Researching! 🎓📚
+-Pemeriksa plagiarisme berbasis AI
+-Integrasi aplikasi seluler
+-Integrasi Crossref DOI
+🚀 Selamat Meneliti! 🎓📚
