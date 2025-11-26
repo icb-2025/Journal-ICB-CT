@@ -14,7 +14,7 @@ class UserSeeder extends Seeder // jalankan ini jika ingin menambah php artisan 
         User::create([
             'name' => 'Super User',
             'email' => 'superuser@example.com',
-            'password' => Hash::make('password'),
+            'password' => '12345678',
             'role' => 'superuser',
         ]);
 

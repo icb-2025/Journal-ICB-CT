@@ -105,6 +105,7 @@ class HariLiburController extends Controller
         JadwalLibur::create([
             'perusahaan_id' => $request->perusahaan_id,
             'hari_libur'    => $hariLibur,
+            'status' => 'active'
         ]);
 
         return redirect()->route('superuser.jadwal-hari-libur.index')
