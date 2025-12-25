@@ -9,7 +9,6 @@ class JadwalLibur extends Model
     protected $table = 'jadwal_libur';
     protected $fillable = ['perusahaan_id', 'hari_libur', 'status'];
 
-    // App\Models\JadwalLibur.php
 public function perusahaan()
 {
     return $this->belongsTo(Perusahaan::class, 'perusahaan_id', 'kode_perusahaan');

@@ -15,12 +15,6 @@
             <label class="block mb-1 font-semibold">Deskripsi</label>
             <textarea name="deskripsi" class="w-full border rounded px-3 py-2"></textarea>
         </div>
-        <div class="mb-4">
-    <label class="block mb-1 font-semibold">Kata Kunci (dipisahkan dengan koma)</label>
-    <textarea name="keywords" class="w-full border rounded px-3 py-2">{{ old('keywords', $kategori->keywords ?? '') }}</textarea>
-    <p class="text-sm text-gray-500 mt-1">Contoh: belajar, membaca, coding, latihan</p>
-</div>
-
         <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Simpan</button>
     </form>
 </div>

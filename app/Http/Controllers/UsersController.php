@@ -9,10 +9,8 @@ class UsersController extends Controller
 {
     public function index()
     {
-        // Ambil NIS user yang login
         $nis = Auth::user()->nisn;
 
-        // Ambil siswa berdasarkan NIS tersebut
         $siswas = Siswa::with('jurusan')
             ->where('nis', $nis)
             ->paginate(10);

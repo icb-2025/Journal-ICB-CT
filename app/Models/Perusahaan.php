@@ -9,8 +9,8 @@ class Perusahaan extends Model
 {
     use HasFactory;
     protected $table = 'perusahaans';
-    protected $primaryKey = 'kode_perusahaan'; // ✅ kasih tau Laravel
-    public $incrementing = false;              // ✅ karena bukan integer auto increment
+    protected $primaryKey = 'kode_perusahaan'; 
+    public $incrementing = false;  
     protected $keyType = 'string';
 
     protected $fillable = [

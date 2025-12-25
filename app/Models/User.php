@@ -35,13 +35,11 @@ class User extends Authenticatable
         ];
     }
 
-    // Relasi ke perusahaan
     public function perusahaan()
     {
         return $this->belongsTo(Perusahaan::class, 'kode_perusahaan', 'kode_perusahaan');
     }
 
-    // Relasi ke user yang menginput
     public function inputBy()
     {
         return $this->belongsTo(User::class, 'input_by');
@@ -50,10 +48,9 @@ class User extends Authenticatable
     // Relasi ke tabel siswa
     public function siswa()
     {
-        return $this->hasOne(Siswa::class, 'nis', 'nisn'); // sesuaikan field-nya
+        return $this->hasOne(Siswa::class, 'nis', 'nisn'); 
     }
 
-    // Relasi ke jurusan (berdasarkan nama_jurusan di tabel users)
     public function jurusan()
     {
         return $this->belongsTo(Jurusan::class, 'nama_jurusan', 'nama_jurusan');

@@ -43,7 +43,7 @@ class AktivitasSiswaController extends Controller
     'aktivitasSiswa'     => $aktivitasSiswa,
     'isLibur'            => str_contains(strtolower($statusHariIni), 'libur'),
     'statusDefault'      => str_contains(strtolower($statusHariIni), 'libur') ? 'libur' : 'masuk',
-    'kodeBelakang'       => $perusahaanUser?->kode_perusahaan, // ✅ tambahkan ini
+    'kodeBelakang'       => $perusahaanUser?->kode_perusahaan, 
 ]);
 
 
@@ -124,7 +124,7 @@ class AktivitasSiswaController extends Controller
             }
         }
 
-        return null; // fallback
+        return null;
     }
 
     private function getStatusHariIni($user)
@@ -135,7 +135,6 @@ class AktivitasSiswaController extends Controller
 
         $statusHariIni = 'Masuk';
 
-        // 🔹 Cek libur nasional dari API
         try {
             $response = file_get_contents('https://api-harilibur.vercel.app/api');
             $holidays = json_decode($response, true);

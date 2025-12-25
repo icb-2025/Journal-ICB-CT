@@ -8,16 +8,16 @@
         @csrf
         @method('PUT')
 
-        <div>
-            <label class="block text-sm font-medium">Perusahaan</label>
-            <select name="perusahaan_id" class="w-full border rounded">
-                @foreach($perusahaans as $p)
-                    <option value="{{ $p->id }}" {{ $jadwal->perusahaan_id == $p->id ? 'selected' : '' }}>
-                        {{ $p->nama_industri }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+      <div>
+    <label class="block text-sm font-medium">Perusahaan</label>
+<select name="perusahaan_id" class="w-full border rounded">
+    @foreach($perusahaans as $p)
+        <option value="{{ $p->kode_perusahaan }}" {{ $jadwal->perusahaan_id == $p->kode_perusahaan ? 'selected' : '' }}>
+            {{ $p->nama_industri }}
+        </option>
+    @endforeach
+</select>
+</div>
         @php
     [$mulai, $selesai] = explode('-', $jadwal->hari_libur);
 @endphp

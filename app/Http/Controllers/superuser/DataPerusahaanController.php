@@ -31,9 +31,8 @@ class DataPerusahaanController extends Controller
             'nama_pembimbing' => 'required|string|max:255',
         ]);
 
-        // Tetapkan kode perusahaan hanya sekali di sini
-        $bulanTahun = now()->format('Ym'); // Format: 202507
-        $random = strtoupper(Str::random(5)); // Contoh: H7G8D
+        $bulanTahun = now()->format('Ym'); 
+        $random = strtoupper(Str::random(5));
 
         $validated['kode_perusahaan'] = 'KODE-' . $bulanTahun . '-' . $random;
         $validated['input_by'] = auth()->id();
@@ -59,7 +58,6 @@ class DataPerusahaanController extends Controller
             'nama_pembimbing' => 'required|string|max:255',
         ]);
 
-        // Pastikan kode_perusahaan tidak ikut terupdate
         $data_perusahaan->update($validated);
 
         return redirect()->route('superuser.data-perusahaan.index')->with('success', 'Data perusahaan berhasil diperbarui.');

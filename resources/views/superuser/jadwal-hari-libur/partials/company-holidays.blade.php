@@ -69,40 +69,42 @@
                 <th class="px-6 py-3 text-xs font-medium text-right text-gray-500 uppercase">Aksi</th>
             </tr>
         </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-            @forelse($jadwal as $item)
-                <tr>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="font-medium">{{ $item->perusahaan->nama_perusahaan}}</div>
-<div class="text-sm text-gray-500">{{ $item->perusahaan->nama_industri}}</div>
-
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">{{ $item->hari_libur }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="inline-flex px-2 text-xs font-semibold leading-5 
-                            {{ $item->status == 'Libur' ? 'text-red-800 bg-red-100' : 'text-green-800 bg-green-100' }} rounded-full">
-                            {{ $item->status }}
-                        </span>
-                    </td>
-                    <td class="px-6 py-4 text-right whitespace-nowrap">
-                        <a href="{{ route('superuser.jadwal-hari-libur.edit', $item->id) }}" class="p-1 text-indigo-600 hover:text-indigo-900">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <form id="delete-form-{{ $item->id }}" action="{{ route('superuser.jadwal-hari-libur.destroy', $item->id) }}" method="POST" class="inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="button" class="p-1 ml-2 text-red-600 hover:text-red-900" onclick="confirmDelete({{ $item->id }})">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="4" class="px-6 py-4 text-center text-gray-500">Tidak ada data</td>
-                </tr>
-            @endforelse
-        </tbody>
+        <!-- ... bagian tabel lainnya ... -->
+<tbody class="bg-white divide-y divide-gray-200">
+    @forelse($jadwal as $item)
+        <tr>
+            <td class="px-6 py-4 whitespace-nowrap">
+                {{-- PERBAIKAN: Gunakan 'nama_industri' dan tambahkan pemeriksaan null --}}
+                <div class="font-medium">{{ $item->perusahaan->nama_industri ?? 'Perusahaan tidak ditemukan' }}</div>
+                <div class="text-sm text-gray-500">{{ $item->perusahaan->kode_unik ?? 'Kode tidak ada' }}</div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ $item->hari_libur }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+                <span class="inline-flex px-2 text-xs font-semibold leading-5 
+                    {{ $item->status == 'Libur' ? 'text-red-800 bg-red-100' : 'text-green-800 bg-green-100' }} rounded-full">
+                    {{ $item->status }}
+                </span>
+            </td>
+            <td class="px-6 py-4 text-right whitespace-nowrap">
+                <a href="{{ route('superuser.jadwal-hari-libur.edit', $item->id) }}" class="p-1 text-indigo-600 hover:text-indigo-900">
+                    <i class="fas fa-edit"></i>
+                </a>
+                <form id="delete-form-{{ $item->id }}" action="{{ route('superuser.jadwal-hari-libur.destroy', $item->id) }}" method="POST" class="inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="button" class="p-1 ml-2 text-red-600 hover:text-red-900" onclick="confirmDelete({{ $item->id }})">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </form>
+            </td>
+        </tr>
+    @empty
+        <tr>
+            <td colspan="4" class="px-6 py-4 text-center text-gray-500">Tidak ada data</td>
+        </tr>
+    @endforelse
+</tbody>
+<!-- ... bagian tabel lainnya ... -->
     </table>
 </div>
 

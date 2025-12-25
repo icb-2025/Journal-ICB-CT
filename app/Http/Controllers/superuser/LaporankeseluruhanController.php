@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Superuser;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Aktivitas; // Pastikan model Aktivitas ada
+use App\Models\Aktivitas;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\AktivitasExport;
-use Barryvdh\DomPDF\Facade\Pdf; // Perbaikan import PDF
+use Barryvdh\DomPDF\Facade\Pdf; 
 use App\Models\Perusahaan;
 use App\Models\Jurusan;
 

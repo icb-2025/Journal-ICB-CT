@@ -147,7 +147,7 @@ class DataSiswaController extends Controller
 
     private function getFilteredQuery(Request $request)
     {
-        return Siswa::with('jurusan') // <- penting ini supaya jurusan ikut eager load
+        return Siswa::with('jurusan') 
             ->when($request->filled('search'), function($query) use ($request) {
                 $query->where(function($q) use ($request) {
                     $q->where('nama_lengkap', 'like', '%'.$request->search.'%')

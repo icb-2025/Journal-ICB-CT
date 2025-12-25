@@ -17,27 +17,24 @@ class DataPerusahaanController extends Controller
     $perusahaans = Perusahaan::with('user')->get();
 
     foreach ($perusahaans as $perusahaan) {
-        // Ambil kode sekarang
         $kode = $perusahaan->kode_perusahaan;
         $parts = explode('-', $kode);
 
         if (count($parts) === 3) {
-            $kodePrefix = $parts[0];     // "KODE"
-            $kodeBulan = $parts[1];      // contoh: "202507"
-            $kodeRandom = $parts[2];     // contoh: "H4GTTJX7"
+            $kodePrefix = $parts[0];    
+            $kodeBulan = $parts[1];   
+            $kodeRandom = $parts[2];     
 
-            $currentMonth = now()->format('Ym'); // "202508"
+            $currentMonth = now()->format('Ym'); 
 
-            // Jika bulan kode berbeda dengan bulan sekarang
             if ($kodeBulan !== $currentMonth) {
                 $kodeBaru = $kodePrefix . '-' . $currentMonth . '-' . strtoupper(Str::random(8));
                 $perusahaan->kode_perusahaan = $kodeBaru;
-                $perusahaan->save(); // simpan perubahan ke database
+                $perusahaan->save(); 
             }
         }
     }
 
-    // Ambil ulang hasil paginasi
     $paginated = Perusahaan::with('user')->oldest()->paginate(10);
 
     return view('guru.data-perusahaan.index', ['perusahaans' => $paginated]);
@@ -60,14 +57,10 @@ class DataPerusahaanController extends Controller
         'nama_pembimbing' => 'required|string|max:255',
     ]);
 
-    // Format kode: KODE-YYYYMM-ABCDE
-    // $bulanTahun = now()->format('Ym'); // Contoh: 202507
-
-    // Untuk testing: anggap sekarang adalah 1 Agustus 2025
-$bulanTahun = \Carbon\Carbon::create(2025, 10, 1)->format('Ym'); // hasil: 202508
+$bulanTahun = \Carbon\Carbon::create(2025, 10, 1)->format('Ym');
 
 
-    $random = strtoupper(Str::random(5)); // 5 huruf acak
+    $random = strtoupper(Str::random(5));
 
     $validated['kode_perusahaan'] = 'KODE-' . $bulanTahun . '-' . $random;
     $validated['input_by'] = auth()->id();

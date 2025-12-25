@@ -25,9 +25,6 @@
                                 <h3 class="text-2xl font-bold text-white">{{ $siswa->nama_lengkap }}</h3>
                                 <p class="text-blue-100 mt-1">NIS: {{ $siswa->nis }}</p>
                             </div>
-                            <div class="flex items-center space-x-2">
-                                <span class="px-3 py-1 bg-white bg-opacity-20 rounded-full text-white text-sm font-medium">{{ $siswa->jurusan->nama_jurusan ?? 'Belum ditentukan' }}</span>
-                            </div>
                         </div>
                     </div>
 

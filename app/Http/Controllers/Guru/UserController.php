@@ -11,9 +11,7 @@ use Carbon\Carbon;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the users.
-     */
+
     public function index()
     {
         $users = User::with('inputBy')->paginate(10);
@@ -23,18 +21,14 @@ class UserController extends Controller
         return view('guru.data-user.index', compact('users', 'perusahaans'));
     }
 
-    /**
-     * Show the form for creating a new user.
-     */
+
     public function create()
     {
         $perusahaans = Perusahaan::all();
         return view('guru.data-user.create', compact('perusahaans'));
     }
 
-    /**
-     * Store a newly created user in storage.
-     */
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -45,7 +39,6 @@ class UserController extends Controller
             'kode_perusahaan' => 'nullable|string',
         ]);
 
-        // Otomatis isi '-' jika role superuser/guru
         if (in_array($request->role, ['superuser', 'guru'])) {
             $validated['kode_perusahaan'] = '-';
         }
@@ -63,18 +56,11 @@ class UserController extends Controller
         return redirect()->route('guru.data-user.index')->with('success', 'User berhasil ditambahkan.');
     }
 
-    /**
-     * Show the form for editing the specified user.
-     */
    public function edit(User $data_user)
 {
     return view('guru.data-user.edit', ['user' => $data_user]);
 }
 
-
-    /**
-     * Update the specified user in storage.
-     */
     public function update(Request $request, User $data_user)
 {
     $validated = $request->validate([
@@ -88,7 +74,7 @@ class UserController extends Controller
     if ($request->filled('password')) {
         $validated['password'] = bcrypt($request->password);
     } else {
-        unset($validated['password']); // jika kosong, jangan update password
+        unset($validated['password']); 
     }
 
     $validated['input_by'] = auth()->id();
@@ -99,10 +85,6 @@ class UserController extends Controller
     return redirect()->route('guru.data-user.index')->with('success', 'User berhasil diupdate.');
 }
 
-
-    /**
-     * Remove the specified user from storage.
-     */
     public function destroy(User $data_user)
 {
     $data_user->delete();

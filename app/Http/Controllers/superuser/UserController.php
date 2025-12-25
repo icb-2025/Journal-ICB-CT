@@ -12,9 +12,6 @@ use App\Models\Jurusan;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the users.
-     */
     public function index()
     {
         $users = User::with('inputBy')->paginate(10);
@@ -25,9 +22,6 @@ class UserController extends Controller
         return view('superuser.data-user.index', compact('users', 'perusahaans', 'jurusans'));
     }
 
-    /**
-     * Show the form for creating a new user.
-     */
     public function create()
     {
         $perusahaans = Perusahaan::all();
@@ -35,9 +29,6 @@ class UserController extends Controller
         return view('superuser.data-user.create', compact('perusahaans', 'jurusans'));
     }
 
-    /**
-     * Store a newly created user in storage.
-     */
    public function store(Request $request)
 {
     $validated = $request->validate([
@@ -82,19 +73,12 @@ class UserController extends Controller
     return redirect()->route('superuser.data-user.index')->with('success', 'User berhasil ditambahkan.');
 }
 
-
-    /**
-     * Show the form for editing the specified user.
-     */
    public function edit(User $data_user)
 {
     return view('superuser.data-user.edit', ['user' => $data_user]);
 }
 
 
-    /**
-     * Update the specified user in storage.
-     */
     public function update(Request $request, User $data_user)
 {
     $validated = $request->validate([
@@ -108,7 +92,7 @@ class UserController extends Controller
     if ($request->filled('password')) {
         $validated['password'] = bcrypt($request->password);
     } else {
-        unset($validated['password']); // jika kosong, jangan update password
+        unset($validated['password']);
     }
 
     $validated['input_by'] = auth()->id();
@@ -119,10 +103,6 @@ class UserController extends Controller
     return redirect()->route('superuser.data-user.index')->with('success', 'User berhasil diupdate.');
 }
 
-
-    /**
-     * Remove the specified user from storage.
-     */
     public function destroy(User $data_user)
 {
     $data_user->delete();

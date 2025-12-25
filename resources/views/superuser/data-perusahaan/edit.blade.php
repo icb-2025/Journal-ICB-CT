@@ -6,7 +6,7 @@
 <div class="container px-4 py-6 mx-auto">
     <div class="p-6 bg-white rounded shadow-md">
         <h2 class="mb-4 text-2xl font-semibold">Edit Perusahaan</h2>
-<form action="{{ route('superuser.data-perusahaan.update', ['data_perusahaan' => $perusahaan]) }}" method="POST">
+<form action="{{ route('superuser.data-perusahaan.update', $perusahaan->kode_perusahaan) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">

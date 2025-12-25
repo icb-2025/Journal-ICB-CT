@@ -12,22 +12,11 @@ class HariLiburController extends Controller
     
     public function index(Request $request)
     {
-        // =========================
-        // 1️⃣ Ambil tanggal yang dicek
-        // =========================
         $today = $request->input('tanggal', date('Y-m-d')); 
         $today = date('Y-m-d', strtotime($today)); 
         $hariList = ['Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'];
         $hariIni = $hariList[date('N', strtotime($today)) - 1];
-
-        // =========================
-        // 2️⃣ Ambil data jadwal perusahaan
-        // =========================
         $jadwal = JadwalLibur::with('perusahaan')->latest()->get();
-
-        // =========================
-        // 3️⃣ Ambil data libur nasional
-        // =========================
         $nationalHolidays = [];
         try {
             $response = file_get_contents('https://api-harilibur.vercel.app/api');
@@ -43,17 +32,12 @@ class HariLiburController extends Controller
             $nationalHolidays = [];
         }
 
-        // =========================
-        // 4️⃣ Transform status jadwal
-        // =========================
         $jadwal->transform(function ($item) use ($hariList, $hariIni, $today, $nationalHolidays) {
-    // Libur nasional prioritas
     if (in_array($today, $nationalHolidays)) {
         $item->status = 'Libur (Libur Nasional)';
         return $item;
     }
 
-    // ✅ Pecah string hari libur dari DB
     $parts   = explode('-', $item->hari_libur);
     $mulai   = ucfirst(strtolower(trim($parts[0])));
     $selesai = ucfirst(strtolower(trim($parts[1] ?? $parts[0])));

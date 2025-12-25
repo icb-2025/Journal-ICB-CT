@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
-class UserSeeder extends Seeder // jalankan ini jika ingin menambah php artisan db:seed --class=UserSeeder
+class UserSeeder extends Seeder // run this command php artisan db:seed --class=UserSeeder
 
 {
     public function run(): void

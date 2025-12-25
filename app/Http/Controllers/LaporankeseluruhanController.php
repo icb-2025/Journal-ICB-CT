@@ -16,7 +16,6 @@ class LaporankeseluruhanController extends Controller
     {
         $query = Aktivitas::with(['siswa.jurusan', 'perusahaan', 'kategoriTugas']);
 
-        // Search filter
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -30,17 +29,14 @@ class LaporankeseluruhanController extends Controller
             });
         }
 
-        // Department filter
         if ($request->filled('department_id')) {
             $query->whereHas('siswa.jurusan', function ($q) use ($request) {
                 $q->where('id', $request->department_id);
             });
         }
 
-        // Company filter with live search
         if ($request->filled('perusahaan_id')) {
             if ($request->perusahaan_id === 'search') {
-                // Handle live search for companies
                 if ($request->filled('company_search')) {
                     $companySearch = $request->company_search;
                     $query->whereHas('perusahaan', function ($q) use ($companySearch) {
@@ -48,14 +44,12 @@ class LaporankeseluruhanController extends Controller
                     });
                 }
             } else {
-                // Normal company filter
                 $query->whereHas('perusahaan', function ($q) use ($request) {
                     $q->where('id', $request->perusahaan_id);
                 });
             }
         }
 
-        // Date range filter
         if ($request->filled('start_date')) {
             $query->where('tanggal', '>=', $request->start_date);
         }
@@ -87,7 +81,6 @@ class LaporankeseluruhanController extends Controller
     {
         $query = Aktivitas::with(['siswa.jurusan', 'perusahaan', 'kategoriTugas']);
 
-        // Apply the same filters as index
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
@@ -129,7 +122,6 @@ class LaporankeseluruhanController extends Controller
     {
         $query = Aktivitas::with(['siswa.jurusan', 'perusahaan', 'kategoriTugas']);
 
-        // Apply the same filters as index
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
